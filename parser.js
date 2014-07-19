@@ -9,13 +9,13 @@ handlers['eof'] = {
 handlers['plus'] = {
   lbp: 10,
   led: function(left) {
-    return new ast.AdditionExpression(left, this._expression(10));
+    return new ast.AdditionExpression(left, this._statement(10));
   }
 };
 handlers['minus'] = {
   lbp: 10,
   nud: function(value) {
-    var n = this._expression(10);
+    var n = this._statement(10);
     if (n instanceof ast.IntegerLiteral)
       return new ast.IntegerLiteral('-' + n.value);
     if (n instanceof ast.FloatLiteral)
@@ -24,19 +24,31 @@ handlers['minus'] = {
     throw new Error('Invalid - in front of ' + n.constructor.name);
   },
   led: function(left) {
-    return new ast.SubtractionExpression(left, this._expression(10));
+    return new ast.SubtractionExpression(left, this._statement(10));
   }
 };
 handlers['mul'] = {
   lbp: 20,
   led: function(left) {
-    return new ast.MultiplicationExpression(left, this._expression(20));
+    return new ast.MultiplicationExpression(left, this._statement(20));
   }
 };
 handlers['div'] = {
   lbp: 20,
   led: function(left) {
-    return new ast.DivisionExpression(left, this._expression(20));
+    return new ast.DivisionExpression(left, this._statement(20));
+  }
+};
+handlers['doubleand'] = {
+  lbp: 7,
+  led: function(left) {
+    return new ast.LogicalAndExpression(left, this._statement(7));
+  }
+};
+handlers['doubleor'] = {
+  lbp: 6,
+  led: function(left) {
+    return new ast.LogicalOrExpression(left, this._statement(6));
   }
 };
 handlers['int'] = {
@@ -52,7 +64,7 @@ handlers['float'] = {
 handlers['lparen'] = {
   lbp: 0,
   nud: function(value) {
-    var exp = this._expression(0);
+    var exp = this._statement(0);
     this._expect('rparen');
     return exp;
   }
@@ -63,9 +75,9 @@ handlers['rparen'] = {
 handlers['qmark'] = {
   lbp: 5,
   led: function(condition) {
-    var left = this._expression(5);
+    var left = this._statement(5);
     this._expect('colon');
-    var right = this._expression(5);
+    var right = this._statement(5);
 
     return new ast.TernaryExpression(condition, left, right);
   }
@@ -86,14 +98,14 @@ handlers['false'] = {
 handlers['if'] = {
   nud: function() {
     this._expect('lparen');
-    var condition = this._expression(0);
+    var condition = this._statement(0);
     this._expect('rparen');
-    var left = this._expression(0);
+    var left = this._statement(0);
     var right = null;
 
     if (this._curToken[0] == 'else') {
       this._expect('else')
-      right = this._expression(0);
+      right = this._statement(0);
     }
 
     return new ast.IfStatement(condition, left, right);
@@ -107,7 +119,7 @@ handlers['lsquig'] = {
   nud: function() {
     var statements = [];
     while (this._curToken[0] != 'rsquig')
-      statements.push(this._expression(0));
+      statements.push(this._statement(0));
     this._expect('rsquig');
     return new ast.BlockStatement(statements);
   }
@@ -163,7 +175,7 @@ Parser.prototype = {
       throw new Error('Expected ' + type + ', got ' + t[0]);
     this._curToken = this._next();
   },
-  _expression: function(rbp) {
+  _statement: function(rbp) {
     var t = this._curToken;
     this._next();
     var left = this._nud(t);
@@ -178,11 +190,11 @@ Parser.prototype = {
   },
 
   parse: function() {
-    var expressions = [];
+    var statements = [];
 
     while (this._curToken != 'eof')
-      expressions.push(this._expression(0));
+      statements.push(this._statement(0));
 
-    return expressions;
+    return statements;
   }
 };

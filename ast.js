@@ -6,11 +6,11 @@ var inherit = function(Child, Parent) {
   exports[Child.name] = Child;
 };
 
-function Expression() {};
-Expression.prototype.toTreeString = function() {
+function Statement() {};
+Statement.prototype.toTreeString = function() {
   return this.repr('');
 };
-Expression.prototype.repr = function(indent) {
+Statement.prototype.repr = function(indent) {
   var s = indent + this.constructor.name;
   if (this.value)
     s += ': ' + this.value.toString();
@@ -27,6 +27,10 @@ Expression.prototype.repr = function(indent) {
 
   return s;
 };
+
+
+function Expression() {};
+inherit(Expression, Statement);
 
 // Literals
 
@@ -107,13 +111,25 @@ inherit(ModExpression, Expression);
 
 // Logic
 
+function LogicalOrExpression(left, right) {
+  this.left = left;
+  this.right = right;
+};
+
+function LogicalAndExpression(left, right) {
+  this.left = left;
+  this.right = right;
+};
+
 function IfStatement(condition, left, right) {
   this.condition = condition;
   this.left = left;
   this.right = right;
 };
 
-inherit(IfStatement, Expression);
+inherit(IfStatement, Statement);
+inherit(LogicalAndExpression, Expression);
+inherit(LogicalOrExpression, Expression);
 
 // Misc
 
@@ -121,4 +137,4 @@ function BlockStatement(statements) {
   this.body = statements;
 };
 
-inherit(BlockStatement, Expression);
+inherit(BlockStatement, Statement);
