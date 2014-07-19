@@ -107,9 +107,10 @@ inherit(ModExpression, Expression);
 
 // Logic
 
-function IfStatement(condition, left) {
+function IfStatement(condition, left, right) {
   this.condition = condition;
   this.left = left;
+  this.right = right;
 };
 
 inherit(IfStatement, Expression);

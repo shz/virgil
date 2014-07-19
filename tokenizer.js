@@ -4,6 +4,7 @@ var re = [];
 [ 'true'
 , 'false'
 , 'if'
+, 'else'
 ].forEach(function(keyword) {
   re.push([new RegExp('\\b' + keyword + '\\b'), keyword]);
 });

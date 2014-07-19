@@ -89,9 +89,18 @@ handlers['if'] = {
     var condition = this._expression(0);
     this._expect('rparen');
     var left = this._expression(0);
+    var right = null;
 
-    return new ast.IfStatement(condition, left);
+    if (this._curToken[0] == 'else') {
+      this._expect('else')
+      right = this._expression(0);
+    }
+
+    return new ast.IfStatement(condition, left, right);
   }
+};
+handlers['else'] = {
+  lbp: 0
 };
 
 handlers['lsquig'] = {
