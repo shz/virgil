@@ -14,10 +14,16 @@ Expression.prototype.repr = function(indent) {
   var s = indent + this.constructor.name;
   if (this.value)
     s += ': ' + this.value.toString();
+  if (this.condition)
+    s += '\n' + this.condition.repr(indent + '  ');
   if (this.left)
     s += '\n' + this.left.repr(indent + '  ');
   if (this.right)
     s += '\n' + this.right.repr(indent + '  ');
+  if (this.body)
+    this.body.forEach(function(statement) {
+      s += '\n' + statement.repr(indent + '  ');
+    });
 
   return s;
 };
@@ -39,6 +45,26 @@ function FloatLiteral(value) {
 inherit(StringLiteral, Expression);
 inherit(IntegerLiteral, Expression);
 inherit(FloatLiteral, Expression);
+
+// Misc
+
+function TrueExpression() {
+
+};
+
+function FalseExpression() {
+
+};
+
+function TernaryExpression(condition, left, right) {
+  this.condition = condition;
+  this.left = left;
+  this.right = right;
+};
+
+inherit(TernaryExpression, Expression);
+inherit(TrueExpression, Expression);
+inherit(FalseExpression, Expression);
 
 // Arithmetic
 
@@ -78,3 +104,20 @@ inherit(SubtractionExpression, Expression);
 inherit(DivisionExpression, Expression);
 inherit(PowerExpression, Expression);
 inherit(ModExpression, Expression);
+
+// Logic
+
+function IfStatement(condition, left) {
+  this.condition = condition;
+  this.left = left;
+};
+
+inherit(IfStatement, Expression);
+
+// Misc
+
+function BlockStatement(statements) {
+  this.body = statements;
+};
+
+inherit(BlockStatement, Expression);

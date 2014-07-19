@@ -1,15 +1,32 @@
-var re = [ [/\d+\.\d+/, 'float']
-         , [/\d+/, 'int']
-         , ['*', 'mul']
-         , ['/', 'div']
-         , ['+', 'plus']
-         , ['-', 'minus']
-         , ['**', 'pow']
-         , ['(', 'lparen']
-         , [')', 'rparen']
-         , [/\s+/, 'whitespace']
-         , [/.+/, '_err']
-         ];
+var re = [];
+
+// Keywords
+[ 'true'
+, 'false'
+, 'if'
+].forEach(function(keyword) {
+  re.push([new RegExp('\\b' + keyword + '\\b'), keyword]);
+});
+
+// Everythign else
+re = re.concat([ [/\d+\.\d+/, 'float']
+               , [/\d+/, 'int']
+               , ['*', 'mul']
+               , ['/', 'div']
+               , ['+', 'plus']
+               , ['-', 'minus']
+               , ['**', 'pow']
+               , ['(', 'lparen']
+               , [')', 'rparen']
+               , ['?', 'qmark']
+               , [':', 'colon']
+               , ['{', 'lsquig']
+               , ['}', 'rsquig']
+               , [/\s+/, 'whitespace']
+               , [/.+/, '_err']
+               ]);
+
+
 
 var masterRe = re.map(function(r) {
   var s = null;

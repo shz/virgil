@@ -60,6 +60,52 @@ handlers['lparen'] = {
 handlers['rparen'] = {
   lbp: 0
 };
+handlers['qmark'] = {
+  lbp: 5,
+  led: function(condition) {
+    var left = this._expression(5);
+    this._expect('colon');
+    var right = this._expression(5);
+
+    return new ast.TernaryExpression(condition, left, right);
+  }
+};
+handlers['colon'] = {
+  lbp: 5
+};
+handlers['true'] = {
+  nud: function() {
+    return new ast.TrueExpression();
+  }
+};
+handlers['false'] = {
+  nud: function() {
+    return new ast.FalseExpression();
+  }
+};
+handlers['if'] = {
+  nud: function() {
+    this._expect('lparen');
+    var condition = this._expression(0);
+    this._expect('rparen');
+    var left = this._expression(0);
+
+    return new ast.IfStatement(condition, left);
+  }
+};
+
+handlers['lsquig'] = {
+  nud: function() {
+    var statements = [];
+    while (this._curToken[0] != 'rsquig')
+      statements.push(this._expression(0));
+    this._expect('rsquig');
+    return new ast.BlockStatement(statements);
+  }
+};
+handlers['rsquig'] = {
+  lbp: 0
+};
 
 var Parser = module.exports = function Parser(src) {
   this.src = src;
@@ -91,7 +137,7 @@ Parser.prototype = {
     if (!this.tokens.length)
       throw new Error('Out of tokens');
 
-    var t = this.tokens.shift();
+    var t = this._curToken = this.tokens.shift();
     if (t[0] == 'whitespace')
       return this._next();
     else
@@ -110,12 +156,12 @@ Parser.prototype = {
   },
   _expression: function(rbp) {
     var t = this._curToken;
-    this._curToken = this._next();
+    this._next();
     var left = this._nud(t);
 
     while ((rbp || 0) < this._lbp(this._curToken)) {
       t = this._curToken;
-      this._curToken = this._next();
+      this._next();
       left = this._led(t, left);
     }
 
