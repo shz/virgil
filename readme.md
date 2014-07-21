@@ -2,7 +2,27 @@
 
 A visual programming language.
 
-# Spec
+# Usage
+
+**Installation**
+
+Do it manually!
+
+**Compiling**
+
+```bash
+vzs-js FILE
+```
+
+**Testing**
+
+```bash
+npm test
+# Or
+./script/test.sh
+```
+
+# Spec - TOTAL WIP
 
 Is the language completely immutable?  I think so.
 

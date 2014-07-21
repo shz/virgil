@@ -1,0 +1,25 @@
+{
+  "name": "vz-script",
+  "version": "1.0.0",
+  "description": "Universal language for frontend animation",
+  "main": "lib/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "bin": {
+    "vzs-js": "bin/vzs-js"
+  },
+  "dependencies": {
+    "escodegen": "~1.3.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "script/test.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.corp.yahoo.com:lpstein/vz-script.git"
+  },
+  "author": "Patrick Stein <lpstein@yahoo-inc.com>",
+  "license": "None"
+}
