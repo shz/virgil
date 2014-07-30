@@ -1,7 +1,9 @@
-if (true) {
-  1
-} else if (false) {
-  2
+if false {
+  a
+} else if (true) {
+  b
 } else {
-  3
+  c
 }
+
+1 + 1

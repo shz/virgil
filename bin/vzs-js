@@ -1,8 +1,12 @@
 #!/usr/bin/env node
 
 var fs = require('fs')
+  , clc = require('cli-color')
   , vzs = require('../lib')
   ;
+
+// TODO - Debug params
+var DEBUG = true;
 
 if (!process.argv[2] || process.argv[2] == '-h' || process.argv[2] == '--help') {
   console.log('Usage: vzs-js FILE');
@@ -14,6 +18,31 @@ if (!process.argv[2] || process.argv[2] == '-h' || process.argv[2] == '--help') 
 fs.readFile(process.argv[2], {encoding: 'utf8'}, function(err, src) {
   if (err) throw err;
 
-  console.log(vzs.compile(src, 'javascript'));
+  try {
+    console.log(vzs.compile(src, 'javascript'));
+  } catch (err) {
+    var lines = src.split(/\r?\n/g);
+
+    for (var i=Math.max(0, err.line - 3); i<Math.min(lines.length, err.line + 2); i++) {
+      var parts = [ i + 1 + ':'
+                  , ' ' + lines[i].substring(0, err.colStart)
+                  , lines[i].substring(err.colStart, err.colEnd)
+                  , lines[i].substring(err.colEnd)
+                  ];
+
+      if (i + 1 == err.line) {
+        parts[0] = clc.red.bgWhite(parts[0]);
+        parts[2] = clc.red.bgWhite(parts[2]);
+      }
+      console.log(parts.join(''));
+    }
+    console.log('');
+    if (DEBUG)
+      console.log(err.stack);
+    else
+      console.log(err.message);
+
+    process.exit(1);
+  }
 });
 
