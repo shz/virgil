@@ -34,7 +34,7 @@ for file in $(find test/integration -name \*.js); do
     echo ''
   else
     echo "${GREEN}PASS${RESTORE}"
-    # echo "$result"
+    echo "$result"
   fi
 done
 echo ''
