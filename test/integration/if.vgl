@@ -1,6 +1,6 @@
 if false {
   a
-} else if (true) {
+} else if true {
   b
 } else {
   c

@@ -1,5 +1,5 @@
 {
-  "name": "vz-script",
+  "name": "virgil",
   "version": "1.0.0",
   "description": "Universal language for frontend animation",
   "main": "lib/index.js",
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@git.corp.yahoo.com:lpstein/vz-script.git"
+    "url": "git@git.corp.yahoo.com:vizify/virgil.git"
   },
   "author": "Patrick Stein <lpstein@yahoo-inc.com>",
   "license": "None"

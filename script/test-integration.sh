@@ -23,7 +23,7 @@ LCYAN='\033[01;36m'
 WHITE='\033[01;37m'
 
 echo ''
-for file in $(find test/integration -name \*.js); do
+for file in $(find test/integration -name \*.st); do
   printf "${YELLOW}$file${RESTORE}  =  "
   result=`bin/vzs-js $file 2>&1`
   if [ $? -ne 0 ]; then

@@ -1,8 +1,11 @@
-# vz-script
+# virgil
 
-A visual programming language.
+A universal language for animations and visualization.
 
-# Usage
+Compiles into C++ and Javascript, with special integrations for use
+with the [Vizify](https://git.corp.yahoo.com/lpstein/vizify) platform.
+
+## Usage
 
 **Installation**
 
@@ -11,7 +14,7 @@ Do it manually!
 **Compiling**
 
 ```bash
-vzs-js FILE
+vzs-js FILE.vgl
 ```
 
 **Testing**
@@ -22,72 +25,8 @@ npm test
 ./script/test.sh
 ```
 
-# Spec - TOTAL WIP
+## The Language
 
-Is the language completely immutable?  I think so.
-
-## Types
-
- * Int
- * Float
- * String
- * Date
- * Image
- * Video
- * Audio
- * List<T>
- * Map
-
-## Syntax
-
-```
-# This is a comment
-let i = 25
-let i2 = Int(25)
-let s = String("Hello world")
-let s2 = "Hello world"
-let d = Date("October 25, 2011")
-
-func f(Integer a, Float b) -> Int
-  blah
-  pass
-
-let f = (Integer a, Float b) {
-
-}
-
-[1, 2, 3].each {
-
-}
-
-match a
-  a: false
-  _: true
+Docs forthcoming.
 
 
-scope {
-
-}
-
-scope (ctx.save, ctx.restore) {
-
-}
-
-```
-
-## Noodling
-
-```
-
-```
-
-## Ported Program
-
-```
-export storyRender (ctx, data, anim) {
-  ctx.beginPath()
-  ctx.rect(0, 0, ctx.width, ctx.height);
-  ctx.fillStyle = 'black';
-  ctx.fill();
-}
-```
