@@ -1,0 +1,22 @@
+# This is a comment
+
+function add (int a, int b) returns int {
+  return a + b
+}
+
+let a = "This is a string"
+out b = "This is a string"
+mut c = "This is a string"
+c = "And the variable remains mutable"
+
+let f = 1.0
+let ff : float = 1
+let fff : float = 1.0f
+
+let p : perc = f
+
+if true {
+  c = "True!"
+} else {
+  c = "False!"
+}

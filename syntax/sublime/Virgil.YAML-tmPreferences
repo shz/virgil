@@ -5,6 +5,6 @@ scope: source.vgl
 settings:
   shellVariables:
     - name: TM_COMMENT_START
-      value: "// "
+      value: "# "
     - name: TM_COMMENT_MODE
       value: line

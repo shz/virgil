@@ -22,9 +22,9 @@
 			<key>comment</key>
 			<string>Comments</string>
 			<key>match</key>
-			<string>(//).*?$\n?</string>
+			<string>(#).*?$\n?</string>
 			<key>name</key>
-			<string>comment.line.double-slash.vgl</string>
+			<string>comment.line.pound.vgl</string>
 		</dict>
 		<dict>
 			<key>comment</key>

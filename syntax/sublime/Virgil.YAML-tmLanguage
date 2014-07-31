@@ -1,13 +1,13 @@
 # [PackageDev] target_format: plist, ext: tmLanguage
 ---
 name: Virgil
-scopeName: source.virgil
+scopeName: source.vgl
 fileTypes: ["vgl"]
 uuid: 35baef2b-fb03-4b10-8ecd-4a979c8cd213
 
 patterns:
-  - match: (//).*?$\n?
-    name: comment.line.double-slash.vgl
+  - match: (#).*?$\n?
+    name: comment.line.pound.vgl
     comment: Comments
     captures:
       '1':
