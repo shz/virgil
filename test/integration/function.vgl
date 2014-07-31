@@ -12,4 +12,5 @@ function baz {
   a
 }
 
-1 + 1
+baz()
+foobar(1, 2)

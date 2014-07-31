@@ -103,7 +103,7 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>\\(t|n|r)</string>
+					<string>\\(t|n|r|")</string>
 					<key>name</key>
 					<string>constant.character.escape.vgl</string>
 				</dict>

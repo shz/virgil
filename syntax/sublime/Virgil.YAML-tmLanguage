@@ -48,7 +48,7 @@ patterns:
         name: punctuation.definition.string.end.vgl
     name: string.quoted.vgl
     patterns:
-      - match: \\(t|n|r)
+      - match: \\(t|n|r|")
         name: constant.character.escape.vgl
 
   - match: (function)\s*([a-z][a-zA-Z0-9]*)

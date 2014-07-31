@@ -2,7 +2,7 @@ import foobar = foo/bar
 
 struct data
 
-function(ctx) {
+function (ctx) {
   ctx....
 
 
@@ -10,7 +10,7 @@ function(ctx) {
 
 struct layout {
   struct balloon {
-    px padding = 0
+    padding : px = 0
   }
 
   struct thing {
@@ -47,6 +47,12 @@ function calculateLayout(layout l) return layout {
 
 
 
+
+}
+
+l = layout()
+
+method layout.area(layout l) return px {
 
 }
 
