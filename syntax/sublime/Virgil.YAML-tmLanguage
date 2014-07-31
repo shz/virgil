@@ -1,0 +1,61 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+---
+name: Virgil
+scopeName: source.virgil
+fileTypes: ["vgl"]
+uuid: 35baef2b-fb03-4b10-8ecd-4a979c8cd213
+
+patterns:
+  - match: (//).*?$\n?
+    name: comment.line.double-slash.vgl
+    comment: Comments
+    captures:
+      '1':
+        name: punctuation.definition.comment.vgl
+
+  - match: \b(return|returns|if|else)\b
+    name: keyword.control.vgl
+    comment: Keywords
+
+  - match: \b(int|float|str|px|perc|color|speed|image|video|audio)\b
+    name: storage.type.vgl
+    comment: Types
+
+  - match: \b(let|out|mut)\b
+    name: storage.modifier.vgl
+    comment: Types
+
+  - match: \btrue\b
+    name: constant.language.boolean.true.vgl
+    comment: True
+
+  - match: \bfalse\b
+    name: constant.language.boolean.true.vgl
+    comment: False
+
+  - match: \+|\-|/|\*\*|\*
+    name: keyword.operator.vgl
+    comment: Operators
+
+  - comment: Strings
+    begin: '"'
+    beginCaptures:
+      '0':
+        name: punctuation.definition.string.begin.vgl
+    end: '"'
+    endCaptures:
+      '0':
+        name: punctuation.definition.string.end.vgl
+    name: string.quoted.vgl
+    patterns:
+      - match: \\(t|n|r)
+        name: constant.character.escape.vgl
+
+  - match: (function)\s*([a-z][a-zA-Z0-9]*)
+    captures:
+      '0':
+        name: storage.type.function.vgl
+      '1':
+        name: entity.name.function.vgl
+    comment: Functions
+

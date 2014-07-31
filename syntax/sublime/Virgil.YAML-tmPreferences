@@ -1,0 +1,10 @@
+# [PackageDev] target_format: plist, ext: tmPreferences
+---
+name: Comments
+scope: source.vgl
+settings:
+  shellVariables:
+    - name: TM_COMMENT_START
+      value: "// "
+    - name: TM_COMMENT_MODE
+      value: line
