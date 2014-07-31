@@ -8,6 +8,27 @@ function (ctx) {
 
 };
 
+
+list<list<int>>
+
+
+list'list'a
+
+struct layout {
+  a = 1
+  b = 2
+}
+
+struct something<T, U> {
+  U = default(U)
+}
+
+struct layout {
+  a = 1px
+  b = 1
+  bb : float = 1
+}
+
 struct layout {
   struct balloon {
     padding : px = 0

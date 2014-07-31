@@ -4,6 +4,10 @@ function add (int a, int b) returns int {
   return a + b
 }
 
+function sum (list<int> a) returns int {
+  return 0 # Yep
+}
+
 let a = "This is a string"
 out b = "This is a string"
 mut c = "This is a string"
@@ -17,6 +21,7 @@ let p : perc = f
 
 let i = add(1, add(2, 3))
 
+let a : list<int> = null;
 
 if true {
   c = "True!"
