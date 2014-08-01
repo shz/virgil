@@ -1,6 +1,6 @@
 {
   "name": "virgil",
-  "version": "1.0.0",
+  "version": "0.9.0",
   "description": "Universal language for frontend animation",
   "main": "lib/index.js",
   "directories": {
@@ -13,14 +13,19 @@
     "escodegen": "~1.3.3",
     "cli-color": "^0.3.2"
   },
-  "devDependencies": {},
   "scripts": {
-    "test": "script/test.sh"
+    "test": "script/test.sh",
+    "lint": "script/lint.sh"
   },
   "repository": {
     "type": "git",
     "url": "git@git.corp.yahoo.com:vizify/virgil.git"
   },
   "author": "Patrick Stein <lpstein@yahoo-inc.com>",
-  "license": "None"
+  "license": "None",
+  "devDependencies": {
+    "jshint": "^2.5.2",
+    "whiskey": "^0.8.4",
+    "istanbul": "^0.3.0"
+  }
 }

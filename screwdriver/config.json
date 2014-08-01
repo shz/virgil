@@ -1,0 +1,35 @@
+{
+  "version": 2,
+  "shared": {
+    "test_results_type": "tap",
+    "notification_email": "lpstein@yahoo-inc.com",
+    "build": {
+      "compile": {
+        "task": "none",
+      },
+      "test": {
+        "task": "script",
+        "command": "./bin/test-unit.sh"
+      },
+      "lint": {
+        "task": "node-hint",
+        "after": {
+          "task": "script",
+          "command": "./bin/lint.sh"
+        }
+      },
+      "ci": {
+        "task": "none"
+      },
+      "docs": {
+        "task": "none"
+      },
+      "publish": {
+        "task": "npm-publish"
+      },
+      "deploy": {
+        "task": "none"
+      }
+    }
+  }
+}
