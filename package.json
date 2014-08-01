@@ -29,6 +29,16 @@
     "istanbul": "^0.3.0"
   },
 
+  "yahoo": {
+    "custodian": {
+      "email": "lpstein@yahoo-inc.com",
+      "url": "https://git.corp.yahoo.com/lpstein/virgil"
+    },
+    "bugzilla": {
+      "product": "Virgil",
+      "component": "General"
+    }
+  },
   "yhint": {
     "excludes": ".*"
   }
