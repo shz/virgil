@@ -9,8 +9,9 @@ function sum (list<int> a) returns int {
 }
 
 function iHaveNoArguments {
-
+  return void
 }
+
 let a = "This is a string"
 out b = "This is a string"
 mut c = "This is a string"
@@ -25,14 +26,11 @@ let p : perc = f
 let i = add(1, add(2, 3))
 
 # Not yet supported
-# let l : list<int> = [1, 2, 3, 4]
-# let ll = [
-#   1
-#   2
-#   3
-#   4
-#   5
-# ]
+let l : list<int> = [1, 2, 3, 4]
+let ll = [
+  1,
+  2,
+]
 
 struct shazam {
   struct nested {
