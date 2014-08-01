@@ -21,6 +21,8 @@ let f = 1.0
 let ff : float = 1
 let fff : float = 1.0f
 
+let powah = 2 ** 4
+
 let p : perc = f
 
 let i = add(1, add(2, 3))
