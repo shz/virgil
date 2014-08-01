@@ -7,7 +7,7 @@
     "test": "test"
   },
   "bin": {
-    "virgil-js": "bin/virgl-js"
+    "virgil-js": "bin/virgil-js"
   },
   "dependencies": {
     "escodegen": "~1.3.3",
