@@ -5,7 +5,7 @@
     "notification_email": "lpstein@yahoo-inc.com",
     "build": {
       "compile": {
-        "task": "none",
+        "task": "none"
       },
       "test": {
         "task": "script",
