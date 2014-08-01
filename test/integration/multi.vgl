@@ -8,6 +8,9 @@ function sum (list<int> a) returns int {
   return 0 # Yep
 }
 
+function iHaveNoArguments {
+
+}
 let a = "This is a string"
 out b = "This is a string"
 mut c = "This is a string"
@@ -40,6 +43,8 @@ struct shazam {
   b : int = nested()
 }
 
+let sh = shazam()
+add(sh.a, sh.a)
 
 if true {
   c = "True!"
