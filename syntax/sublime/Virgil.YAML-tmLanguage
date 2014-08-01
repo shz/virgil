@@ -13,7 +13,7 @@ patterns:
       '1':
         name: punctuation.definition.comment.vgl
 
-  - match: ^\s*(struct)\s+([a-z][a-zA-Z0-9]*)
+  - match: ^\s*(struct)\s+([a-zA-Z0-9]+)
     captures:
       '0':
         name: storage.type.struct.vgl
@@ -58,7 +58,7 @@ patterns:
       - match: \\(t|n|r|")
         name: constant.character.escape.vgl
 
-  - match: (function)\s*([a-z][a-zA-Z0-9]*)
+  - match: (function)\s*([a-zA-Z0-9]+)
     captures:
       '0':
         name: storage.type.function.vgl

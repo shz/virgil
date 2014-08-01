@@ -1,10 +1,10 @@
 # This is a comment
 
-function add (int a, int b) returns int {
+function add(int a, int b) returns int {
   return a + b
 }
 
-function sum (list<int> a) returns int {
+function sum(list<int> a) returns int {
   return 0 # Yep
 }
 
@@ -34,16 +34,12 @@ let ll = [
   2,
 ]
 
-struct shazam {
-  struct nested {
-    a = "hi"
-  }
-
+struct Shazam {
   a = 1
-  b : int = nested()
+  b : int = add(1, 2)
 }
 
-let sh = shazam()
+let sh = Shazam()
 add(sh.a, sh.a)
 
 if true {
