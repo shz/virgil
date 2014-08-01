@@ -41,7 +41,12 @@ struct Shazam {
   b : int = add(1, 2)
 }
 
+mut test = true
 
+while test {
+  console.log("inside loop")
+  test = false
+}
 
 let a = [1, 2, 3]
 a.sum()
