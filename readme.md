@@ -5,16 +5,26 @@ A universal language for animations and visualization.
 Compiles into C++ and Javascript, with special integrations for use
 with the [Vizify](https://git.corp.yahoo.com/lpstein/vizify) platform.
 
+```
+function main returns int {
+  let message = "Hello World"
+  console.log(message)
+  return 0
+}
+```
+
 ## Usage
 
 **Installation**
 
-Do it manually!
+```bash
+ynpm install virgil
+```
 
 **Compiling**
 
 ```bash
-vzs-js FILE.vgl
+virgil-js FILE.vgl
 ```
 
 **Testing**
@@ -23,10 +33,13 @@ vzs-js FILE.vgl
 npm test
 # Or
 ./script/test.sh
+# Or, for verbose integration tests...
+./script/test-integration.sh --debug
 ```
 
 ## The Language
 
-Docs forthcoming.
+Real documentation forthcoming.
 
-
+ * [Types](language/types.md)
+ * [Operators](language/operators.md)

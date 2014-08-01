@@ -3,6 +3,20 @@
 # Canonical dir
 cd "$(dirname $0)/../"
 
+# Args
+debug=0
+
+for var in "$@"
+do
+  if [ $var == '--debug' ]; then
+    debug=1
+  else
+    echo ''
+    echo "Unknown option $var"
+    echo ''
+  fi
+done
+
 # Colors
 RESTORE='\033[0m'
 
@@ -22,10 +36,9 @@ LPURPLE='\033[01;35m'
 LCYAN='\033[01;36m'
 WHITE='\033[01;37m'
 
-echo ''
 for file in $(find test/integration -name \*.vgl); do
   printf "${YELLOW}$file${RESTORE}  =  "
-  result=`bin/vzs-js $file 2>&1`
+  result=`bin/virgil-js $file 2>&1`
   if [ $? -ne 0 ]; then
     echo "${RED}FAIL${RESTORE}"
     # echo '--------------------------------------------------------'
@@ -34,7 +47,10 @@ for file in $(find test/integration -name \*.vgl); do
     echo ''
   else
     echo "${GREEN}PASS${RESTORE}"
-    echo "$result"
+
+    if [ $debug -eq 1 ]; then
+      echo "$result"
+    fi
   fi
 done
 echo ''
