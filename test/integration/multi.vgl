@@ -1,20 +1,10 @@
-import foo/bar
-export {
-  a = add
-  b = foo
-}
-
 # This is a comment
 
 function add(a : int, b : int) returns int {
-
-}
-
-function add(int a, int b) returns int {
   return a + b
 }
 
-function sum(list<int> myList) returns int {
+function sum(myList : list<int>) returns int {
 
 
   return 0 # Yep
@@ -50,30 +40,12 @@ let ll = [
   2,
 ]
 
-function renderSomething(canvas c, data d, clock cl) {
-  c.fillStyle = 'rgba(1, 1, 1)';
-  c.fillRect(0, 0, 10, 10)
-}
-
-function(canvas, data, clock) {
-  c.delay(500).fade(100, 200).drawThing();
-  c.translate({x: 10, y: 10}, 100).
-}
-
 struct Shazam {
   a = 1
   b : int = add(1, 2)
 }
 
-let h = Hash<str, int>()
-h.set("foo", 1)
-h.get("foo")
-
 let a : bool = true
-
-method aFunction(Shazam s) returns int {
-  return s.a
-}
 
 let s = Shazam()
 s.aFunction()
@@ -96,10 +68,3 @@ if true {
   c = "False!"
 }
 
-function main(canvas c, data d) {
-  c.drawRect(0, 0, 10, 10)
-
-
-}
-
-let a =
