@@ -9,13 +9,13 @@
       },
       "test": {
         "task": "script",
-        "command": "./bin/test-unit.sh"
+        "command": "./script/test-unit.sh"
       },
       "lint": {
         "task": "node-hint",
         "after": {
           "task": "script",
-          "command": "./bin/lint.sh"
+          "command": "./script/lint.sh"
         }
       },
       "ci": {
