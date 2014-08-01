@@ -13,6 +13,13 @@ patterns:
       '1':
         name: punctuation.definition.comment.vgl
 
+  - match: ^\s*(struct)\s+([a-z][a-zA-Z0-9]*)
+    captures:
+      '0':
+        name: storage.type.struct.vgl
+      '1':
+        name: entity.name.type.vgl
+
   - match: \b(return|returns|if|else)\b
     name: keyword.control.vgl
     comment: Keywords

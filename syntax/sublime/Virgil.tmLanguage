@@ -27,6 +27,23 @@
 			<string>comment.line.pound.vgl</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.struct.vgl</string>
+				</dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.type.vgl</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^\s*(struct)\s+([a-z][a-zA-Z0-9]*)</string>
+		</dict>
+		<dict>
 			<key>comment</key>
 			<string>Keywords</string>
 			<key>match</key>

@@ -21,10 +21,29 @@ let p : perc = f
 
 let i = add(1, add(2, 3))
 
-let a : list<int> = null;
+# Not yet supported
+# let l : list<int> = [1, 2, 3, 4]
+# let ll = [
+#   1
+#   2
+#   3
+#   4
+#   5
+# ]
+
+struct shazam {
+  struct nested {
+    a = "hi"
+  }
+
+  a = 1
+  b : int = nested()
+}
+
 
 if true {
   c = "True!"
 } else {
   c = "False!"
 }
+
