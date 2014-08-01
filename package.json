@@ -27,5 +27,9 @@
     "jshint": "^2.5.2",
     "whiskey": "^0.8.4",
     "istanbul": "^0.3.0"
+  },
+
+  "yhint": {
+    "excludes": ".*"
   }
 }
