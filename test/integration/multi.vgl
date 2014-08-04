@@ -32,13 +32,20 @@ let p : perc = f
 # let t = 100ms
 
 let i = add(1, add(2, 3))
-
-# Not yet supported
 let l : list<int> = [1, 2, 3, 4]
 let ll = [
   1,
   2,
 ]
+
+for i = 0 to 2 {
+  console.log(i)
+  continue
+}
+for i = 10 to 1 {
+  console.log(i)
+  break
+}
 
 struct Shazam {
   a = 1

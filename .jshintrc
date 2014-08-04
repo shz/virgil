@@ -19,6 +19,7 @@
   "-W041": true,
   "-W004": true,
   "-W083": true,
+  "-W086": true,
   "asi": true,
   "eqnull": true,
   "laxcomma": true
