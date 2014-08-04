@@ -1,0 +1,11 @@
+struct Test {
+  a = 1
+  b : str = "default"
+}
+
+let s = Test()
+let s2 = Test({
+  a : str = 1
+  b = 2
+})
+s2.b = "not default"

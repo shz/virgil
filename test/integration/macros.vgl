@@ -1,0 +1,11 @@
+# @prefixMacro foo(right : Statement) {
+#   let tree = @parse {
+#     let $a = 1
+
+#     function $foo
+#   }
+
+#   return tree
+# }
+
+# @macro
