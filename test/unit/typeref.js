@@ -1,4 +1,5 @@
 var types = require('./util/require')('types')
+  ;
 
 exports.testBasic = function(test, assert) {
   assert.isDefined(types.TypeRef);
