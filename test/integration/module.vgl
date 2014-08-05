@@ -1,0 +1,16 @@
+struct InternalStruct {
+  a = 1
+}
+
+export struct ExportedStruct {
+  a = 1
+  b = "yep"
+}
+
+function doSomethingInteral {
+
+}
+
+export function doSomething(s : Something) {
+  1 + 1
+}
