@@ -5,7 +5,96 @@
 #     function $foo
 #   }
 
-#   return tree
+#   return tree.render({
+#     a = "var1"
+#     foo = right.name
+#   })
 # }
 
-# @macro
+# @prefixMacro renderer(right : FunctionStatement) {
+#   let template = @parse {
+#     method $name() {
+#       function paint { $body }
+#       ctx.draw(paint)
+#     }
+#   }
+#   template.args = right.args
+#   template.args.shift({
+#     name = "rc",
+#     type = TypeRef({name: "RenderContext"})
+#   })
+
+#   return template.render({
+#     name = right.name
+#     body = right.body
+#   })
+# }
+
+# @macro rgba(right : FunctionCallExpression)
+
+# @macro prefix foo(
+
+# let font = myFont @size 18px
+
+# ###################
+# # Framework level
+# ###################
+
+# host {
+#   function foo(a : int) returns int {}
+#   struct Something {
+
+#   }
+#   method do (s : Something, a : int, b : float) returns str {}
+# }
+
+# struct Clock {
+#   fromStart = 0
+#   fromEnd = 0
+# }
+
+# struct Canvas {
+
+# }
+
+# struct RenderContext<T> {
+#   clock = Clock()
+#   data = T()
+#   canvas : Canvas = null
+# }
+
+# ##################
+# # User level
+# ##################
+
+# struct Datum {
+#   foo = 0
+#   bar = "bar"
+# }
+# struct Data {
+#   parts : list<Datum> = []
+# }
+
+# let rc = RenderContext<Data>({
+#   data = getData()
+#   canvas = makeCanvas()
+# })
+
+# method drawSomething(rc : RenderContext, x : int, y : int) {
+#   rc.draw(block(c) {
+
+#   })
+# }
+
+# @renderer drawSomething(c : Canvas, x : int, y: int) {
+#   c.fillRect(x, y, 100, 100)
+# }
+
+# rc.fade(100, 200).drawSomething(100, 200)
+# rc.fade(100, 200).draw(block(a : int) {
+
+# })
+
+# rc.fade(100, 200).map(0, 10, lambda(a, b) {
+
+# })
