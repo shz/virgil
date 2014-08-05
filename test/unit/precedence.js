@@ -4,7 +4,7 @@ var types = require('./util/require')('types')
   ;
 
 var parse = function(str) {
-  return js([parser(str)[0]]);
+  return js(parser.snippet(str));
 };
 
 exports.testAccess = function(test, assert) {

@@ -38,11 +38,11 @@ let ll = [
   2,
 ]
 
-for i = 0 to 2 {
+for i = 0 upto 2 {
   console.log(i)
   continue
 }
-for i = 10 to 1 {
+for i = 10 downto 1 {
   console.log(i)
   break
 }

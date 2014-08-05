@@ -6,20 +6,60 @@ var fs = require('fs')
   ;
 
 // TODO - Debug params
-var DEBUG = true;
-
-if (!process.argv[2] || process.argv[2] == '-h' || process.argv[2] == '--help') {
-  console.log('Usage: virgil-js FILE');
-  console.log('');
-
-  process.exit(1);
+var options = {
+  debug: false,
+  module: false,
+  node: false
 };
 
-fs.readFile(process.argv[2], {encoding: 'utf8'}, function(err, src) {
+var args = [];
+for (var i=2; i<process.argv.length; i++) {
+  var arg = process.argv[i];
+
+  switch (arg) {
+    case '-d':
+    case '--debug':
+      options.debug = true;
+      break;
+
+    case '-m':
+    case '--module':
+      options.module = true;
+      break;
+
+    case '--node':
+      options.node = true;
+      break;
+
+    default:
+      if (arg[0] == '-') {
+        console.log('Unknown option', arg);
+      } else {
+        args.push(arg);
+        break;
+      }
+    case '-h':
+    case '--help':
+      console.log('Usage: virgil-js [-d|--debug] [-m|--module [--node]] FILE');
+      console.log('');
+      process.exit(0);
+      break;
+  }
+}
+
+fs.readFile(args[0], {encoding: 'utf8'}, function(err, src) {
   if (err) throw err;
 
   try {
-    console.log(vzs.compile(src, 'javascript'));
+    if (options.module) {
+      var opts = {
+        node: options.node,
+        moduleName: args[0].replace(/\.vgl$/, '').replace(/[\/\\]/g, '.')
+      };
+      console.log(vzs.compileModule(src, 'javascript', opts));
+    } else {
+      console.log(vzs.compile(src, 'javascript'));
+    }
   } catch (err) {
     var lines = src.split(/\r?\n/g);
 
@@ -37,7 +77,7 @@ fs.readFile(process.argv[2], {encoding: 'utf8'}, function(err, src) {
       console.log(parts.join(''));
     }
     console.log('');
-    if (DEBUG)
+    if (options.debug)
       console.log(err.stack);
     else
       console.log(err.message);

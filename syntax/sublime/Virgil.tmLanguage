@@ -47,7 +47,7 @@
 			<key>comment</key>
 			<string>Keywords</string>
 			<key>match</key>
-			<string>\b(return|returns|if|else|while|for|to|break|continue)\b</string>
+			<string>\b(return|returns|if|else|while|for|downto|upto|break|continue|export|import)\b</string>
 			<key>name</key>
 			<string>keyword.control.vgl</string>
 		</dict>

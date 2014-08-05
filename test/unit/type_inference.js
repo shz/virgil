@@ -3,8 +3,7 @@ var types = require('./util/require')('types')
   ;
 
 var calc = function(str) {
-  var tree = parser(str)[0];
-  return types.calculate(parser(str)[0]).toString();
+  return types.calculate(parser.statement(str)).toString();
 };
 
 exports.testDirect = function(test, assert) {
