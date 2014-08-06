@@ -13,22 +13,24 @@ patterns:
       '1':
         name: punctuation.definition.comment.vgl
 
-  - match: ^\s*(struct)\s+([a-zA-Z0-9]+)
+  - match: (struct)\s+([a-zA-Z0-9]+)
     captures:
       '0':
-        name: storage.type.struct.vgl
+        name: storage.modifier.struct.vgl
       '1':
+        name: storage.type.struct.vgl
+      '2':
         name: entity.name.type.vgl
 
-  - match: \b(return|returns|if|else|while|for|downto|upto|break|continue|export|import)\b
+  - match: \b(return|returns|if|else|while|for|downto|upto|break|continue|import)\b
     name: keyword.control.vgl
     comment: Keywords
 
-  - match: \b(void|list|lambda|bool|int|float|str|px|perc|color|speed|image|video|audio)\b
+  - match: \b(void|func|list|lambda|bool|int|float|str|px|perc|color|speed|image|video|audio)\b
     name: storage.type.vgl
     comment: Types
 
-  - match: \b(let|out|mut)\b
+  - match: \b(export|let|out|mut)\b
     name: storage.modifier.vgl
     comment: Types
 
@@ -58,11 +60,13 @@ patterns:
       - match: \\(t|n|r|")
         name: constant.character.escape.vgl
 
-  - match: (function)\s*([a-zA-Z0-9]+)
+  - match: (function|method)\s+([a-zA-Z0-9]+)
     captures:
       '0':
-        name: storage.type.function.vgl
+        name: storage.modifier.function.vgl
       '1':
+        name: storage.type.function.vgl
+      '2':
         name: entity.name.function.vgl
     comment: Functions
 

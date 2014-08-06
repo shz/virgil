@@ -1,5 +1,10 @@
-function each(l : list<T>, action : lambda<T, void>) {
+export function each(l : list<T>, action : func<T, void>) {
   for i = 0 upto l.length {
     action(l[i])
   }
 }
+
+let l = [1, 2, 3, 4]
+each(l, lambda(x) {
+  console.log(x)
+})
