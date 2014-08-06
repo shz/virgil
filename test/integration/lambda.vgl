@@ -1,0 +1,5 @@
+function each(l : list<T>, action : lambda<T, void>) {
+  for i = 0 upto l.length {
+    action(l[i])
+  }
+}
