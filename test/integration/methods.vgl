@@ -1,0 +1,43 @@
+struct Widget {
+  width = 100
+  height = 100
+}
+
+# Methods are very similar to functions, with syntactic sugar for
+# calling.  The first parameter of a method determines the type
+# to add the method to.
+
+method area(w : Widget) returns int {
+  return w.width * w.height
+}
+
+let size = Widget().area() # 10000
+
+# Methods, like functions, can be defined in subsequent scopes, and
+# will exist only in that scope.
+
+function findNarrowest(ws : list<Widget>) returns Widget {
+
+  # This method can only be called inside findNarrowest
+  method smallestSide(w : Widget) returns int {
+    if w.width > w.height {
+      return w.width
+    } else {
+      return w.height
+    }
+  }
+
+  mut smallest : Widget = null
+  for i = 0 upto ws.length {
+    if smallest == null || ws[i].smallestSide() < smallest.smallestSide() {
+      smallest = ws[i]
+    }
+  }
+
+  return smallest
+}
+
+# Structs compile down to the native language's classes.  Methods defined
+# on structs at the root scope will become real methods in the native
+# language's output.  When compiling in module mode, this only applies
+# for exported structs/methods.

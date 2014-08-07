@@ -34,6 +34,10 @@ patterns:
     name: storage.modifier.vgl
     comment: Types
 
+  - match: \bnull\b
+    name: constant.language.null.vgl
+    comment: True
+
   - match: \btrue\b
     name: constant.language.boolean.true.vgl
     comment: True

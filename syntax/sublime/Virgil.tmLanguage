@@ -76,6 +76,14 @@
 			<key>comment</key>
 			<true/>
 			<key>match</key>
+			<string>\bnull\b</string>
+			<key>name</key>
+			<string>constant.language.null.vgl</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<true/>
+			<key>match</key>
 			<string>\btrue\b</string>
 			<key>name</key>
 			<string>constant.language.boolean.true.vgl</string>

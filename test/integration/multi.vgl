@@ -52,7 +52,7 @@ struct Shazam {
   b : int = add(1, 2)
 }
 
-let a : bool = true
+let aaaa : bool = true
 
 let s = Shazam()
 s.aFunction()
@@ -63,7 +63,7 @@ while test {
   test = false
 }
 
-let a = [1, 2, 3]
+let aaaaaaa = [1, 2, 3]
 a.sum()
 
 let sh = Shazam()

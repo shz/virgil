@@ -49,3 +49,14 @@ exports.testNested = function(test, assert) {
 
   test.finish();
 };
+
+exports.testWalking = function(test, assert) {
+  var scope = calc('struct Foo {}; function bar {}');
+
+  var root = scope.scopes[0];
+  assert.isDefined(root);
+  assert.equal(root.search('struct', 'Foo'), scope);
+  assert.isNull(root.search('function', 'notdefined'));
+
+  test.finish();
+};
