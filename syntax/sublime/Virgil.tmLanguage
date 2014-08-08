@@ -68,7 +68,7 @@
 			<key>comment</key>
 			<string>Types</string>
 			<key>match</key>
-			<string>\b(export|let|out|mut)\b</string>
+			<string>\b(export|let\!?|out\!?|mut\!?)\b</string>
 			<key>name</key>
 			<string>storage.modifier.vgl</string>
 		</dict>
