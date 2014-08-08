@@ -78,6 +78,9 @@ exports.testIdentifier = function(test, assert) {
   assert.throws(function() {
     calc2('let a = null; a');
   });
+  assert.throws(function() {
+    calc2('let b = a; let a = 1');
+  });
 
   test.finish();
 };
@@ -100,6 +103,15 @@ exports.testFunction = function(test, assert) {
   assert.equal('int', calc2('function foobar returns int { return 1 }; let fb = foobar(); fb'));
   assert.throws(function() {
     calc2('function foobar {}; let fb2 = foobar(); fb2');
+  });
+
+  test.finish();
+};
+
+exports.testPropertyAccess = function(test, assert) {
+  assert.equal('int', calc2('struct A { a = 1 }; let t = A(); t.a;'));
+  assert.throws(function() {
+    calc2('struct A { z = 1 }; let t = A(); t.a;');
   });
 
   test.finish();
