@@ -47,6 +47,69 @@ for (var i=2; i<process.argv.length; i++) {
   }
 }
 
+var printErrorContext = function(src, err) {
+  var lines = src.split(/\r?\n/g);
+  var start = Math.max(0, err.start.line - 3);
+  var end = Math.min(lines.length, err.end.line + 2);
+  var color = clc.red.bgWhite;
+
+  var splitWhitespace = function(line) {
+    var i = (line.match(/\S/) || {index: 0}).index;
+    return [line.substr(0, i), line.substr(i)];
+  };
+  var lineHeader = function() {
+    var base = null;
+    if (lineNum >= err.start.line && lineNum <= err.end.line)
+      base = color(lineNum + ':');
+    else
+      base = clc.blackBright(lineNum + ':');
+    return base + ' ';
+  };
+
+  for (var i=start; i<end; i++) {
+    var line = lines[i];
+    var lineNum = i + 1;
+
+    // Fade back comments in a line a bit
+    line = line.replace(/#.*$/, function(s) {
+      return clc.italic.blackBright(s);
+    });
+
+    // Intermediate lines fully highlighted
+    if (i+1 > err.start.line && i+1 < err.end.line) {
+      var l = splitWhitespace(line);
+      console.log(lineHeader() + l[0] + color(l[1]));
+
+    // If the error is only on one line, special case
+    } else if (i+1 == err.start.line && i+1 == err.end.line) {
+      var t = lineHeader();
+      t += line.substr(0, err.start.col);
+      t += color(line.substring(err.start.col, err.end.col));
+      t += line.substr(err.end.col);
+      console.log(t);
+
+    // Highlight leading portion
+    } else if (i+1 == err.start.line) {
+      var t = lineHeader();
+      t += line.substr(0, err.start.col)
+      t += color(line.substr(err.start.col));
+      console.log(t);
+
+    // Highlight trailing portion
+    } else if (i+1 == err.end.line) {
+      var t = lineHeader();
+      var l = splitWhitespace(line.substr(0, err.end.col));
+      t += l[0] + color(l[1]);
+      t += line.substr(err.end.col);
+      console.log(t);
+
+    // Don't highlight anything else
+    } else {
+      console.log(lineHeader() + line);
+    }
+  }
+};
+
 fs.readFile(args[0], {encoding: 'utf8'}, function(err, src) {
   if (err) throw err;
 
@@ -61,22 +124,28 @@ fs.readFile(args[0], {encoding: 'utf8'}, function(err, src) {
       console.log(vzs.compile(src, 'javascript'));
     }
   } catch (err) {
-    var lines = src.split(/\r?\n/g);
-
-    for (var i=Math.max(0, err.line - 3); i<Math.min(lines.length, err.line + 2); i++) {
-      var parts = [ i + 1 + ':'
-                  , ' ' + lines[i].substring(0, err.colStart)
-                  , lines[i].substring(err.colStart, err.colEnd)
-                  , lines[i].substring(err.colEnd)
-                  ];
-
-      if (i + 1 == err.line) {
-        parts[0] = clc.red.bgWhite(parts[0]);
-        parts[2] = clc.red.bgWhite(parts[2]);
-      }
-      console.log(parts.join(''));
+    // Attempt to pretty print errors
+    if (err.start && !err.end) {
+      err.end = {
+        line: err.start.line,
+        col: 1000
+      };
+      if (options.debug)
+        console.log('Warning: No end marker for error');
+    } else if (err.end && !err.start) {
+      err.start = {
+        line: err.end.line,
+        col: 0
+      };
+      if (options.debug)
+        console.log('Warning: No start marker for error');
     }
-    console.log('');
+    if (err.start && err.end) {
+      printErrorContext(src,err);
+      console.log('');
+    }
+
+    // Log out the actual error source
     if (options.debug)
       console.log(err.stack);
     else
