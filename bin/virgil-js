@@ -47,6 +47,38 @@ for (var i=2; i<process.argv.length; i++) {
   }
 }
 
+var highlight = function(line) {
+  // Split line into comment and not comment
+  var split = line.split('#');
+  if (split.length > 1)
+    split = [split[0], '#' + split.slice(1).join('#')];
+
+  // Highlight keywords
+  split[0] = split[0].replace(/\b(return)\b/g, function(s) {
+    return clc.green(s);
+  });
+
+  // Highlight keywords 2
+  split[0] = split[0].replace(/\b(true|false|let|mut|out|struct|function|method|if|else|for|while|export)\b/g, function(s) {
+    return clc.cyan(s);
+  });
+
+  // Highlight type names
+  split[0] = split[0].replace(/\b([A-Z][a-z0-9]*|int|float|str|list)\b/g, function(s) {
+    return clc.magenta(s);
+  });
+
+  // Highlight operators
+  split[0] = split[0].replace(/(\*|\*\*|\|\||\+|\-|\/|\=\=|\=|\%|\&\&|\<|\>)/g, function(s) {
+    return clc.blue(s);
+  });
+
+  // Fade back comments in a line a bit
+  split[1] = clc.italic.blackBright(split[1]);
+
+  return split.join('');
+};
+
 var printErrorContext = function(src, err) {
   var lines = src.split(/\r?\n/g);
   var start = Math.max(0, err.start.line - 3);
@@ -70,11 +102,6 @@ var printErrorContext = function(src, err) {
     var line = lines[i];
     var lineNum = i + 1;
 
-    // Fade back comments in a line a bit
-    line = line.replace(/#.*$/, function(s) {
-      return clc.italic.blackBright(s);
-    });
-
     // Intermediate lines fully highlighted
     if (i+1 > err.start.line && i+1 < err.end.line) {
       var l = splitWhitespace(line);
@@ -83,15 +110,15 @@ var printErrorContext = function(src, err) {
     // If the error is only on one line, special case
     } else if (i+1 == err.start.line && i+1 == err.end.line) {
       var t = lineHeader();
-      t += line.substr(0, err.start.col);
+      t += highlight(line.substr(0, err.start.col));
       t += color(line.substring(err.start.col, err.end.col));
-      t += line.substr(err.end.col);
+      t += highlight(line.substr(err.end.col));
       console.log(t);
 
     // Highlight leading portion
     } else if (i+1 == err.start.line) {
       var t = lineHeader();
-      t += line.substr(0, err.start.col)
+      t += highlight(line.substr(0, err.start.col));
       t += color(line.substr(err.start.col));
       console.log(t);
 
@@ -100,12 +127,12 @@ var printErrorContext = function(src, err) {
       var t = lineHeader();
       var l = splitWhitespace(line.substr(0, err.end.col));
       t += l[0] + color(l[1]);
-      t += line.substr(err.end.col);
+      t += highlight(line.substr(err.end.col));
       console.log(t);
 
     // Don't highlight anything else
     } else {
-      console.log(lineHeader() + line);
+      console.log(lineHeader() + highlight(line));
     }
   }
 };
