@@ -1,9 +1,16 @@
 var types = require('./util/require')('types')
   , parser = require('./util/require')('parser')
+  , passes = require('./util/require')('passes')
   ;
 
 var calc = function(str) {
   return types.calculate(parser.statement(str)).toString();
+};
+
+var calc2 = function(str) {
+  var parsed = parser.snippet(str);
+  passes.runAll(parsed);
+  return types.calculate(parsed[parsed.length - 1]).toString();
 };
 
 exports.testDirect = function(test, assert) {
@@ -53,12 +60,46 @@ exports.testListExpression = function(test, assert) {
   assert.equal('list<float>', calc('[1.0f, 1.0]'));
   assert.equal('list<str>', calc('["foo", "bar"]'));
   assert.equal('list<list<int>>', calc('[[1, 2], [1]]'));
+  assert.equal('int', calc('[1, 2, 3][1]'));
 
   assert.throws(function() {
     calc('[1, 1.0]');
   });
   assert.throws(function() {
     calc('[[1], ["foo"]]');
+  });
+
+  test.finish();
+};
+
+exports.testIdentifier = function(test, assert) {
+  assert.equal('int', calc2('let a = 1; a'));
+  assert.equal('int', calc2('let a = 1; let b = a; b'));
+  assert.throws(function() {
+    calc2('let a = null; a');
+  });
+
+  test.finish();
+};
+
+exports.testStruct = function(test, assert) {
+  assert.equal('Widget', calc2('struct Widget {}; let a : Widget = null; a'));
+  assert.equal('Widget', calc2('struct Widget {}; let a = Widget(); a'));
+
+  test.finish();
+};
+
+exports.testLaxNumerics = function(test, assert) {
+  assert.equal('float', calc2('let a : float = 1; a'));
+  assert.equal('int', calc2('let a = 1.0; let b : int = a; b'));
+
+  test.finish();
+};
+
+exports.testFunction = function(test, assert) {
+  assert.equal('int', calc2('function foobar returns int { return 1 }; let fb = foobar(); fb'));
+  assert.throws(function() {
+    calc2('function foobar {}; let fb2 = foobar(); fb2');
   });
 
   test.finish();
