@@ -59,12 +59,12 @@ var highlight = function(line) {
   });
 
   // Highlight keywords 2
-  split[0] = split[0].replace(/\b(true|false|let|mut|out|struct|function|method|if|else|for|while|export)\b/g, function(s) {
+  split[0] = split[0].replace(/\b(true|false|let|mut|out|struct|function|method|if|else|for|upto|downto|while|export)\b/g, function(s) {
     return clc.cyan(s);
   });
 
   // Highlight type names
-  split[0] = split[0].replace(/\b([A-Z][a-z0-9]*|int|float|str|list)\b/g, function(s) {
+  split[0] = split[0].replace(/\b([A-Z][a-z0-9]*|int|float|str|list|func|void)\b/g, function(s) {
     return clc.magenta(s);
   });
 
