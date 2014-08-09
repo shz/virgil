@@ -1,9 +1,9 @@
 if false {
-  a
+  1
 } else if true {
-  b
+  2
 } else {
-  c
+  3
 }
 
 1 + 1

@@ -1,15 +1,11 @@
 function foobar (a : int, b : int) returns int {
   a
   b
-  c +
-  d
-  e
-  f ; g
   return 1
 }
 
 function baz {
-  a
+  1
 }
 
 baz()
