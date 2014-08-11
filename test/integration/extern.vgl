@@ -5,7 +5,7 @@
 extern {
   struct Console {
     a : int
-    b : bool
+    b : str
   }
   method log(c : Console, value : str)
   function alert(s : str)
@@ -13,4 +13,6 @@ extern {
 }
 
 alert("This should work")
-console.log("sweet success");
+console.log("sweet success")
+console.log(console.a)
+console.log(console.b)
