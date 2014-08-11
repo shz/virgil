@@ -6,5 +6,5 @@ export function each(l : list<T>, action : func<T, void>) {
 
 let l = [1, 2, 3, 4]
 each(l, lambda(x) {
-  console.log(x)
+  # console.log(x)
 })

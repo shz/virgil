@@ -4,7 +4,7 @@ function add(a : int, b : int) returns int {
   return a + b
 }
 
-function sum(myList : list<int>) returns int {
+method sum(myList : list<int>) returns int {
 
 
   return 0 # Yep
@@ -38,12 +38,12 @@ let ll = [
   2,
 ]
 
-for i = 0 upto 2 {
-  console.log(i)
+for j = 0 upto 2 {
+  # console.log(i)
   continue
 }
-for i = 10 downto 1 {
-  console.log(i)
+for k = 10 downto 1 {
+  # console.log(i)
   break
 }
 
@@ -54,17 +54,14 @@ struct Shazam {
 
 let aaaa : bool = true
 
-let s = Shazam()
-s.aFunction()
-
 mut test = true
 while test {
-  console.log("inside loop")
+  # console.log("inside loop")
   test = false
 }
 
 let aaaaaaa = [1, 2, 3]
-a.sum()
+aaaaaaa.sum()
 
 let sh = Shazam()
 add(sh.a, sh.a)
