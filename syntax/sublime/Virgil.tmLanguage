@@ -52,7 +52,7 @@
 			<key>comment</key>
 			<string>Keywords</string>
 			<key>match</key>
-			<string>\b(return|returns|if|else|while|for|downto|upto|break|continue|import)\b</string>
+			<string>\b(extern|return|returns|if|else|while|for|downto|upto|break|continue|import)\b</string>
 			<key>name</key>
 			<string>keyword.control.vgl</string>
 		</dict>
@@ -68,7 +68,7 @@
 			<key>comment</key>
 			<string>Types</string>
 			<key>match</key>
-			<string>\b(export|let\!?|out\!?|mut\!?)\b</string>
+			<string>\b(export|let|out|mut)\b</string>
 			<key>name</key>
 			<string>storage.modifier.vgl</string>
 		</dict>

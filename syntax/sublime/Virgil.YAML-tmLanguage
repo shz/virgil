@@ -22,7 +22,7 @@ patterns:
       '2':
         name: entity.name.type.vgl
 
-  - match: \b(return|returns|if|else|while|for|downto|upto|break|continue|import)\b
+  - match: \b(extern|return|returns|if|else|while|for|downto|upto|break|continue|import)\b
     name: keyword.control.vgl
     comment: Keywords
 

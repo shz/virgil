@@ -1,0 +1,16 @@
+# Extern blocks are used to declare external APIs.  Any struct, method,
+# variable declaration, or function defined in an extern block will
+# be available to the surrounding scope.
+
+extern {
+  struct Console {
+    a : int
+    b : bool
+  }
+  method log(c : Console, value : str)
+  function alert(s : str)
+  console : Console
+}
+
+alert("This should work")
+console.log("sweet success");

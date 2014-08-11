@@ -73,6 +73,11 @@ var highlight = function(line) {
     return clc.blue(s);
   });
 
+  // Highlight strings
+  split[0] = split[0].replace(/"[^\\"\r\n]*(?:\\.[^"\\]*)*"/g, function(s) {
+    return clc.yellow(s);
+  });
+
   // Fade back comments in a line a bit
   split[1] = clc.italic.blackBright(split[1]);
 
