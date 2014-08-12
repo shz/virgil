@@ -1,5 +1,7 @@
 # Types
 
+**Note:** This is very out of date and doesn't match the current language syntax at all.  It's more of a thought experiment on richer animation-centric datatypes, and will eventually be updated to match the real language...
+
 ## Basic Stypes
 
 ### `str`
