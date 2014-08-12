@@ -24,8 +24,15 @@ ynpm install virgil
 **Compiling**
 
 ```bash
-virgil-js FILE.vgl
+virgil-js [options] [files...]
 ```
+
+**Options**
+
+ * `-d`/`--debug` - Use to debug the compiler
+ * `-w`/`--watch` - Runs continuously, recompiling when input files change
+ * `-m`/`--module` - Compiles into modules
+ * `-o FILE`/`--output FILE` - Compiles to a file rather than stdout
 
 **Testing**
 
