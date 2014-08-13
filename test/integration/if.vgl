@@ -3,7 +3,7 @@ if false {
 } else if true {
   2
 } else {
-  3
+  3 ** 4
 }
 
 1 + 1
