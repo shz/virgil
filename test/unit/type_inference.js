@@ -100,7 +100,7 @@ exports.testLaxNumerics = function(test, assert) {
 };
 
 exports.testFunction = function(test, assert) {
-  assert.equal('int', calc2('function foobar returns int { return 1 }; let fb = foobar(); fb'));
+  assert.equal('int', calc2('function foobar : int { return 1 }; let fb = foobar(); fb'));
   assert.throws(function() {
     calc2('function foobar {}; let fb2 = foobar(); fb2');
   });

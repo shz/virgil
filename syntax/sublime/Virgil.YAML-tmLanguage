@@ -22,13 +22,17 @@ patterns:
       '2':
         name: entity.name.type.vgl
 
-  - match: \b(extern|return|returns|if|else|while|for|downto|upto|break|continue|import)\b
+  - match: \b(extern|return|if|else|while|for|downto|upto|break|continue|import)\b
     name: keyword.control.vgl
     comment: Keywords
 
   - match: \b(void|func|list|lambda|bool|int|float|str|px|perc|color|speed|image|video|audio)\b
     name: storage.type.vgl
     comment: Types
+
+  - match: \b[A-Z][a-z0-9]*\b
+    name: storage.type.vgl
+    comment: User type
 
   - match: \b(export|let|out|mut)\b
     name: storage.modifier.vgl

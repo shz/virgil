@@ -7,7 +7,7 @@ struct Widget {
 # calling.  The first parameter of a method determines the type
 # to add the method to.
 
-method area(w : Widget) returns int {
+method area(w : Widget) : int {
   return w.width * w.height
 }
 
@@ -16,10 +16,10 @@ let size = Widget().area() # 10000
 # Methods, like functions, can be defined in subsequent scopes, and
 # will exist only in that scope.
 
-function findNarrowest(ws : list<Widget>) returns Widget {
+function findNarrowest(ws : list<Widget>) : Widget {
 
   # This method can only be called inside findNarrowest
-  method smallestSide(w : Widget) returns int {
+  method smallestSide(w : Widget) : int {
     if w.width > w.height {
       return w.width
     } else {
