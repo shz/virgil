@@ -61,6 +61,7 @@ exports.testListExpression = function(test, assert) {
   assert.equal('list<str>', calc('["foo", "bar"]'));
   assert.equal('list<list<int>>', calc('[[1, 2], [1]]'));
   assert.equal('int', calc('[1, 2, 3][1]'));
+  assert.equal('inferred', calc('[]'));
 
   assert.throws(function() {
     calc('[1, 1.0]');
@@ -80,6 +81,17 @@ exports.testIdentifier = function(test, assert) {
   });
   assert.throws(function() {
     calc2('let b = a; let a = 1');
+  });
+
+  test.finish();
+};
+
+exports.testEmptyList = function(test, assert) {
+  assert.equal('list<int>', calc2('let a : list<int> = []; a'));
+  assert.equal('int', calc2('let a : list<int> = []; a[1]'));
+
+  assert.throws(function() {
+    calc2('let a = []; a');
   });
 
   test.finish();
