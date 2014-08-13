@@ -1,0 +1,15 @@
+struct Color {
+  r = 0f
+  g = 0f
+  b = 0f
+  a = 1f
+}
+
+export function rgb(ir : int, ig : int, ib : int) : Color {
+  let c = Color({
+    r = ir / 255.0
+    g = ig / 255.0
+    b = ib / 255.0
+  })
+  return c
+}

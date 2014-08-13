@@ -8,11 +8,11 @@ extern {
   console : Console
 }
 
-function add(a : int, b : int) returns int {
+function add(a : int, b : int) : int {
   return a + b
 }
 
-method sum(myList : list<int>) returns int {
+method sum(myList : list<int>) : int {
   return 0 # Yep
 }
 
