@@ -15,13 +15,20 @@ function main returns int {
 
 ## Usage
 
-**Installation**
+#### Installation
 
 ```bash
 ynpm install virgil
 ```
 
-**Compiling**
+#### Using from node
+
+```javascript
+require('virgil');
+require('./path/to/virgil/file');
+```
+
+#### Compiling with Virgil
 
 ```bash
 virgil-js [options] [files...]
@@ -34,7 +41,7 @@ virgil-js [options] [files...]
  * `-m`/`--module` - Compiles into modules
  * `-o FILE`/`--output FILE` - Compiles to a file rather than stdout
 
-**Testing**
+#### Testing
 
 ```bash
 npm test

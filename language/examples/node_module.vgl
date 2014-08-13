@@ -1,0 +1,9 @@
+extern {
+  struct Console {}
+  method log(c : Console, msg : str)
+  console : Console
+}
+
+export function greet(name : str) returns str {
+  return console.log("Hello, " + name)
+}
