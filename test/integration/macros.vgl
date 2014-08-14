@@ -1,100 +1,34 @@
-# @prefixMacro foo(right : Statement) {
-#   let tree = @parse {
-#     let $a = 1
+# #
+# # Goal is to turn this:
+# #
 
-#     function $foo
-#   }
-
-#   return tree.render({
-#     a = "var1"
-#     foo = right.name
+# method fade(rc : RenderContext<Data>, i : int, o : int)
+# : env.RenderContext<data> {
+#   return rc.anim(lambda(c : Canvas, cl : Clock) {
+#     c.globalAlpha = cl.percent
 #   })
 # }
 
-# @prefixMacro renderer(right : FunctionStatement) {
-#   let template = @parse {
-#     method $name() {
-#       function paint { $body }
-#       ctx.draw(paint)
-#     }
-#   }
-#   template.args = right.args
-#   template.args.shift({
-#     name = "rc",
-#     type = TypeRef({name: "RenderContext"})
-#   })
+# #
+# # Into this
+# #
 
-#   return template.render({
-#     name = right.name
-#     body = right.body
-#   })
+# animation! method fade(rc : RenderContext<Data>, i : int, o : int) {
+#   c.globalAlpha = cl.percent
 # }
 
-# @macro rgba(right : FunctionCallExpression)
+# #
+# # Via something like this
+# #
 
-# @macro prefix foo(
+# macro animation!(thing : MethodStatement) : MethodStatement {
+#   thing.args.push(...)
 
-# let font = myFont @size 18px
-
-# ###################
-# # Framework level
-# ###################
-
-# host {
-#   function foo(a : int) returns int {}
-#   struct Something {
+#   let oldbody = thing.body
+#   thing.body = parse! return rc.anim(lambda c, cl) {
 
 #   }
-#   method do (s : Something, a : int, b : float) returns str {}
+#   thing.body.body = oldbody
+
+#   return thing
 # }
-
-# struct Clock {
-#   fromStart = 0
-#   fromEnd = 0
-# }
-
-# struct Canvas {
-
-# }
-
-# struct RenderContext<T> {
-#   clock = Clock()
-#   data = T()
-#   canvas : Canvas = null
-# }
-
-# ##################
-# # User level
-# ##################
-
-# struct Datum {
-#   foo = 0
-#   bar = "bar"
-# }
-# struct Data {
-#   parts : list<Datum> = []
-# }
-
-# let rc = RenderContext<Data>({
-#   data = getData()
-#   canvas = makeCanvas()
-# })
-
-# method drawSomething(rc : RenderContext, x : int, y : int) {
-#   rc.draw(block(c) {
-
-#   })
-# }
-
-# @renderer drawSomething(c : Canvas, x : int, y: int) {
-#   c.fillRect(x, y, 100, 100)
-# }
-
-# rc.fade(100, 200).drawSomething(100, 200)
-# rc.fade(100, 200).draw(block(a : int) {
-
-# })
-
-# rc.fade(100, 200).map(0, 10, lambda(a, b) {
-
-# })
