@@ -60,3 +60,13 @@ exports.testWalking = function(test, assert) {
 
   test.finish();
 };
+
+exports.testLambda = function(test, assert) {
+  var scope = calc('lambda(x) { return x }');
+
+  assert.isDefined(scope);
+  assert.equal(scope.scopes.length, 1);
+  assert.isDefined(scope.scopes[0].variables.x);
+
+  test.finish();
+};
