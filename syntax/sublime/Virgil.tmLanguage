@@ -68,7 +68,7 @@
 			<key>comment</key>
 			<string>User type</string>
 			<key>match</key>
-			<string>\b[A-Z][a-z0-9]*\b</string>
+			<string>\b[A-Z][a-zA-Z0-9]*\b</string>
 			<key>name</key>
 			<string>storage.type.vgl</string>
 		</dict>

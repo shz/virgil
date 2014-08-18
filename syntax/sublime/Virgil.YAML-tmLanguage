@@ -30,7 +30,7 @@ patterns:
     name: storage.type.vgl
     comment: Types
 
-  - match: \b[A-Z][a-z0-9]*\b
+  - match: \b[A-Z][a-zA-Z0-9]*\b
     name: storage.type.vgl
     comment: User type
 

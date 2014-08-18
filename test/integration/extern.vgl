@@ -15,7 +15,6 @@ extern {
 # Everything defined in the extern block is now usable just as
 # if it was
 
-alert("This should work")
 console.log("sweet success")
 console.log(console.a)
 console.log(console.b)
