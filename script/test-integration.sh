@@ -38,7 +38,7 @@ WHITE='\033[01;37m'
 
 for file in $(find test/integration -name \*.vgl); do
   printf "${YELLOW}$file${RESTORE}  =  "
-  result=`bin/virgil-js $file 2>&1`
+  result=`bin/virgil-js -s $file 2>&1`
   if [ $? -ne 0 ]; then
     echo "${RED}FAIL${RESTORE}"
     # echo '--------------------------------------------------------'
