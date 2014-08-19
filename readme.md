@@ -49,6 +49,10 @@ npm test
 ./script/test.sh
 # Or, for verbose integration tests...
 ./script/test-integration.sh --debug
+# Or, for coverage-free unit tests
+./script/test-unit.sh --no-coverage
+# Or, for a single unit test
+whiskey test/unit/[testfile].js
 ```
 
 ## The Language
