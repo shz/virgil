@@ -1,5 +1,7 @@
 import a
+import sub.b
 
 function something {
   foobar()
+  kazam()
 }
