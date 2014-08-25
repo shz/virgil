@@ -4,4 +4,6 @@ import sub.b
 function something {
   foobar()
   kazam()
+
+  let b = Bojangles()
 }
