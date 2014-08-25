@@ -38,7 +38,7 @@ WHITE='\033[01;37m'
 
 file="test/module/main.vgl"
 printf "${YELLOW}$file${RESTORE}  =  "
-result=`bin/virgil-js $file -o test/module/output 2>&1`
+result=`bin/virgil-js $file --debug -o test/module/output 2>&1`
 if [ $? -ne 0 ]; then
   echo "${RED}FAIL${RESTORE}"
   # echo '--------------------------------------------------------'

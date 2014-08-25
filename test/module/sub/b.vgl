@@ -6,3 +6,11 @@ export struct Bojangles {
   a = 1
   b = "b"
 }
+
+method getPrivate(b : Bojangles) : str {
+  return b.b
+}
+
+export method getPublic(b : Bojangles) : str {
+  return b.b
+}
