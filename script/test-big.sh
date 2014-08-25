@@ -36,7 +36,7 @@ LPURPLE='\033[01;35m'
 LCYAN='\033[01;36m'
 WHITE='\033[01;37m'
 
-for file in $(find test/integration -name \*.vgl); do
+for file in $(find test/big -name \*.vgl); do
   printf "${YELLOW}$file${RESTORE}  =  "
   result=`bin/virgil-js -s $file 2>&1`
   if [ $? -ne 0 ]; then

@@ -1,0 +1,12 @@
+import a
+import sub.b
+import sub.extra
+
+function something {
+  foobar()
+  kazam()
+
+  let b = Bojangles()
+  b.getPublic()
+  b.extra()
+}
