@@ -1,0 +1,3 @@
+export method extra(b : Bojangles) : bool {
+  return true
+}

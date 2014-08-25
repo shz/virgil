@@ -36,21 +36,22 @@ LPURPLE='\033[01;35m'
 LCYAN='\033[01;36m'
 WHITE='\033[01;37m'
 
-file="test/module/main.vgl"
-printf "${YELLOW}$file${RESTORE}  =  "
-result=`bin/virgil-js $file --debug -o test/module/output 2>&1`
-if [ $? -ne 0 ]; then
-  echo "${RED}FAIL${RESTORE}"
-  # echo '--------------------------------------------------------'
-  echo "$result"
-  echo ''
-  echo ''
-else
-  echo "${GREEN}PASS${RESTORE}"
-
-  if [ $debug -eq 1 ]; then
+for file in $(find test/big -name \*.vgl); do
+  printf "${YELLOW}$file${RESTORE}  =  "
+  result=`bin/virgil-js -s $file 2>&1`
+  if [ $? -ne 0 ]; then
+    echo "${RED}FAIL${RESTORE}"
+    # echo '--------------------------------------------------------'
     echo "$result"
+    echo ''
+    echo ''
+  else
+    echo "${GREEN}PASS${RESTORE}"
+
+    if [ $debug -eq 1 ]; then
+      echo "$result"
+    fi
   fi
-fi
+done
 echo ''
 

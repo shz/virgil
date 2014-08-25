@@ -1,10 +1,7 @@
-# THIS IS A MODULE!!
-
 extern {
 
-  # Use of SUGARJS Date
-  struct Date {
-  }
+  # Use of Browser/SugarJS Date
+  struct Date {}
   function createDate(unixtime : int) : Date
   method isYesterday(input : Date) : bool
   method isToday(input : Date) : bool
@@ -15,7 +12,7 @@ extern {
   function mathMin(x1 : float, x2 : float) : float
   function mathRound(x1 : float) : int
 
-  method findIndex(haystack : list<int>, needle : int) : int 
+  method findIndex(haystack : list<int>, needle : int) : int
   method findIndex(haystack : list<float>, needle : float) : int
   method push(haystack : list<float>, newguy : float) : void
   method push(haystack : list<int>, newguy : int) : void
@@ -93,7 +90,7 @@ export struct StockVizDriverData {
   dateRelDispl = ""
 }
 
-  
+
 
 
 # ************************
@@ -104,7 +101,7 @@ export function analyze(input : StockVizInput) : StockVizDriverData {
 
   data.dates = input.values.mapForInt(lambda(x:StockVizInputDataPoint) { return x.time })
   data.quotes = input.values.mapForFloat(lambda(x:StockVizInputDataPoint) { return x.close })
-    
+
   # Find the low/high for the day (stock-price).
   data.low = data.quotes.min();
   data.high = data.quotes.max();
@@ -119,9 +116,9 @@ export function analyze(input : StockVizInput) : StockVizDriverData {
     absolute = data.priceEnd - data.prevClose
     perc = 100 * ((data.priceEnd - data.prevClose) / data.prevClose)
   })
-    
+
   # Starting point for the y-axis window matches the low/high
-  # data values but we will nudge those to provide some 
+  # data values but we will nudge those to provide some
   # breathing room.
   data.lowGraphWindow = mathMin(data.low, data.prevClose)
   data.highGraphWindow = mathMax(data.high, data.prevClose)
@@ -135,14 +132,14 @@ export function analyze(input : StockVizInput) : StockVizDriverData {
   }
   else if (dateOfGraph.isYesterday()) {
     data.dateSemantic = "Yesterday"
-  } 
+  }
 
   data.dateRelDispl = dateOfGraphStr
 
   # Determine the array indexes that produced those highs/lows.
   data.idxOfLow = data.quotes.findIndex(data.low)
   data.idxOfHigh = data.quotes.findIndex(data.high)
-   
+
   # This is the span of the graphwindow, not the actual high/low of stock price
   data.span = data.highGraphWindow - data.lowGraphWindow
 
@@ -155,7 +152,7 @@ export function analyze(input : StockVizInput) : StockVizDriverData {
 
   # Determine the Y-axis horiz-rule positioning.
   data.yUnitsPerRule = data.span / 5
-  
+
   # Normalize the yUnitsPerRule
   if (data.yUnitsPerRule > 0.8) {
     data.yUnitsPerRule = mathRound(data.yUnitsPerRule)
