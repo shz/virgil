@@ -6,9 +6,9 @@ Compiles into C++ and Javascript, with special integrations for use
 with the [Vizify](https://git.corp.yahoo.com/lpstein/vizify) platform.
 
 ```
-function main returns int {
+function main : int {
   let message = "Hello World"
-  console.log(message)
+  alert(message)
   return 0
 }
 ```
@@ -32,14 +32,16 @@ require('./path/to/virgil/file');
 
 ```bash
 virgil-js [options] [files...]
+virgil-cpp [options] [files...]
 ```
 
 **Options**
 
  * `-d`/`--debug` - Use to debug the compiler
  * `-w`/`--watch` - Runs continuously, recompiling when input files change
- * `-m`/`--module` - Compiles into modules
- * `-o FILE`/`--output FILE` - Compiles to a file rather than stdout
+ * `-s`/`--snippet` - Compiles using snippet mode
+ * `-o LOCATION`/`--output LOCATION` - Specifies output directory, or
+                                       output file in snippet mode
 
 #### Testing
 
@@ -49,6 +51,8 @@ npm test
 ./script/test.sh
 # Or, for verbose integration tests...
 ./script/test-integration.sh --debug
+# Or, to debug the module system
+./script/test-module.sh --debug
 # Or, for coverage-free unit tests
 ./script/test-unit.sh --no-coverage
 # Or, for a single unit test
@@ -57,7 +61,7 @@ whiskey test/unit/[testfile].js
 
 ## The Language
 
-Real documentation forthcoming.
+Real documentation forthcoming.  Ignore these for now.
 
  * [Types](language/types.md)
  * [Operators](language/operators.md)
