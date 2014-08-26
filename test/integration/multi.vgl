@@ -1,4 +1,5 @@
-# This is a comment
+# This file is a random shmorgasboard of functionality.  Helps us put
+# the parser through its paces :)
 
 extern {
   struct Console {}
