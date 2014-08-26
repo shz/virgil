@@ -3,9 +3,9 @@
 extern {
   struct Console {}
   method log(c : Console, v : str)
-  method log(c : Console, v : int)
 
   console : Console
+  jaz : Console
 }
 
 function add(a : int, b : int) : int {
