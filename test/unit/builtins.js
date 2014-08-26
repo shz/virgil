@@ -15,7 +15,7 @@ var calc2 = function(str) {
 
 exports.testListMembers = function(test, assert) {
   assert.equal('int', calc2('[1, 2, 3].length'));
-  assert.equal('void', calc2('[1, 2, 3].empty()'));
+  // assert.equal('void', calc2('[1, 2, 3].empty()'));
   assert.throws(function() {
     assert.ok(types.equal(types.make('int'), calc2('[1, 2, 3].foobam')));
   });

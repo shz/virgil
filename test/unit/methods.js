@@ -3,6 +3,16 @@ var types = require('./util/require')('types')
   , passes = require('./util/require')('passes')
   ;
 
+var calc = function(str) {
+  return types.calculate(parser.statement(str)).toString();
+};
+
+var calc2 = function(str) {
+  var parsed = parser.snippet(str);
+  passes.runAll(parsed);
+  return types.calculate(parsed[parsed.length - 1]).toString();
+};
+
 exports.testNatural = function(test, assert) {
   var node = parser.module('struct Foo {} ; method bar(f : Foo) {}');
   passes.runAll(node);
@@ -37,3 +47,15 @@ exports.testUnnatural = function(test, assert) {
   test.finish();
 };
 
+exports.testType = function(test, assert) {
+  assert.equal('method<int, int>', calc2('method a(i : int) : int {}; (1).a'));
+  assert.equal('method<list<int>, void>', calc2('method a(l : list<int>) {}; [1].a'));
+
+  test.finish();
+};
+
+exports.testBuiltinTypes = function(test, assert) {
+  // assert.equal('method<list<int>, void>', calc2('[true].push'));
+
+  test.finish();
+};
