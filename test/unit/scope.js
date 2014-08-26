@@ -70,3 +70,20 @@ exports.testLambda = function(test, assert) {
 
   test.finish();
 };
+
+exports.testConflicts = function(test, assert) {
+  assert.throws(function() {
+    calc('let a = 1; let a = 2');
+  }, /defined/);
+  assert.throws(function() {
+    calc('let a = 1; function a {}');
+  }, /defined/);
+  assert.throws(function() {
+    calc('method a(i : int) {}; method a(i : int) {}');
+  }, /defined/);
+
+  // Shouldn't throw
+  calc('let a = 1; method a(i : int) {}');
+
+  test.finish();
+};
