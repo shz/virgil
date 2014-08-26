@@ -1,6 +1,7 @@
 import a
 import sub.b
 import sub.extra
+import externs
 
 function something {
   foobar()
@@ -9,4 +10,7 @@ function something {
   let b = Bojangles()
   b.getPublic()
   b.extra()
+
+  let f = Foo()
+  baz()
 }

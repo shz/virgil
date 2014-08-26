@@ -1,0 +1,8 @@
+export extern {
+  struct Foo {}
+  function baz
+}
+
+extern {
+  function bar
+}
