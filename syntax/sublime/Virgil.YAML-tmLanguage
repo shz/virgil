@@ -46,6 +46,10 @@ patterns:
     name: constant.language.new.vgl
     comment: New
 
+  - match: \'[A-Z]
+    name: constant.language.null.vgl
+    comment: Generic params
+
   - match: \btrue\b
     name: constant.language.boolean.true.vgl
     comment: True
