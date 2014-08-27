@@ -1,0 +1,46 @@
+# Generics are specified using familiar C++/C#/Java style syntax.  There
+# are a few builtin types that already support generics.
+
+let l : list<int> = [1, 2, 3]
+let f : func<void> = lambda {}
+
+# You can define your own methods on specialized types.
+
+method sum(l : list<int>) : int {
+  mut s = 0
+  for i=0 upto l.length {
+    s = s + l[i]
+  }
+  return s
+}
+
+# You can also define your own methods on base types.
+
+method halfLength(l : list<'T>) : int {
+  return l.length / 2
+}
+
+method myMap(l : list<'T>, f : func<'T, 'T>) {
+  let l2 : list<'T> = []
+  for i=0 upto l.length {
+    # l2.push(f(l[i]))
+  }
+  return l2
+}
+
+# When you define a struct, you can also use generic members
+
+struct Thing<'T> {
+  quixoticity = 0.0
+  item : 'T = null
+}
+
+let thing1 = new Thing<int>()
+let thing2 = new Thing<Thing<float>>()
+
+# Functions work as well
+
+function nop(thing : 'T) : 'T {
+  return thing
+}
+
