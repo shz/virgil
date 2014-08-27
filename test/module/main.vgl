@@ -7,10 +7,10 @@ function something {
   foobar()
   kazam()
 
-  let b = Bojangles()
+  let b = new Bojangles()
   b.getPublic()
   b.extra()
 
-  let f = Foo()
+  let f = new Foo()
   baz()
 }

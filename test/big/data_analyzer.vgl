@@ -97,7 +97,7 @@ export struct StockVizDriverData {
 # THE ANALYZER
 #
 export function analyze(input : StockVizInput) : StockVizDriverData {
-  let data = StockVizDriverData()
+  let data = new StockVizDriverData()
 
   data.dates = input.values.mapForInt(lambda(x:StockVizInputDataPoint) { return x.time })
   data.quotes = input.values.mapForFloat(lambda(x:StockVizInputDataPoint) { return x.close })
@@ -112,7 +112,7 @@ export function analyze(input : StockVizInput) : StockVizDriverData {
   data.prevClose = parseFloat(input.meta.prev_close);
 
   # // net gain/loss for the day
-  data.netEffect = Delta({
+  data.netEffect = new Delta({
     absolute = data.priceEnd - data.prevClose
     perc = 100 * ((data.priceEnd - data.prevClose) / data.prevClose)
   })

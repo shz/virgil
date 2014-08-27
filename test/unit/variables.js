@@ -20,7 +20,7 @@ exports.testAssignmentAllowance = function(test, assert) {
   calc2('out a = 1; a');
   calc2('mut a = 1; a = 2; a');
   calc2('mut a = 1; a = 2.0f; a');
-  calc2('struct Foo { a = 1 }; let f = Foo(); f.a = 2; f.a');
+  calc2('struct Foo { a = 1 }; let f = new Foo(); f.a = 2; f.a');
 
   // These should fail
   assert.throws(function() {

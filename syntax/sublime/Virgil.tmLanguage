@@ -82,11 +82,19 @@
 		</dict>
 		<dict>
 			<key>comment</key>
-			<true/>
+			<false/>
 			<key>match</key>
 			<string>\bnull\b</string>
 			<key>name</key>
 			<string>constant.language.null.vgl</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>New</string>
+			<key>match</key>
+			<string>\bnew\b</string>
+			<key>name</key>
+			<string>constant.language.new.vgl</string>
 		</dict>
 		<dict>
 			<key>comment</key>

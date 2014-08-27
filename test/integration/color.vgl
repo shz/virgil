@@ -9,7 +9,7 @@ export struct Color {
 }
 
 export function rgb(ir : int, ig : int, ib : int) : Color {
-  return Color({
+  return new Color({
     r = ir / 255.0
     g = ig / 255.0
     b = ib / 255.0
@@ -20,7 +20,7 @@ export method greyscale(c : Color) : Color {
   # FYI, this is a terrible way to greyscale.  Demo purposes only :)
   let sum = c.r + c.g + c.b
   let avg = sum / 3
-  return Color({
+  return new Color({
     r = avg
     g = avg
     b = avg

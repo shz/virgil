@@ -40,7 +40,11 @@ patterns:
 
   - match: \bnull\b
     name: constant.language.null.vgl
-    comment: True
+    comment: Null
+
+  - match: \bnew\b
+    name: constant.language.new.vgl
+    comment: New
 
   - match: \btrue\b
     name: constant.language.boolean.true.vgl
