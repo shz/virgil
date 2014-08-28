@@ -32,7 +32,6 @@ exports.testStruct = function(test, assert) {
   assert.throws(function() {
     parse("struct Foo<'T> { a : 'B = null }");
   }, /undeclared/i);
-  console.log('blah');
   assert.throws(function() {
     parse("struct Foo<'T> { a : 'T = null }; let a = new Foo<'B>()");
   }, /undeclared/i);
