@@ -39,7 +39,7 @@ let p = f
 
 # let t = 100ms
 
-let i = add(1, add(2, 3))
+let i = add(1, add(-2, 3))
 let l : list<int> = [1, 2, 3, 4]
 let ll = [
   1,
