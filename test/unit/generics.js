@@ -4,7 +4,7 @@ var types = require('./util/require')('types')
   ;
 
 var parse = function(str) {
-  passes.runAll(parser.statement(str));
+  passes.runAll(parser.snippet(str));
 };
 
 var calc = function(str) {
@@ -23,14 +23,29 @@ exports.testGenericTyperef = function(test, assert) {
   test.finish();
 };
 
-exports.testStructChecking = function(test, assert) {
-  // Should not throw
+exports.testStruct = function(test, assert) {
+  // All valid declarations, should be fine
   parse("struct Foo<'T> { a : 'T = null }");
+  parse("struct Foo<'T> { a : 'T = null }; let a = new Foo<int>()");
 
-  // Should throw
+  // Should fail due to undeclared generic params
   assert.throws(function() {
     parse("struct Foo<'T> { a : 'B = null }");
   }, /undeclared/i);
+  console.log('blah');
+  assert.throws(function() {
+    parse("struct Foo<'T> { a : 'T = null }; let a = new Foo<'B>()");
+  }, /undeclared/i);
+  assert.throws(function() {
+    parse("struct Foo<'T> { a : 'T = null }; let a = new Foo<'T>()");
+  }, /undeclared/i);
+  assert.throws(function() {
+    parse("struct Foo<'T> { a : 'T = null }; function test { let a = new Foo<'T>() }");
+  }, /undeclared/i);
+
+  // Make sure types resolve properly
+  // assert.equal('int', calc2("struct Foo<'T> { a : 'T = null }; let f = new Foo<int>(); f.a"));
+  // assert.equal('int', calc2("struct Foo<'T> { a : 'T = null }; let f = new Foo<Foo<int>>(); f.a.a"));
 
   test.finish();
 };
