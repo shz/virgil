@@ -13,6 +13,25 @@ var calc2 = function(str) {
   return types.calculate(parsed[parsed.length - 1]).toString();
 };
 
+exports.testDefaults = function(test, assert) {
+  // Just make sure these don't fail
+  calc2('let a : int = default; a');
+  calc2('let a : float = default; a');
+  calc2('let a : str = default; a');
+  calc2('let a : bool = default; a');
+  calc2('let a : func<void> = default; a');
+  calc2('let a : method<int, void> = default; a'); // Weird generic failure
+  calc2('let a : list<bool> = default; a');
+  calc2('struct Foo {}; let a : Foo = default; a');
+
+  // Types must be defined to use default
+  assert.throws(function() {
+    calc2('let a = default; a');
+  }, /default/);
+
+  test.finish();
+};
+
 exports.testAssignmentAllowance = function(test, assert) {
   // Just attempt to trigger errors.  All of these are supposed to work.
   calc2('let a = 1; a');

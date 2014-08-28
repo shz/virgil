@@ -21,6 +21,7 @@ function iHaveNoArguments {
   return void
 }
 
+let defaultedString : str = default
 let a = "This is a string"
 out b = "This is a string"
 mut c = "This is a string"
