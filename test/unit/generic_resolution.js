@@ -5,6 +5,7 @@ var types = require('./util/require')('types')
 
 var TR = types.TypeRef;
 var resolve = types.generics.resolve;
+var match = types.generics.matches;
 
 exports.testBasic = function(test, assert) {
   var r = resolve( new TR("int")
@@ -52,6 +53,30 @@ exports.testBasic = function(test, assert) {
            , new TR('list', [types.canned['str']])
            );
   }, /mismatch/i);
+
+  test.finish();
+};
+
+exports.testMatching = function(test, assert) {
+  assert.equal(match( new TR('str')
+                    , types.canned['str']
+                    ), true);
+
+  assert.equal(match( new TR('str')
+                    , types.canned['int']
+                    ), false);
+
+  assert.equal(match( new TR("'T")
+                    , types.canned['str']
+                    ), true);
+
+  assert.equal(match( new TR('list', [new TR('str')])
+                    , new TR('list', [new TR('str')])
+                    ), true);
+
+  assert.equal(match( new TR('list', [new TR("'T")])
+                    , new TR('list', [new TR('str')])
+                    ), true);
 
   test.finish();
 };
