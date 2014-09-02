@@ -65,6 +65,12 @@ Real documentation forthcoming.  Ignore these for now.
 
  * [Types](language/types.md)
  * [Operators](language/operators.md)
+ * [Control](language/control.md)
+ * [Functions](language/functions.md)
+ * [Structs/Methods](language/structs.md)
+ * [Modules](language/modules.md)
+ * [Externs](language/externs.md)
+ * [Generics](language/generics.md)
 
 ## TODO
 
