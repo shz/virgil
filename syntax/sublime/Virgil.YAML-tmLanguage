@@ -50,6 +50,10 @@ patterns:
     name: constant.language.null.vgl
     comment: Generic params
 
+  - match: \bdefault\b
+    name: storage.type.vgl
+    comment: Generic params
+
   - match: \btrue\b
     name: constant.language.boolean.true.vgl
     comment: True

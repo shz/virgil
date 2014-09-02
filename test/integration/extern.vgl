@@ -16,7 +16,6 @@ extern {
 # if it was
 
 console.log("sweet success")
-console.log(console.a)
 console.log(console.b)
 
 let i : int = parseInt("100")

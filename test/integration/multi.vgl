@@ -47,11 +47,11 @@ let ll = [
 ]
 
 for j = 0 upto 2 {
-  console.log(i)
+  console.log("i")
   continue
 }
 for k = 10 downto 1 {
-  console.log(i)
+  console.log("i")
   break
 }
 

@@ -99,17 +99,17 @@ export struct StockVizDriverData {
 export function analyze(input : StockVizInput) : StockVizDriverData {
   let data = new StockVizDriverData()
 
-  data.dates = input.values.mapForInt(lambda(x:StockVizInputDataPoint) { return x.time })
-  data.quotes = input.values.mapForFloat(lambda(x:StockVizInputDataPoint) { return x.close })
+  data.dates = input.values.mapForInt(lambda(x:StockVizInputDataPoint) : int { return x.time })
+  data.quotes = input.values.mapForFloat(lambda(x:StockVizInputDataPoint) : float { return x.close })
 
   # Find the low/high for the day (stock-price).
-  data.low = data.quotes.min();
-  data.high = data.quotes.max();
+  data.low = data.quotes.min()
+  data.high = data.quotes.max()
 
-  data.priceStart = data.quotes.first();
-  data.priceEnd = data.quotes.last();
+  data.priceStart = data.quotes.first()
+  data.priceEnd = data.quotes.last()
 
-  data.prevClose = parseFloat(input.meta.prev_close);
+  data.prevClose = input.meta.prev_close
 
   # // net gain/loss for the day
   data.netEffect = new Delta({

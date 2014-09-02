@@ -43,3 +43,12 @@ exports.testDefinitions = function(test, assert) {
 
   test.finish();
 };
+
+exports.testReturn = function(test, assert) {
+  // Make sure return statements get walked
+  assert.throws(function() {
+    calc('function a : int { return 1 + "string" }');
+  });
+
+  test.finish();
+};

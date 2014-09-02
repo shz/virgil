@@ -32,7 +32,7 @@ method sum(l : list<int>) : int {
 
 struct Thing<'T> {
   quixoticity = 0.0
-  item : 'T = null
+  item : 'T = default
 }
 
 let thing1 = new Thing<int>()
@@ -40,7 +40,7 @@ let thing2 = new Thing<Thing<float>>()
 
 # Functions work as well
 
-# function nop(thing : 'T) : 'T {
-#   return thing
-# }
+function nop(thing : 'T) : 'T {
+  return thing
+}
 

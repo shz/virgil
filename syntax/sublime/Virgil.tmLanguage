@@ -106,6 +106,14 @@
 		</dict>
 		<dict>
 			<key>comment</key>
+			<string>Generic params</string>
+			<key>match</key>
+			<string>\bdefault\b</string>
+			<key>name</key>
+			<string>storage.type.vgl</string>
+		</dict>
+		<dict>
+			<key>comment</key>
 			<true/>
 			<key>match</key>
 			<string>\btrue\b</string>
