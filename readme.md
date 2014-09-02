@@ -65,3 +65,11 @@ Real documentation forthcoming.  Ignore these for now.
 
  * [Types](language/types.md)
  * [Operators](language/operators.md)
+
+## TODO
+
+In addition to finishing up the language...
+
+ * Use Ragel -> C -> emscripten for lexing
+ * Consistent representation of source locations
+ * Formal operator precedence

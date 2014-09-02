@@ -1,4 +1,5 @@
-# This is a comment
+# This file is a random shmorgasboard of functionality.  Helps us put
+# the parser through its paces :)
 
 extern {
   struct Console {}
@@ -20,6 +21,7 @@ function iHaveNoArguments {
   return void
 }
 
+let defaultedString : str = default
 let a = "This is a string"
 out b = "This is a string"
 mut c = "This is a string"
@@ -37,7 +39,7 @@ let p = f
 
 # let t = 100ms
 
-let i = add(1, add(2, 3))
+let i = add(1, add(-2, 3))
 let l : list<int> = [1, 2, 3, 4]
 let ll = [
   1,
@@ -45,11 +47,11 @@ let ll = [
 ]
 
 for j = 0 upto 2 {
-  console.log(i)
+  console.log("i")
   continue
 }
 for k = 10 downto 1 {
-  console.log(i)
+  console.log("i")
   break
 }
 
@@ -69,7 +71,7 @@ while test {
 let aaaaaaa = [1, 2, 3]
 aaaaaaa.sum()
 
-let sh = Shazam()
+let sh = new Shazam()
 add(sh.a, sh.a)
 
 if true {

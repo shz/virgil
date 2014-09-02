@@ -3,8 +3,8 @@ struct Test {
   b : str = "default"
 }
 
-let s = Test()
-let s2 = Test({
+let s = new Test()
+let s2 = new Test({
   a = "aa"
   b = 2
 })

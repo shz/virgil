@@ -1,7 +1,7 @@
 import sub.b
 
 export function foobar {
-  let b = Bojangles()
+  let b = new Bojangles()
 
   1 + 1
 }

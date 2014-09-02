@@ -1,15 +1,17 @@
-function foobar (a : int, b : int) : int {
-  a
-  b
-  return 1
+# Type annotations are NOT optional for function signatures
+function sum (a : int, b : int) : int {
+  return a + b
 }
 
+# If a function lacks a return type, omit that part.  Arguments are the
+# same.  If you include empty brackets, the compiler will complain.
 function baz {
-  1
+  # Normally you'd do something here
 }
 
+# Calling works just like you'd expect
 baz()
-foobar(1, 2)
+sum(1, 2)
 
-
-
+# Functions are first class and can be referred to by name.
+let f = sum # f's type is func<int, int, int>

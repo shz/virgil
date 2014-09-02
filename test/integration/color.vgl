@@ -1,4 +1,7 @@
-struct Color {
+# Example of how you'd define a Color structure, with methods and
+# a helper creation function.
+
+export struct Color {
   r = 0f
   g = 0f
   b = 0f
@@ -6,10 +9,26 @@ struct Color {
 }
 
 export function rgb(ir : int, ig : int, ib : int) : Color {
-  let c = Color({
+  return new Color({
     r = ir / 255.0
     g = ig / 255.0
     b = ib / 255.0
   })
-  return c
 }
+
+export method greyscale(c : Color) : Color {
+  # FYI, this is a terrible way to greyscale.  Demo purposes only :)
+  let sum = c.r + c.g + c.b
+  let avg = sum / 3
+  return new Color({
+    r = avg
+    g = avg
+    b = avg
+    a = c.a
+  })
+}
+
+# Sample usage
+
+let red = rgb(255, 0, 0)
+let grey = red.greyscale()

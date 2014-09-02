@@ -1,9 +1,15 @@
+#
+# Usage from node:
+#
+# require('./node_module.vgl').greet('My name')
+#
+
 extern {
   struct Console {}
   method log(c : Console, msg : str)
   console : Console
 }
 
-export function greet(name : str) returns str {
+export function greet(name : str) {
   return console.log("Hello, " + name)
 }
