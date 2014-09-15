@@ -3,9 +3,13 @@ struct Test {
   b : str = "default"
 }
 
-let s = new Test()
-let s2 = new Test({
-  a = "aa"
-  b = 2
-})
-s2.b = "not default"
+function main : int {
+  let s = new Test()
+  let s2 = new Test({
+    a = 2
+    b = "a"
+  })
+  s2.b = "not default"
+
+  return 1
+}
