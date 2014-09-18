@@ -8,6 +8,7 @@ extern {
     b : str
   }
   method log(c : Console, value : str)
+  method warn(c : Console, value : str)
   function parseInt(s : str) : int
   console : Console
 }

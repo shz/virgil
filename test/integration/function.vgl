@@ -15,3 +15,16 @@ sum(1, 2)
 
 # Functions are first class and can be referred to by name.
 let f = sum # f's type is func<int, int, int>
+let v = sum(1, 4)
+
+# Functions may also be nested inside other functions
+function outer(n : int) : int {
+  let a = 5
+
+  # Inner functions close over variables in the same scope
+  function inner(n : int) : int {
+    return a + n
+  }
+
+  return inner(n)
+}

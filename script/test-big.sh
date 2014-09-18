@@ -37,8 +37,24 @@ LCYAN='\033[01;36m'
 WHITE='\033[01;37m'
 
 for file in $(find test/big -name \*.vgl); do
-  printf "${YELLOW}$file${RESTORE}  =  "
+  printf "${YELLOW}$file${RESTORE} Javascript =  "
   result=`bin/virgil-js -s $file 2>&1`
+  if [ $? -ne 0 ]; then
+    echo "${RED}FAIL${RESTORE}"
+    # echo '--------------------------------------------------------'
+    echo "$result"
+    echo ''
+    echo ''
+  else
+    echo "${GREEN}PASS${RESTORE}"
+
+    if [ $debug -eq 1 ]; then
+      echo "$result"
+    fi
+  fi
+
+  printf "${YELLOW}$file${RESTORE} C++        =  "
+  result=`bin/virgil-cpp -s $file 2>&1`
   if [ $? -ne 0 ]; then
     echo "${RED}FAIL${RESTORE}"
     # echo '--------------------------------------------------------'

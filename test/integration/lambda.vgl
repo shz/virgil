@@ -1,7 +1,8 @@
 export function each(l : list<'T>, action : func<'T, int, void>) {
-  for i = 0 upto l.length {
-    action(l[i], i)
-  }
+  # for i = 0 upto l.length {
+  #   action(l[i], i)
+  # }
+  action(l[0], 0)
 }
 
 let l = [1, 2, 3, 4]
