@@ -14,8 +14,6 @@ extern {
 
   method findIndex(haystack : list<int>, needle : int) : int
   method findIndex(haystack : list<float>, needle : float) : int
-  method push(haystack : list<float>, newguy : float) : void
-  method push(haystack : list<int>, newguy : int) : void
   method max(haystack : list<float>) : float
   method min(haystack : list<float>) : float
   method first(haystack : list<float>) : float

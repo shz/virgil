@@ -1,0 +1,17 @@
+#
+# An example of list methods and usage
+#
+
+function main : int {
+  let l = [1, 2, 3, 4]
+  l.push(5)
+
+  if l.length != 5 {
+    return 1
+  }
+  if l.pop() != 5 {
+    return 2
+  }
+
+  return 0
+}
