@@ -7,6 +7,13 @@ var TR = types.TypeRef;
 var resolve = types.generics.resolve;
 var match = types.generics.matches;
 
+var calc2 = function(str) {
+  var parsed = parser.snippet(str);
+  passes.runAll(parsed);
+  return types.calculate(parsed[parsed.length - 1]).toString();
+};
+
+
 exports.testBasic = function(test, assert) {
   var r = resolve( new TR("int")
                  , types.canned['int']
@@ -77,6 +84,13 @@ exports.testMatching = function(test, assert) {
   assert.equal(match( new TR('list', [new TR("'T")])
                     , new TR('list', [new TR('str')])
                     ), true);
+
+  test.finish();
+};
+
+exports.testReturnType = function(test, assert) {
+  assert.equal('int', calc2("function f(a : 'T) : 'T { return a }; f(1)"));
+  assert.equal('int', calc2("method f(a : list<'T>) : 'T { return a[0] }; [1].max()"));
 
   test.finish();
 };
