@@ -90,7 +90,7 @@ exports.testMatching = function(test, assert) {
 
 exports.testReturnType = function(test, assert) {
   assert.equal('int', calc2("function f(a : 'T) : 'T { return a }; f(1)"));
-  assert.equal('int', calc2("method f(a : list<'T>) : 'T { return a[0] }; [1].max()"));
+  assert.equal('int', calc2("method f(a : list<'T>) : 'T { return a[0] }; [1].f()"));
 
   test.finish();
 };
