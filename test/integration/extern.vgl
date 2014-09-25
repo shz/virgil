@@ -20,3 +20,21 @@ console.log("sweet success")
 console.log(console.b)
 
 let i : int = parseInt("100")
+
+# Externs also understand external namespaces, as well.
+extern math {
+  struct Thing {}
+  function abs(a : int, b : int)
+}
+
+# Namespaced externs are used just the same as regular externs, but
+# the resulting code that's generated uses namespace references.
+abs(1, 2)
+
+# For example, here's the resulting Javascript:
+#   math.abs(1, 2)
+# And the resulting C++:
+#   math::abs(1, 2)
+
+# Another example
+let a = new Thing()
