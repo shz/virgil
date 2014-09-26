@@ -16,23 +16,23 @@ method sum(l : list<int>) : int {
 
 # You can also define your own methods on base types.
 
-method halfLength(l : list<'T>) : int {
-  return l.length / 2
-}
+# method halfLength(l : list<'T>) : int {
+#   return l.length / 2
+# }
 
-[1, 2, 3, 3].halfLength() # Returns 2
+# [1, 2, 3, 3].halfLength() # Returns 2
 
-method myMap(l : list<'T>, f : func<'T, 'T>) {
-  let l2 : list<'T> = []
-  for i=0 upto l.length {
-    # l2.push(f(l[i]))
-  }
-  return l2
-}
+# method myMap(l : list<'T>, f : func<'T, 'T>) {
+#   let l2 : list<'T> = []
+#   for i=0 upto l.length {
+#     # l2.push(f(l[i]))
+#   }
+#   return l2
+# }
 
-[1, 2, 3, 4].myMap(lambda(x : int) : int {
-  return x * 2
-})
+# [1, 2, 3, 4].myMap(lambda(x : int) : int {
+#   return x * 2
+# })
 
 # When you define a struct, you can also use generic members
 
@@ -50,3 +50,11 @@ function nop(thing : 'T) : 'T {
   return thing
 }
 
+
+# Types are resolved as needed
+
+struct Something<'T> {}
+method a(s : Something<'T>) : Something<'T> {}
+method b(s : Something<list<int>>) {}
+
+new Something<list<int>>().a().b()
