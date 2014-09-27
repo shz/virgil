@@ -11,6 +11,8 @@ function doSomethingInteral {
 
 }
 
+struct Something {}
+
 export function doSomething(s : Something) {
   1 + 1
 }

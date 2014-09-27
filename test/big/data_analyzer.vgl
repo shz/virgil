@@ -19,7 +19,6 @@ extern {
   method first(haystack : list<float>) : float
   method last(haystack : list<float>) : float
 
-  method round(f : float, resolution : int) : float
 
   function parseFloat(s:str) : float
 }
@@ -145,7 +144,7 @@ export function analyze(input : StockVizInput) : StockVizDriverData {
   # some data that lies below the actual minimum,
   # so the trough of the graph doesn't actually hit
   # rock bottom.
-  data.span = (1.1 * data.span).round(2)
+  data.span = (1.1 * data.span).round()
   data.lowGraphWindow = data.highGraphWindow - data.span
 
   # Determine the Y-axis horiz-rule positioning.
@@ -156,7 +155,7 @@ export function analyze(input : StockVizInput) : StockVizDriverData {
     data.yUnitsPerRule = mathRound(data.yUnitsPerRule)
   } else {
     for i=1 upto 10 {
-      if (data.yUnitsPerRule.round(i) > 0) {
+      if (data.yUnitsPerRule.round() > 0) {
         data.yUnitsPerRule = data.yUnitsPerRule.round(i)
         break
       }
