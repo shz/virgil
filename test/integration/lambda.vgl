@@ -6,6 +6,6 @@ export function each(l : list<'T>, action : func<'T, int, void>) {
 }
 
 let l = [1, 2, 3, 4]
-each(l, lambda(x, i) {
+each(l, lambda(x : int, i : int) {
   # console.log(x)
 })

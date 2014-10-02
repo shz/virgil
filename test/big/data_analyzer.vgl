@@ -156,7 +156,7 @@ export function analyze(input : StockVizInput) : StockVizDriverData {
   } else {
     for i=1 upto 10 {
       if (data.yUnitsPerRule.round() > 0) {
-        data.yUnitsPerRule = data.yUnitsPerRule.round(i)
+        data.yUnitsPerRule = data.yUnitsPerRule.round()
         break
       }
     }
