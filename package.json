@@ -29,7 +29,8 @@
   "devDependencies": {
     "jshint": "^2.5.2",
     "whiskey": "^0.8.4",
-    "istanbul": "^0.3.0"
+    "istanbul": "^0.3.0",
+    "mock-fs": "^2.3.1"
   },
   "yahoo": {
     "custodian": {
