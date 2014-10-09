@@ -73,3 +73,13 @@ struct Case1<'T> {
 
 let c1 = new Case1<int>()
 let temp = c1.l
+
+extern {
+  struct Test<'T> {}
+}
+method do(t : Test<'T>) : 'T {
+  let m : 'T = default
+  return m
+}
+let t = new Test<int>()
+let tt = t.do()
