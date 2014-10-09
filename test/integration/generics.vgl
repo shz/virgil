@@ -58,3 +58,9 @@ method a(s : Something<'T>) : Something<'T> {}
 method b(s : Something<list<int>>) {}
 
 new Something<list<int>>().a().b()
+
+# Inference can go pretty deep
+
+function blah(a : 'T) : Something<'T> {
+  return new Something<'T>()
+}
