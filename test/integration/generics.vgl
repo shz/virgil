@@ -64,3 +64,12 @@ new Something<list<int>>().a().b()
 function blah(a : 'T) : Something<'T> {
   return new Something<'T>()
 }
+
+# This is a test case
+
+struct Case1<'T> {
+  l : list<'T> = null
+}
+
+let c1 = new Case1<int>()
+let temp = c1.l
