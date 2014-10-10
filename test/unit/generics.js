@@ -66,11 +66,11 @@ exports.testStruct = function(test, assert) {
 exports.testFunction = function(test, assert) {
   // All valid declarations, should be fine
   parse("function nop(x : 'T) {}");
-  parse("function nop(x : 'T) : 'T {}");
+  parse("function nop(x : 'T) : 'T { return x }");
   parse("function nop(x : 'T) { let foo : 'T = default }");
   parse("function nop(x : 'T) { mut foo : 'T = default; foo = x }");
   parse("function nop(x : 'T) : 'T { mut foo : 'T = default; foo = x; return foo }");
-  parse("function nop(x : 'T) { function inner(y : 'B) {} }");
+  parse("function nop(x : 'T) { function inner(y : 'B) { } }");
   parse("function first(x : list<'T>) : 'T { return x[0] }");
 
   // Should fail due to undeclared generic params
@@ -104,7 +104,7 @@ exports.testFunction = function(test, assert) {
 exports.testMethod = function(test, assert) {
   // All valid declarations, should be fine
   parse("method nop(a : int, x : 'T) {}");
-  parse("method nop(a : int, x : 'T) : 'T {}");
+  parse("method nop(a : int, x : 'T) : 'T { return x }");
   parse("method nop(a : int, x : 'T) { let foo : 'T = default }");
   parse("method nop(a : int, x : 'T) { mut foo : 'T = default; foo = x }");
   parse("method nop(a : int, x : 'T) : 'T { mut foo : 'T = default; foo = x; return foo }");

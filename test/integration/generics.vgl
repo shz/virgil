@@ -22,10 +22,10 @@ method halfLength(l : list<'T>) : int {
 
 [1, 2, 3, 3].halfLength() # Returns 2
 
-method myMap(l : list<'T>, f : func<'T, 'T>) {
-  let l2 : list<'T> = []
+method myMap(l : list<'I>, f : func<'I, 'O>) : list<'O> {
+  let l2 : list<'O> = []
   for i=0 upto l.length {
-    # l2.push(f(l[i]))
+    l2.push(f(l[i]))
   }
   return l2
 }
@@ -54,7 +54,7 @@ function nop(thing : 'T) : 'T {
 # Types are resolved as needed
 
 struct Something<'T> {}
-method a(s : Something<'T>) : Something<'T> {}
+method a(s : Something<'T>) : Something<'T> { return s }
 method b(s : Something<list<int>>) {}
 
 new Something<list<int>>().a().b()

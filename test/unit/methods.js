@@ -48,7 +48,7 @@ exports.testUnnatural = function(test, assert) {
 };
 
 exports.testType = function(test, assert) {
-  assert.equal('method<int, int>', calc2('method a(i : int) : int {}; (1).a'));
+  assert.equal('method<int, int>', calc2('method a(i : int) : int { return 1}; (1).a'));
   assert.equal('method<list<int>, void>', calc2('method a(l : list<int>) {}; [1].a'));
 
   test.finish();
