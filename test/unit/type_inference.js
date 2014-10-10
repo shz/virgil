@@ -28,7 +28,8 @@ exports.testDirect = function(test, assert) {
 exports.testArithmetic = function(test, assert) {
   assert.equal('int', calc('1 + 1'));
   assert.equal('str', calc('"hi" + "bye"'));
-  assert.equal('float', calc('1.0 + 2'));
+  assert.equal('float', calc('1.0 + 2.0'));
+  assert.equal('float', calc('1.0 + 2f'));
 
   assert.equal('int', calc('1 - 1'));
   assert.equal('int', calc('1 * 1'));
@@ -38,10 +39,13 @@ exports.testArithmetic = function(test, assert) {
 
   assert.throws(function() {
     calc('"hi" * "bye"');
-  });
+  }, /type/);
   assert.throws(function() {
     calc('true + false');
-  });
+  }, /type/);
+  assert.throws(function() {
+    calc('1.0 + 2');
+  }, /type/);
 
   test.finish();
 };

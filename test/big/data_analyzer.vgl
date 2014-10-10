@@ -111,7 +111,7 @@ export function analyze(input : StockVizInput) : StockVizDriverData {
   # // net gain/loss for the day
   data.netEffect = new Delta({
     absolute = data.priceEnd - data.prevClose
-    perc = 100 * ((data.priceEnd - data.prevClose) / data.prevClose)
+    perc = 100f * ((data.priceEnd - data.prevClose) / data.prevClose)
   })
 
   # Starting point for the y-axis window matches the low/high
@@ -148,7 +148,7 @@ export function analyze(input : StockVizInput) : StockVizDriverData {
   data.lowGraphWindow = data.highGraphWindow - data.span
 
   # Determine the Y-axis horiz-rule positioning.
-  data.yUnitsPerRule = data.span / 5
+  data.yUnitsPerRule = data.span / 5f
 
   # Normalize the yUnitsPerRule
   if (data.yUnitsPerRule > 0.8) {
