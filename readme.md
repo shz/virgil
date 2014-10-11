@@ -61,7 +61,12 @@ whiskey test/unit/[testfile].js
 
 ## The Language
 
-Real documentation forthcoming.  Ignore these for now.
+Documentation is being actively developed, but needs lots of work still.
+Feel free to reach out to lpstein@yahoo-inc.com if you have any questions
+or need help!
+
+[Language guide](language/guide.md) - A short, gentle, and mostly complete
+                                      introduction to Virgil.
 
  * [Types](language/types.md)
  * [Operators](language/operators.md)

@@ -1,75 +1,103 @@
 # Types
 
-**Note:** This is very out of date and doesn't match the current language syntax at all.  It's more of a thought experiment on richer animation-centric datatypes, and will eventually be updated to match the real language...
+Virgil has a few simple built-in types, and allows for user-defined
+types via [structs](structs.md).
 
-## Basic Stypes
+**Value types:**
 
-### `str`
-
-```
-str a = "Hello world"
-```
+ * `int` - Signed integer type
+ * `float` - Double-precision floating point
+ * `bool` - Standard boolean type, either `true` or `false`
+ * `str` - String type
+ * `list<'T>` - [Generic](generics.md) list type
 
 ### `int`
 
+May be used in arithmetic expressions.  Unlike many languages, casting
+between `int` and `float` is not automatic.  If you want to turn your
+`int` into a `float`, use the `.asFloat()` method.
+
+```c#
+let a : int = 1
+let b = 10
+let c = b * a - 20
+let d = c.asFloat()
+let e = 20f / a.asFloat()
 ```
-int a = 1
-```
+
+**Properties:**
+None
+
+**Methods:**
+TODO
 
 ### `float`
 
-```
-float a = 1.0f
-```
+May be used in arithmetic expressions.  Unlike many languages, casting
+between `int` and `float` is not automatic.  If you want to turn your
+`float` into an `int`, use the `.round()`, `.ceil()`, or `.floor()`
+methods.
 
-### `px`
-
-```
-px a = 10px
-```
-
-### `perc`
-
-Same as a `float`.  Will automatically cast to a `float`, bounded
-to `[0, 1]`.
-
-```
-perc a = 0.5f
+```c#
+let a : float = 1f
+let b = 1f
+let c = 10.2
+let d = 12.4f
+let e = 10 * c.ceil()
 ```
 
-### `time`
+**Properties:**
+None
 
-Same as an `int`.  Automatically casts to an `int`.
+**Methods:**
+TODO
 
+### `bool`
+
+Either `true` or `false`.  May be used in logical expressions.
+
+```c#
+let a = true
+let b = false
+let c : bool = false
+let d = true || false
+let e = d && (a || false)
 ```
-time a = 10ms
-time b = 0.5s
+
+**Properties:**
+None
+
+**Methods:**
+None
+
+### `str`
+
+Created using double-quotes.  May be concatenated using addition.
+
+```c#
+let a : str = "Hello world"
+let b = "Hello " + "world"
+let c = a + " " + b
 ```
 
-### `color`
+**Properties:**
+TODO
 
-Automatically casts to a `string`.
+**Methods:**
+TODO
 
+### `list<'T>`
+
+Standard array type.  Elements must all be of the same type.
+
+```c#
+let a : list<int> = []
+let b : list<int> = [ 1, 2, 5 ]
+let c = [ 6, 7, 9, ]
 ```
-color a = rgb(100, 255, 1)
-color b = rgba(100, 243, 1, 0)
-```
 
-### `speed`
+**Properties:**
+TODO
 
-**Thought experiment**
-
-This is its own datatype, though arithmetic operations with other
-datatypes can convert this to `time` or `px`.
-
-```
-speed a = 100px/ms
-speed b = 200px/s
-
-## Vizify Datatypes
-
-### `image`
-
-### `audio`
-
-### `video`
+**Methods:**
+TODO
