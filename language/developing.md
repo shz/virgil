@@ -8,6 +8,10 @@ Please do the standard fork + pull request for any changes.
 
 Make sure that `npm run lint` and `npm test` are clean.
 
+## Misc. Notes
+
+Things you should know.
+
 ### Testing
 
 There are numerous ways to run the various types of tests.
