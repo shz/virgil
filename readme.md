@@ -43,22 +43,6 @@ virgil-cpp [options] [files...]
  * `-o LOCATION`/`--output LOCATION` - Specifies output directory, or
                                        output file in snippet mode
 
-#### Testing
-
-```bash
-npm test
-# Or
-./script/test.sh
-# Or, for verbose integration tests...
-./script/test-integration.sh --debug
-# Or, to debug the module system
-./script/test-module.sh --debug
-# Or, for coverage-free unit tests
-./script/test-unit.sh --no-coverage
-# Or, for a single unit test
-whiskey test/unit/[testfile].js
-```
-
 ## The Language
 
 Documentation is being actively developed, but needs lots of work still.
@@ -77,9 +61,13 @@ or need help!
  * [Externs](language/externs.md)
  * [Generics](language/generics.md)
 
-## TODO
+## Contributing
 
-In addition to finishing up the language...
+Check out [developing.md](language/developing.md) for information.
+
+#### TODO
+
+In no particular order, some things on the horizon:
 
  * Use Ragel -> C -> emscripten for lexing
  * Consistent representation of source locations
