@@ -27,3 +27,10 @@ exports.testEmpty = function(test, assert) {
 
   test.finish();
 };
+
+exports.testUserDefined = function(test, assert) {
+  // These shouldn't fail
+  parse('struct A {}; function a : A { return null }');
+
+  test.finish();
+};
