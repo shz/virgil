@@ -36,6 +36,7 @@ exports.testArithmetic = function(test, assert) {
   assert.equal('int', calc('1 / 1'));
   assert.equal('int', calc('1 % 1'));
   assert.equal('int', calc('1 ** 1'));
+  assert.equal('float', calc('1f ** 2'));
 
   assert.throws(function() {
     calc('"hi" * "bye"');
@@ -46,6 +47,12 @@ exports.testArithmetic = function(test, assert) {
   assert.throws(function() {
     calc('1.0 + 2');
   }, /type/);
+  assert.throws(function() {
+    calc('"foo" ** 1');
+  }, /left/i);
+  assert.throws(function() {
+    calc('10 ** 1.4');
+  }, /right/i);
 
   test.finish();
 };
