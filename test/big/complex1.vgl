@@ -1,0 +1,28 @@
+struct Fraction {
+  num = 0
+  den = 1
+}
+
+struct Root {
+  primary : list<Fraction> = []
+  secondary : list<Fraction> = []
+}
+
+function main : int {
+  method count(r : Root) : int {
+    return r.primary.length + r.secondary.length
+  }
+
+  let r = new Root()
+
+  r.primary.push(new Fraction({
+    num = 10
+    den = 3
+  }))
+  r.secondary.push(new Fraction({
+    num = 20
+    den = 100
+  }))
+
+  return r.count()
+}
