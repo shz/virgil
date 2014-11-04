@@ -27,12 +27,12 @@ exports.testForcedStack = function(test, assert) {
   assert.equal(conv('\'T', 'heap'), 'T');
 
   // These are not
-  assert.equal(conv('list', ['int'], 'heap'), 'std::shared_ptr<std::vector<int>>');
-  assert.equal(conv('Foobar', 'heap'), 'std::shared_ptr<Foobar>');
+  assert.equal(conv('list', ['int'], 'heap'), 'std::vector<int>*');
+  assert.equal(conv('Foobar', 'heap'), 'Foobar*');
 
   // Slightly more complex case
-  assert.equal(conv('func', ['Foobar'], 'heap'), 'std::function<std::shared_ptr<Foobar>()>');
-  assert.equal(conv('list', ['Foobar'], 'heap'), 'std::shared_ptr<std::vector<std::shared_ptr<Foobar>>>');
+  assert.equal(conv('func', ['Foobar'], 'heap'), 'std::function<Foobar*()>');
+  assert.equal(conv('list', ['Foobar'], 'heap'), 'std::vector<Foobar*>*');
 
   test.finish();
 };
