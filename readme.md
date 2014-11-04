@@ -52,6 +52,8 @@ or need help!
 [Language guide](language/guide.md) - A short, gentle, and mostly complete
                                       introduction to Virgil.
 
+Details documentation/specs (some of these TODO):
+
  * [Types](language/types.md)
  * [Operators](language/operators.md)
  * [Control](language/control.md)
@@ -63,15 +65,7 @@ or need help!
 
 ## Contributing
 
-Check out [developing.md](language/developing.md) for information.
-
-#### TODO
-
-In no particular order, some things on the horizon:
-
- * Use Ragel -> C -> emscripten for lexing
- * Consistent representation of source locations
- * Formal operator precedence
- * Multiple error messages at once
- * Nice documentation
- * Emacs syntax highlighting
+Check out [developing.md](language/developing.md) for information.  If
+you're interested in hacking on the language, adding compiler features,
+or whatever, don't hesitate to ask lpstein@yahoo-inc.com for help.  I'm
+more than happy to help ease people into the codebase!

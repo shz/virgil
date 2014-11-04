@@ -8,29 +8,20 @@ Please do the standard fork + pull request for any changes.
 
 Make sure that `npm run lint` and `npm test` are clean.
 
+## TODO List
+
+In no particular order, some things on the horizon:
+
+ * Use Ragel -> C -> emscripten for lexing
+ * Consistent representation of source locations
+ * Formal operator precedence
+ * Multiple error messages at once
+ * Nice documentation
+ * Emacs syntax highlighting
+
 ## Misc. Notes
 
 Things you should know.
-
-### Testing
-
-There are numerous ways to run the various types of tests.
-
-```bash
-npm test
-# Or
-./script/test.sh
-# Or, for verbose integration tests...
-./script/test-integration.sh --debug
-# Or, to debug the module system
-./script/test-module.sh --debug
-# Or, for coverage-free unit tests
-./script/test-unit.sh --no-coverage
-# Or, for a single unit test
-whiskey test/unit/[testfile].js
-```
-
-The above is a sampling of available combinations.
 
 ### Error Messages
 
@@ -53,5 +44,25 @@ accomplishes that goal best.
 
 ### Testing
 
-The more tests, the better.  It's incredibly important for Virgil, as
-a compiler, to not suffer from regressions whenever possible.
+There are numerous ways to run the various types of tests.
+
+```bash
+npm test
+# Or
+./script/test.sh
+# Or, for verbose integration tests...
+./script/test-integration.sh --debug
+# Or, to debug the module system
+./script/test-module.sh --debug
+# Or, for coverage-free unit tests
+./script/test-unit.sh --no-coverage
+# Or, for a single unit test
+whiskey test/unit/[testfile].js
+```
+
+The above is a sampling of available combinations, hopefully you get
+the idea.
+
+The general philosophy towards testing: the more tests, the better.
+It's incredibly important for Virgil, as a compiler, to not suffer from
+regressions whenever possible.

@@ -12,8 +12,16 @@ idiomatic C++11 and Javascript.
 
 Ok.  With that out of the way, let's dive into the language.
 
+**Quick reference**:
+
+ * [Variables](#variables)
+ * [If/else](#ifelse)
+ * [Loops](#loops)
+ * [Boolean logic](#logic)
+
 ## Basics
 
+<a name="variables"></a>
 Virgil has a few built in types that are pretty much exactly what you'd
 expect: `int`, `float`, `bool`, `str`, `list<'T>`.  Usage is pretty
 self explanatory, but check [here](types.md) for the full reference.
@@ -42,6 +50,7 @@ mut b = 1
 b = 4 # Works just fine
 ```
 
+<a name="ifelse"></a>
 All your normal control flow features are present as well; if/else,
 while/for loops.
 
@@ -62,7 +71,50 @@ while count < 10 {
 }
 ```
 
+<a name="loops"></a>
 For loops bear special mentions, as they're a little different than
-most languages.
+most languages, and by different, I mean limited.  Take a look:
 
-TODO - The rest
+```python
+mut count = 0
+for i = 0 upto 3 {
+  count = count + 1
+}
+# count == 1 + 2 == 3
+for i = 10 downto 9 {
+  count += i
+}
+# count = 3 + 10 = 13
+```
+
+The main thing to beware of is that for loops only work on `int`s, and
+`upto`/`downto` *exclude* the final value.  So `for i = 0 upto 2` will
+see values `i = 0` and `i = 1`.
+
+<a name="logic"></a>
+Boolean operators are largely the same as in any other language.
+
+```perl
+let a = false || true && (1 > 20) || (4 <= 4)
+```
+
+## Functions
+
+TODO
+
+## Structs
+
+TODO
+
+## Methods
+
+TODO
+
+## Module System
+
+TODO
+
+## Externs
+
+TODO
+
