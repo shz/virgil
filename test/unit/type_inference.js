@@ -110,8 +110,8 @@ exports.testEmptyList = function(test, assert) {
 
 exports.testStruct = function(test, assert) {
   assert.equal('Widget', calc2('struct Widget {}; let a : Widget = null; a'));
-  assert.equal('Widget', calc2('struct Widget {}; let a = new Widget(); a'));
-  assert.equal('Widget', calc2('struct Widget {}; new Widget()'));
+  assert.equal('Widget', calc2('struct Widget {}; let a = new Widget; a'));
+  assert.equal('Widget', calc2('struct Widget {}; new Widget'));
 
   test.finish();
 };
@@ -133,10 +133,10 @@ exports.testFunction = function(test, assert) {
 };
 
 exports.testPropertyAccess = function(test, assert) {
-  assert.equal('int', calc2('struct A { a = 1 }; let t = new A(); t.a'));
-  assert.equal('int', calc2('struct A { a = 1 }; new A().a'));
+  assert.equal('int', calc2('struct A { a = 1 }; let t = new A; t.a'));
+  assert.equal('int', calc2('struct A { a = 1 }; new A.a'));
   assert.throws(function() {
-    calc2('struct A { z = 1 }; let t = new A(); t.a');
+    calc2('struct A { z = 1 }; let t = new A; t.a');
   });
 
   test.finish();

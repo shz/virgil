@@ -11,7 +11,7 @@ method area(w : Widget) : int {
   return w.width * w.height
 }
 
-let size = new Widget().area() # 10000
+let size = new Widget.area() # 10000
 
 # Methods, like functions, can be defined in subsequent scopes, and
 # will exist only in that scope.

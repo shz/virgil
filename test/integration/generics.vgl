@@ -41,8 +41,8 @@ struct Thing<'T> {
   item : 'T = default
 }
 
-let thing1 = new Thing<int>()
-let thing2 = new Thing<Thing<float>>()
+let thing1 = new Thing<int>
+let thing2 = new Thing<Thing<float>>
 
 # Functions work as well
 
@@ -57,12 +57,12 @@ struct Something<'T> {}
 method a(s : Something<'T>) : Something<'T> { return s }
 method b(s : Something<list<int>>) {}
 
-new Something<list<int>>().a().b()
+new Something<list<int>>.a().b()
 
 # Inference can go pretty deep
 
 function blah(a : 'T) : Something<'T> {
-  return new Something<'T>()
+  return new Something<'T>
 }
 
 # This is a test case
@@ -71,7 +71,7 @@ struct Case1<'T> {
   l : list<'T> = null
 }
 
-let c1 = new Case1<int>()
+let c1 = new Case1<int>
 let temp = c1.l
 
 extern {
@@ -81,14 +81,14 @@ method do(t : Test<'T>) : 'T {
   let m : 'T = default
   return m
 }
-let t = new Test<int>()
+let t = new Test<int>
 let tt = t.do()
 
 struct Regression<'T> {
   a : func<list<'T>, void> = null
 }
 
-let r = new Regression<int>({
+let r = new Regression<int> {
   a = lambda(i : list<int>) {}
-})
+}
 r.a([1, 2])

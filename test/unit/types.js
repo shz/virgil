@@ -38,7 +38,7 @@ exports.testDefinitions = function(test, assert) {
     calc('let a : b = null');
   }, /defined/);
   assert.throws(function() {
-    calc('let a = new B()');
+    calc('let a = new B');
   }, /defined/);
 
   test.finish();

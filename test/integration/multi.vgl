@@ -71,7 +71,7 @@ while test {
 let aaaaaaa = [1, 2, 3]
 aaaaaaa.sum()
 
-let sh = new Shazam()
+let sh = new Shazam
 add(sh.a, sh.a)
 
 if true {

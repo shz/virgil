@@ -37,4 +37,4 @@ abs(1, 2)
 #   math::abs(1, 2)
 
 # Another example
-let a = new Thing()
+let a = new Thing

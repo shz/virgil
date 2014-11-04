@@ -4,11 +4,11 @@ struct Test {
 }
 
 function main : int {
-  let s = new Test()
-  let s2 = new Test({
+  let s = new Test
+  let s2 = new Test {
     a = 2
     b = "a"
-  })
+  }
   s2.b = "not default"
 
   return 1

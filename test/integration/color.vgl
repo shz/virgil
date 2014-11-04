@@ -9,23 +9,23 @@ export struct Color {
 }
 
 export function rgb(ir : int, ig : int, ib : int) : Color {
-  return new Color({
+  return new Color {
     r = ir.asFloat() / 255.0
     g = ig.asFloat() / 255.0
     b = ib.asFloat() / 255.0
-  })
+  }
 }
 
 export method greyscale(c : Color) : Color {
   # FYI, this is a terrible way to greyscale.  Demo purposes only :)
   let sum = c.r + c.g + c.b
   let avg = sum / 3f
-  return new Color({
+  return new Color {
     r = avg
     g = avg
     b = avg
     a = c.a
-  })
+  }
 }
 
 # Sample usage
