@@ -31,9 +31,6 @@ exports.testImports = function(test, assert) {
 
     test.finish();
   });
-
-  assert.isDefined(w.compiling['a.vgl']);
-  assert.isDefined(w.compiling['b.vgl']);
 };
 
 exports.testCircularDetection = function(test, assert) {
