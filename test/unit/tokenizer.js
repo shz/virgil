@@ -19,11 +19,16 @@ exports.testSuperflousSemicolon = function(test, assert) {
 
 exports.testStrings = function(test, assert) {
   var a = parse('let a = "this # has a hash"');
-
   assert.equal(a.length, 1);
   assert.equal(a[0].constructor.name, 'VariableDeclaration');
   assert.equal(a[0].expression.constructor.name, 'StringLiteral');
   assert.equal(a[0].expression.value, 'this # has a hash');
+
+  var b = parse('let a = "this is a \\" string"');
+  assert.equal(b.length, 1);
+  assert.equal(b[0].constructor.name, 'VariableDeclaration');
+  assert.equal(b[0].expression.constructor.name, 'StringLiteral');
+  assert.equal(b[0].expression.value, 'this is a " string');
 
   test.finish();
 };

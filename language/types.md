@@ -25,11 +25,14 @@ let d = c.asFloat()
 let e = 20f / a.asFloat()
 ```
 
-**Properties:**
+#### Properties:
+
 None
 
-**Methods:**
-TODO
+#### Methods:
+
+**`asFloat()`** - Converts to a `float`
+**`asStr()`** - Converts to a `str`
 
 ### `float`
 
@@ -46,11 +49,20 @@ let d = 12.4f
 let e = 10 * c.ceil()
 ```
 
-**Properties:**
+#### Properties:
+
 None
 
-**Methods:**
-TODO
+#### Methods:
+
+**`format(n : int)`** - Converts to an `str`, showing `n` digits after
+                        the decimal
+**`floor()`** - Returns the floor
+**`ceil()`** - Returns the ceiling
+**`round()`** - Returns the nearest integer
+**`abs()`** - Returns the absolute valuee
+**`cos()`** - Returns cosin of the float
+**`sin()`** - Returns sin of the float
 
 ### `bool`
 
@@ -64,10 +76,12 @@ let d = true || false
 let e = d && (a || false)
 ```
 
-**Properties:**
+#### Properties:
+
 None
 
-**Methods:**
+#### Methods:
+
 None
 
 ### `str`
@@ -80,11 +94,17 @@ let b = "Hello " + "world"
 let c = a + " " + b
 ```
 
-**Properties:**
-TODO
+#### Properties:
 
-**Methods:**
-TODO
+**`length`** - Number of characters in the str
+
+#### Methods:
+
+**`upper()`** - Converts to uppercase
+**`lower()`** - Converts to lowercase
+**`at(n : int)`** - Returns the character at position `n`
+**`asInt()`** - Parses to an `int`
+**`asFloat()`** - Parses to a `float`
 
 ### `list<'T>`
 
@@ -96,8 +116,14 @@ let b : list<int> = [ 1, 2, 5 ]
 let c = [ 6, 7, 9, ]
 ```
 
-**Properties:**
-TODO
+#### Properties:
 
-**Methods:**
-TODO
+**`length`** - Number of elements in the list
+
+#### Methods:
+
+**`empty()`** - Removes all elements from the list
+**`remove(i : int)`** - Removes the element at the specified index, returns removed element
+**`removeRange(start : int, end : int)`** - Removes elements in the specified range, returns elements removed
+**`push(el : T)`** - Adds element to the end of the list
+**`pop()`** - Removes element from the end of the list and returns it
