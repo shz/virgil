@@ -18,6 +18,9 @@ Ok.  With that out of the way, let's dive into the language.
  * [If/else](#ifelse)
  * [Loops](#loops)
  * [Boolean logic](#logic)
+ * [Functions](#functions)
+ * [Creating structs](#struct-def)
+ * [Instantiating structs](#struct-create)
 
 ## Basics
 
@@ -100,11 +103,57 @@ let a = false || true && (1 > 20) || (4 <= 4)
 
 ## Functions
 
-TODO
+<a name="functions"></a>
+Best described through example:
+
+```python
+# No return, no arguments
+function f {
+  return void # Not actually needed in this case, but demos
+              # how to manually return from a function without
+              # a return type.
+}
+
+# Return type, no arguments
+function foo : int {
+  return 1
+}
+
+# Return type, arguments
+function foobar(a : int) : bool {
+  return a == 2
+}
+```
+
+It's important to note that if a function takes no arguments, it
+**must not** include round brackets.  Something like this: `function a() {}`
+is illegal.
 
 ## Structs
 
-TODO
+<a name="struct-def"></a>
+User defined types may be declared using the `struct` keyword.  These
+behave similarly to plain-old C structs, in that they're flat maps of
+name to value.  Unlike C structs, they must declare default values for
+all their properties.
+
+```perl
+struct MyData {
+  a = 1 # Type is inferred
+  b : int = 2 # Type is still inferred, but explicitly declared
+  recursive : MyData = null # Type must be specified, as null has no type
+}
+```
+
+<a name="struct-create"></a>
+To instantiate a struct, use the `new` keyword:
+
+```perl
+let a = new MyData # Initialized with full defaults
+let b = new MyData {
+  a = 10 # Override specified properties
+}
+```
 
 ## Methods
 
@@ -115,6 +164,10 @@ TODO
 TODO
 
 ## Externs
+
+TODO
+
+## Generics
 
 TODO
 
