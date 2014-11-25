@@ -30,5 +30,13 @@ exports.testStrings = function(test, assert) {
   assert.equal(b[0].expression.constructor.name, 'StringLiteral');
   assert.equal(b[0].expression.value, 'this is a " string');
 
+  var c = parse('let c = "\\"abc"');
+  assert.equal(c.length, 1);
+  assert.equal(c[0].expression.value, '"abc');
+
+  var d = parse('let d = "xyz\\""');
+  assert.equal(d.length, 1);
+  assert.equal(d[0].expression.value, 'xyz"');
+
   test.finish();
 };
