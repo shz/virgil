@@ -8,7 +8,7 @@ with the [Vizify](https://git.corp.yahoo.com/lpstein/vizify) platform.
 ```rust
 function main : int {
   let message = "Hello World"
-  alert(message) # Platform specific
+  alert(message)
   return 0
 }
 ```
