@@ -5,10 +5,10 @@ A universal language for animations and visualization.
 Compiles into C++ and Javascript, with special integrations for use
 with the [Vizify](https://git.corp.yahoo.com/lpstein/vizify) platform.
 
-```c#
+```rust
 function main : int {
   let message = "Hello World"
-  alert(message)
+  alert(message) # Platform specific
   return 0
 }
 ```
