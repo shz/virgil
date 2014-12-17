@@ -9,6 +9,7 @@ function something {
 
   let b = new Bojangles
   b.getPublic()
+  b.getPublicExtension()
   b.extra()
 
   let f = new Foo
