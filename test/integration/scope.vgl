@@ -1,0 +1,12 @@
+struct Test {
+  a = 1
+}
+
+function test1 (a : int) {
+  new Test { a = a }
+}
+
+function test2 {
+  let a = 1
+  new Test { a = a }
+}
