@@ -1,10 +1,15 @@
 var types = require('./util/require')('types')
   , scope = require('./util/require')('scope')
   , parser = require('./util/require')('parser')
+  , passes = require('./util/require')('passes')
   ;
 
 var calc = function(str) {
   return scope.build(parser.snippet(str));
+};
+var calc2 = function(str) {
+  var parsed = parser.snippet(str);
+  passes.runAll(parsed);
 };
 
 exports.testBasic = function(test, assert) {
@@ -89,16 +94,21 @@ exports.testConflicts = function(test, assert) {
 };
 
 // This is failing, but I need to push a new version regardless
-// exports.testAssignmentBlock = function(test, assert) {
-//   // Make sure these don't fail
-//   calc('let a = 1; struct Foo { a = 1 }; let b = new Foo { a = 1 }');
-//   calc('let a = 1; struct Foo { a = a }; let b = new Foo { a = a }');
-//   calc('struct Foo { a = 1 }; function foo(a : int) { new Foo { a = a }; }');
+exports.testAssignmentBlock = function(test, assert) {
+  // Make sure these don't fail
+  calc('let a = 1; struct Foo { a = 1 }; let b = new Foo { a = 1 }');
+  calc('let a = 1; struct Foo { a = a }; let b = new Foo { a = a }');
+  calc('struct Foo { a = 1 }; function foo(a : int) { new Foo { a = a }; }');
 
-//   // These should fail
-//   assert.throws(function() {
-//     calc('let a = a; struct Foo { a = b }');
-//   }, /defined/);
+  // These should fail.  Note that we have to use type resolution
+  // to attempt to find undeclared identifiers, as the scope module
+  // doesn't handle those cases.
+  assert.throws(function() {
+    calc2('struct Foo { a = 1 }; new Foo { a = b }');
+  }, /scope/);
+  assert.throws(function() {
+    calc2('struct Foo { a = 1 }; new Foo { z = 1 }');
+  }, /property/);
 
-//   test.finish();
-// };
+  test.finish();
+};
