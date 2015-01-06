@@ -18,3 +18,30 @@ exports.testBlockNewlines = function(test, assert) {
 
   test.finish();
 };
+
+exports.testMethodChaining = function(test, assert) {
+  // Just make sure these work without throwing
+  parse('let a = foo().bar().baz()');
+  parse('let a = foo().bar().\nbaz()');
+  parse('let a = foo().bar().\n   baz()');
+
+  assert.throws(function() {
+    parse('let a = foo().bar()\n.baz()');
+  }, /unexpected/i);
+
+  test.finish();
+};
+
+exports.testArithmetic = function(test, assert) {
+  // Just make sure these work without throwing
+  parse('let a = 1 + 2 / 3');
+  parse('let a = 1+2/3');
+  parse('let a = 1+\n2/3');
+  parse('let a = 1+\n   2/3');
+
+  assert.throws(function() {
+    parse('let a = 1\n+2\n/3');
+  }, /unexpected/i);
+
+  test.finish();
+};
