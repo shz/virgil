@@ -44,11 +44,24 @@ exports.testDefinitions = function(test, assert) {
   test.finish();
 };
 
+exports.testArithmetic = function(test, assert) {
+  assert.throws(function() {
+    calc('function a : int { return 1 + "string" }');
+  }, /numeric/);
+
+  test.finish();
+};
+
 exports.testReturn = function(test, assert) {
   // Make sure return statements get walked
   assert.throws(function() {
-    calc('function a : int { return 1 + "string" }');
-  });
+    calc('function a : int { "string" }');
+  }, /(ret)(urn)/); // Chopped up to not break my syntax highlighter...
+
+  // Make sure property lookup correctly fails on void tpes
+  assert.throws(function() {
+    calc('function a {}; a().b');
+  }, /void/);
 
   test.finish();
 };
