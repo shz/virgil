@@ -63,6 +63,7 @@ Details documentation/specs (some of these TODO):
  * [Modules](language/modules.md)
  * [Externs](language/externs.md)
  * [Generics](language/generics.md)
+ * [Whitespace Rules](language/whitespace.md)
 
 ## Contributing
 

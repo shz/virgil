@@ -45,3 +45,9 @@ exports.testArithmetic = function(test, assert) {
 
   test.finish();
 };
+
+exports.testLineContinuations = function(test, assert) {
+  parse('let a = 1 \\\n    + 2\\\n/3');
+
+  test.finish();
+};
