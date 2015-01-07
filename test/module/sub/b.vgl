@@ -15,6 +15,3 @@ export method getPublic(b : Bojangles) : str {
   return b.b
 }
 
-export struct Magic<'T> {
-  thing : 'T = default
-}

@@ -6,11 +6,6 @@ export function foobar {
   1 + 1
 }
 
-method doSometing(m : Magic<'T>) {
+export method doSomething(b : Bojangles) {
   # Or, actually, do nothing!
-}
-
-function test {
-  let m = new Magic<int>
-  m.doSomething()
 }
