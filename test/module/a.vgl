@@ -1,5 +1,15 @@
 import sub.b
 
+# The next function attempts to extend the public struct
+# defined in sub/b.vgl
+# A regression in early Dec(?) has caused this to produce
+# invalid JS producing a "ReferenceError: Bojangles is not defined"
+# at runtime.
+# In main.vgl, you'll see the attempt to call this method.
+export method getPublicExtension(b : Bojangles) : str {
+  return b.b
+}
+
 export function foobar {
   let b = new Bojangles
 
