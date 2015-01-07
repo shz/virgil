@@ -40,9 +40,9 @@ exports.testUnnatural = function(test, assert) {
   passes.runAll(node);
 
   assert.equal(node.scope.methods.length, 1);
-  assert.equal(node.scope.scopes.length, 3);
-  assert.equal(node.scope.scopes[2].methods.length, 1);
-  assert.equal(node.scope.scopes[2].methods[0][2].nat, false);
+  assert.equal(node.scope.scopes.length, 2);
+  assert.equal(node.scope.scopes[1].methods.length, 1);
+  assert.equal(node.scope.scopes[1].methods[0][2].nat, false);
 
   test.finish();
 };

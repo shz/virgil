@@ -38,7 +38,7 @@ WHITE='\033[01;37m'
 
 for file in $(find test/big -name \*.vgl); do
   printf "${YELLOW}$file${RESTORE} Javascript =  "
-  result=`bin/virgil-js -s $file 2>&1`
+  result=`bin/virgil-js --debug -s $file 2>&1`
   if [ $? -ne 0 ]; then
     echo "${RED}FAIL${RESTORE}"
     # echo '--------------------------------------------------------'
@@ -54,7 +54,7 @@ for file in $(find test/big -name \*.vgl); do
   fi
 
   printf "${YELLOW}$file${RESTORE} C++        =  "
-  result=`bin/virgil-cpp -s $file 2>&1`
+  result=`bin/virgil-cpp --debug -s $file 2>&1`
   if [ $? -ne 0 ]; then
     echo "${RED}FAIL${RESTORE}"
     # echo '--------------------------------------------------------'

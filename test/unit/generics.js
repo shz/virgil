@@ -26,13 +26,11 @@ exports.testGenericTyperef = function(test, assert) {
 exports.testEnsureDefault = function(test, assert) {
   // Just make sure these don't fail
   parse("struct Foo<'T> { a : 'T = default }");
+  parse("struct Foo<'T> { a : 'T = null }");
 
   assert.throws(function() {
     parse("struct Foo<'T> { a : 'T = 1 }");
-  }, /default/);
-  assert.throws(function() {
-    parse("struct Foo<'T> { a : 'T = null }");
-  }, /default/);
+  }, /defined/);
 
   test.finish();
 };
@@ -55,6 +53,9 @@ exports.testStruct = function(test, assert) {
   assert.throws(function() {
     parse("struct Foo<'T> { a : 'T = default }; function test { let a = new Foo<'T> }");
   }, /undeclared/i);
+  assert.throws(function() {
+    parse("struct Foo<'T, 'A> { a : 'T = default }; function test { let a = new Foo<int> }");
+  }, /parameters/);
 
   // Make sure types resolve properly
   assert.equal('int', calc2("struct Foo<'T> { a : 'T = default }; let f = new Foo<int>; f.a"));

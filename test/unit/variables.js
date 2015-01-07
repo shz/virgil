@@ -42,7 +42,7 @@ exports.testAssignmentAllowance = function(test, assert) {
   calc2('struct Foo { a = 1 }; let f = new Foo; f.a = 2; f.a');
   calc2('let a : list<bool> = []; a');
   calc2('function foo(x : \'T) { let a : list<\'T> = [] } foo');
-  calc2('struct Foo<\'T> { a : list<\'T> = [] }; new Foo.a');
+  calc2('struct Foo<\'T> { a : list<\'T> = [] }; new Foo<int>.a');
 
   // These should fail
   assert.throws(function() {
