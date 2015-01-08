@@ -76,6 +76,7 @@ exports.testLambdaOptionalTypes = function(test, assert) {
   // Ensure these don't throw
   calc('function a(f : func<int, void>) {}; a(lambda(i) {})');
   calc('function b(f : func<int>) {}; b(lambda { return 1 })');
+  calc('function d(f : func<int, void>) {}; d(lambda(i) { i + 1 })');
 
   // In cases where we can't infer the type, it should bail
   assert.throws(function() {
