@@ -9,6 +9,12 @@ var calc = function(str) {
   // return types.calculate(parsed[parsed.length - 1]).toString();
 };
 
+var calc2 = function(str) {
+  var parsed = parser.snippet(str);
+  passes.runAll(parsed);
+  return types.calculate(parsed[parsed.length - 1]).toString();
+};
+
 exports.testEquality = function(test, assert) {
   assert.ok(types.equal(new types.TypeRef('foo'), new types.TypeRef('foo')));
   assert.ok(types.equal(new types.TypeRef('int'), types.canned['int']));
@@ -62,6 +68,29 @@ exports.testReturn = function(test, assert) {
   assert.throws(function() {
     calc('function a {}; a().b');
   }, /void/);
+
+  test.finish();
+};
+
+exports.testLambdaOptionalTypes = function(test, assert) {
+  // Ensure these don't throw
+  calc('function a(f : func<int, void>) {}; a(lambda(i) {})');
+  calc('function b(f : func<int>) {}; b(lambda { return 1 })');
+  calc('function d(f : func<int, void>) {}; d(lambda(i) { i + 1 })');
+
+  // In cases where we can't infer the type, it should bail
+  assert.throws(function() {
+    calc('let a = lambda(b) {}');
+  }, /type/i);
+  assert.throws(function() {
+    calc('let a : func<int, void> = lambda(i) {}');
+  }, /type/i);
+  assert.throws(function() {
+    calc('function c(f : func<int>) {}; c(lambda { return "hi" })');
+  }, /type/i);
+  assert.throws(function() {
+    calc('function c(f : func<int, void>) {}; c(lambda(s : str) { })');
+  }, /type/i);
 
   test.finish();
 };

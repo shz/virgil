@@ -9,3 +9,18 @@ let l = [1, 2, 3, 4]
 each(l, lambda(x : int, i : int) {
   # console.log(x)
 })
+
+# Lambdas passed directly to methods or functions don't require type
+# information to be specified.  Instead, types will be inferred based
+# on the function/method definition.
+each(l, lambda(x, i) {
+  x + i
+})
+
+# The same goes for lambda return types
+function inc(f : func<int>) : int {
+  return f() + 1
+}
+inc(lambda {
+  return 5
+})
