@@ -9,3 +9,8 @@ function test2 {
   # Execution stops...
   1 + 1
 }
+
+function test3 : int {
+  return 1 +
+    2 * 4
+}
