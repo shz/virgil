@@ -1,0 +1,11 @@
+let a = 1; let b = 2
+
+function test : int {
+  return 1
+}
+
+function test2 {
+  return
+  # Execution stops...
+  1 + 1
+}
