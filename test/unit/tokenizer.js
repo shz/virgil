@@ -1,10 +1,22 @@
 var types = require('./util/require')('types')
   , parser = require('./util/require')('parser')
   , passes = require('./util/require')('passes')
+  , tokenizer = require('./util/require')('parser/tokenizer')
   ;
 
 var parse = function(str) {
   return parser.snippet(str);
+};
+
+var tokens = function() {
+  var args = Array.prototype.slice.call(arguments);
+  var assert = args.shift();
+  var str = args.shift();
+
+  var t = tokenizer(str);
+  assert.equal(t.length - 2, args.length);
+  for (var i=0; i<t.length-2; i++)
+    assert.equal(t[i][0], args[i]);
 };
 
 exports.testSuperflousSemicolon = function(test, assert) {
@@ -37,6 +49,45 @@ exports.testStrings = function(test, assert) {
   var d = parse('let d = "xyz\\""');
   assert.equal(d.length, 1);
   assert.equal(d[0].expression.value, 'xyz"');
+
+  test.finish();
+};
+
+exports.testErrors = function(test, assert) {
+  var err = null;
+  try {
+    var a = tokenizer('%$#^');
+  } catch (e) {
+    err = e;
+  }
+
+  assert.isDefined(err);
+  assert.isDefined(err.start);
+  assert.isDefined(err.end);
+  assert.type(err.start.line, 'number');
+  assert.type(err.start.col, 'number');
+  assert.type(err.end.line, 'number');
+  assert.type(err.end.col, 'number');
+
+  test.finish();
+};
+
+exports.testWhitespace = function(test, assert) {
+  tokens(assert, 'let i = 0\nlet  i2=1',
+    'let', 'whitespace', 'identifier', 'whitespace', '=', 'whitespace', 'int',
+    'newline',
+    'let', 'whitespace', 'identifier', '=', 'int'
+  );
+
+  tokens(assert, 'let\ni=0\\\nlet a=1',
+    'let', 'newline', 'identifier', '=', 'int',
+    'let', 'whitespace', 'identifier', '=', 'int'
+  );
+
+  tokens(assert, 'let i=0; let a=2.0',
+    'let', 'whitespace', 'identifier', '=', 'int', ';', 'whitespace',
+    'let', 'whitespace', 'identifier', '=', 'float'
+  );
 
   test.finish();
 };
