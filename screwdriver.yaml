@@ -1,0 +1,34 @@
+platform: nodejs_lib
+shared:
+  notifications:
+    email: lpstein@yahoo-inc.com
+
+  steps:
+    lint:
+      description: "Custom lint using jshint instead of yhint"
+      command: "./script/lint.sh"
+
+    test:
+      description: "Custom test using Whiskey"
+      command: "./script/test.sh"
+
+    publish:
+      bump_version: false
+
+  plugins:
+    coverage:
+      enabled: true
+      type: lcov
+      parameters:
+        info_path: artifacts/coverage/lcov.info
+        report_path: artifacts/coverage/lcov-report
+    test_results:
+      type: tap
+      parameters:
+        path: artifacts/test
+
+jobs:
+  component:
+    profile: [init, lint, test, publish]
+  pull-request:
+    profile: [init, lint, test]
