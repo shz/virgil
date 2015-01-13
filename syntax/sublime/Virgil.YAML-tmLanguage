@@ -26,7 +26,7 @@ patterns:
     name: keyword.control.vgl
     comment: Keywords
 
-  - match: \b(void|func|list|lambda|bool|int|float|str|px|perc|color|speed|image|video|audio)\b
+  - match: \b(void|func|list|lambda|bool|int|float|str)\b
     name: storage.type.vgl
     comment: Types
 

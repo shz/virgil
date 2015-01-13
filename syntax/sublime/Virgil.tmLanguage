@@ -60,7 +60,7 @@
 			<key>comment</key>
 			<string>Types</string>
 			<key>match</key>
-			<string>\b(void|func|list|lambda|bool|int|float|str|px|perc|color|speed|image|video|audio)\b</string>
+			<string>\b(void|func|list|lambda|bool|int|float|str)\b</string>
 			<key>name</key>
 			<string>storage.type.vgl</string>
 		</dict>
