@@ -1,0 +1,13 @@
+# Loops are pretty straightforward.  Note that upto is exclusive.
+mut sum = 0
+for i = 0 upto 11 {
+  sum = sum + 1
+}
+sum == 55
+
+# Loop variables cannot be re-used in nested loops
+for i = 0 upto 2 {
+  for k = i downto 0 {
+    # Do something
+  }
+}

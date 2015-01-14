@@ -112,3 +112,12 @@ exports.testAssignmentBlock = function(test, assert) {
 
   test.finish();
 };
+
+exports.testLoops = function(test, assert) {
+  var scope = calc('for i = 0 upto 10 {}');
+  assert.isDefined(scope);
+  assert.equal(scope.scopes.length, 1);
+  assert.equal(scope.search('variable', 'i'), scope.scopes[1], 'i has correct scope');
+
+  test.finish();
+};
