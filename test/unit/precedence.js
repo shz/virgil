@@ -12,6 +12,7 @@ exports.testAccess = function(test, assert) {
   assert.equal(parse('(1 - a.b)'), '1 - a.b;');
   assert.equal(parse('1 - (a.b)'), '1 - a.b;');
   assert.equal(parse('(1 - (a.b))'), '1 - a.b;');
+  assert.equal(parse('a + b <= c + d'), 'a + b <= c + d;');
 
   test.finish();
 };
