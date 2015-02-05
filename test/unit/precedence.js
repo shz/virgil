@@ -18,9 +18,14 @@ exports.testAccess = function(test, assert) {
 };
 
 exports.testArithmetic = function(test, assert) {
-  assert.equal(parse('1 - 2 - 3'), '1 - (2 - 3);');
+  assert.equal(parse('1 - 2 - 3'), '1 - 2 - 3;');
   assert.equal(parse('(1 - 2) - 3'), '1 - 2 - 3;');
   assert.equal(parse('1 - (2 - 3)'), '1 - (2 - 3);');
+
+  assert.equal(parse('1 + 2 + 3'), '1 + 2 + 3;');
+  assert.equal(parse('(1 + 2) + 3'), '1 + 2 + 3;');
+  assert.equal(parse('1 + (2 + 3)'), '1 + (2 + 3);');
+
   assert.equal(parse('1 + 2 - 3'), '1 + 2 - 3;');
 
   test.finish();
