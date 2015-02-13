@@ -14,9 +14,6 @@ var convert = function(str) {
 };
 
 exports.testVariableRenaming = function(test, assert) {
-  // Make sure loop variables are renamed
-  assert.match(convert('let a = 1; for a = 0 upto 1 {}'), /a[\s\S]*a1/);
-
   // Make sure shadowed variables aren't renamed superfluously
   assert.match(convert('let a = 1; function test { let! a = 2 }'), /a\s[\s\S]*a\s/);
 
