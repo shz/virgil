@@ -1,32 +1,30 @@
 # Type annotations are NOT optional for function signatures
-# function sum (a : int, b : int) : int {
-#   return a + b
-# }
+function sum (a : int, b : int) : int {
+  return a + b
+}
 
-function foo {}
+# If a function lacks a return type, omit that part.  Arguments are the
+# same.  If you include empty brackets, the compiler will complain.
+function baz {
+  # Normally you'd do something here
+}
 
-# # If a function lacks a return type, omit that part.  Arguments are the
-# # same.  If you include empty brackets, the compiler will complain.
-# function baz {
-#   # Normally you'd do something here
-# }
+# Calling works just like you'd expect
+baz()
+sum(1, 2)
 
-# # Calling works just like you'd expect
-# baz()
-# sum(1, 2)
+# Functions are first class and can be referred to by name.
+let f = sum # f's type is func<int, int, int>
+let v = sum(1, 4)
 
-# # Functions are first class and can be referred to by name.
-# let f = sum # f's type is func<int, int, int>
-# let v = sum(1, 4)
+# Functions may also be nested inside other functions
+function outer(n : int) : int {
+  let a = 5
 
-# # Functions may also be nested inside other functions
-# function outer(n : int) : int {
-#   let a = 5
+  # Inner functions close over variables in the same scope
+  function inner(n : int) : int {
+    return a + n
+  }
 
-#   # Inner functions close over variables in the same scope
-#   function inner(n : int) : int {
-#     return a + n
-#   }
-
-#   return inner(n)
-# }
+  return inner(n)
+}
