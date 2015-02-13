@@ -119,5 +119,19 @@ exports.testLoops = function(test, assert) {
   assert.equal(scope.scopes.length, 1);
   assert.equal(scope.search('variable', 'i'), scope.scopes[1], 'i has correct scope');
 
+  // Make sure loop variables don't shadow other variables
+  assert.throws(function() {
+    calc('let a = 1; for a = 0 upto 2 {}');
+  }, /defined/i);
+
+  // Make sure loop variables can't be shadowed
+  assert.throws(function() {
+    calc('for i = 0 upto 2 { let! i = 1 }');
+  }, /defined/i);
+  assert.throws(function() {
+    calc('for i = 0 upto 2 { for k = 0 upto 2 { let! i = 1 } }');
+  }, /defined/i);
+
   test.finish();
 };
+
