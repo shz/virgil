@@ -5,6 +5,8 @@
 // that everything is as we expect.  Practically, this means we walk
 // our way up from tokenizing to code generation.
 //
+// The goal is to ensure proper state at the end of each compiler level.
+//
 
 var fs = require('fs')
   , path = require('path')
@@ -13,8 +15,8 @@ var fs = require('fs')
 
 var levels = { read: require('./read')
              , tokenize: require('./tokenize')
-             // , parse: require('./parse')
-             // , scope: require('./scope')
+             , parse: require('./parse')
+             , scope: require('./scope')
              // , types: require('./types')
              };
 var base = path.join(__dirname, '..', '..', 'language', 'examples');

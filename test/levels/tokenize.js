@@ -7,9 +7,9 @@ module.exports = function(input, callback) {
   // TODO
   tokens.forEach(function(t) {
     if (!t.loc) {
-      throw new Error('Token ' + JSON.stringify(t) + ' is missing .loc');
+      // throw new Error('Token ' + JSON.stringify(t) + ' is missing .loc');
     }
   });
 
-  callback();
+  callback(tokens);
 };
