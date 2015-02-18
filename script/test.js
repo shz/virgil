@@ -173,13 +173,13 @@ process.once('exit', function() {
 
     // Junit
     if (true) {
-      var junitOutput = {_name: 'testsuite', _content: []};
+      var junitOutput = {_name: 'testsuites', _content: []};
       var walk = function(src, dst) {
         Object.keys(src.tests).forEach(function(k) {
           dst._content.push({
             _name: 'testcase',
             _attrs: {
-              name: k
+              name: k.replace(/\.vgl$/, '')
             },
             _content: [
               src.tests[k] ? {_name: 'failure', _content: src.tests[k].stack} : undefined
@@ -187,7 +187,7 @@ process.once('exit', function() {
           });
         });
         Object.keys(src.children).forEach(function(k) {
-          var newDst = { _name: 'testsuite', _attrs: {name: k}, _content: [] };
+          var newDst = { _name: 'testsuite', _attrs: {classname: k.replace(/\.vgl$/, '')}, _content: [] };
           dst._content.push(newDst);
           walk(src.children[k], newDst);
         });
