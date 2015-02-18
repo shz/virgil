@@ -187,7 +187,7 @@ process.once('exit', function() {
           });
         });
         Object.keys(src.children).forEach(function(k) {
-          var newDst = { _name: 'testsuite', _attrs: {classname: k.replace(/\.vgl$/, '')}, _content: [] };
+          var newDst = { _name: 'testsuite', _attrs: {name: k.replace(/\.vgl$/, '')}, _content: [] };
           dst._content.push(newDst);
           walk(src.children[k], newDst);
         });
