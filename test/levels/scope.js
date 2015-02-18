@@ -14,5 +14,5 @@ module.exports = function(input, callback) {
     }
   });
 
-  callback(scoped);
+  callback(input);
 };

@@ -19,10 +19,22 @@ console.log('Test options:', opts);
 
 // Set up coverage if asked for
 if (opts.coverage !== false) {
+  var coverageDirs = [
+    path.resolve(path.join(__dirname, '..', 'lib')),
+    path.resolve(path.join(__dirname, '..', 'bin'))
+  ];
   var istanbul = require('istanbul');
   var ins = new istanbul.Instrumenter();
   istanbul.hook.hookRequire(function(filename) {
-    return filename.match(/\.js$/) && filename.indexOf(path.resolve(path.join(__dirname, '..', 'lib'))) == 0;
+    if (!filename.match(/\.js$/) && !filename.match(/^[^\.]+$/)) {
+      return false;
+    }
+    for (var i=0; i<coverageDirs.length; i++) {
+      if (filename.indexOf(coverageDirs[i]) == 0) {
+        return true;
+      }
+    }
+    return false;
   }, function(code, filename) {
     return ins.instrumentSync(code, filename);
   });

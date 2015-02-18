@@ -17,7 +17,9 @@ var levels = { read: require('./read')
              , tokenize: require('./tokenize')
              , parse: require('./parse')
              , scope: require('./scope')
-             // , types: require('./types')
+             , types: require('./types')
+             , js: require('./js')
+             , cpp: require('./cpp')
              };
 var base = path.join(__dirname, '..', '..', 'language', 'examples');
 
