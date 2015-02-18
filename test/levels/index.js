@@ -29,6 +29,10 @@ fs.readdir(base, function(err, files) {
   }
 
   files.forEach(function(f) {
+    // Skip the module folder, it'll break
+    if (f == 'module')
+      return;
+
     var cur = path.join(base, f);
     async.eachSeries(Object.keys(levels), function(k, callback) {
       test('level', f, k, function(done) {

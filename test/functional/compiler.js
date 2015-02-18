@@ -14,7 +14,7 @@ test('functional', 'compiler', 'module', 'javascript', function(done) {
     assert.ifError(err);
 
     compile.compile({
-      args: [path.resolve(path.join(__dirname, '..', 'module', 'main.vgl'))],
+      args: [path.resolve(path.join(__dirname, '..', '..', 'language', 'examples', 'module', 'main.vgl'))],
       outputLanguage: 'javascript',
       module: true,
       outfile: dir,
@@ -41,7 +41,7 @@ test('functional', 'compiler', 'module', 'C++', function(done) {
     assert.ifError(err);
 
     compile.compile({
-      args: [path.resolve(path.join(__dirname, '..', 'module', 'main.vgl'))],
+      args: [path.resolve(path.join(__dirname, '..', '..', 'language', 'examples', 'module', 'main.vgl'))],
       outputLanguage: 'cpp',
       module: true,
       outfile: dir,
