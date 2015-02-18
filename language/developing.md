@@ -49,20 +49,12 @@ There are numerous ways to run the various types of tests.
 ```bash
 npm test
 # Or
-./script/test.sh
-# Or, for verbose integration tests...
-./script/test-integration.sh --debug
-# Or, to debug the module system
-./script/test-module.sh --debug
-# Or, for coverage-free unit tests
-./script/test-unit.sh --no-coverage
-# Or, for a single unit test
-whiskey test/unit/[testfile].js
+./script/test.js
+# Or
+./script/test.js --no-coverage
 ```
-
-The above is a sampling of available combinations, hopefully you get
-the idea.
 
 The general philosophy towards testing: the more tests, the better.
 It's incredibly important for Virgil, as a compiler, to not suffer from
-regressions whenever possible.
+regressions whenever possible.  See [tests.md](tests.md) for more
+details.

@@ -1,6 +1,6 @@
-var types = require('./util/require')('types')
-  , parser = require('./util/require')('parser')
-  , passes = require('./util/require')('passes')
+var types = require('../../lib/types')
+  , parser = require('../../lib/parser')
+  , passes = require('../../lib/passes')
   ;
 
 var parse = function(str) {
@@ -17,7 +17,7 @@ var calc2 = function(str) {
   return types.calculate(parsed[parsed.length - 1]).toString();
 };
 
-exports.testFunctionAssignment = function(test, assert) {
+test('integration', 'functions', 'function assigment', function() {
   assert.equal('int', calc2('function a : int { return 1 } ; let b = a() ; b'));
   assert.throws(function() {
     calc2('function a { } ; let b = a()');
@@ -25,11 +25,9 @@ exports.testFunctionAssignment = function(test, assert) {
   assert.throws(function() {
     calc2('function a {} ; mut b = 1 ; b = a() ; b');
   }, /void/);
+});
 
-  test.finish();
-};
-
-exports.testSignatureTyping = function(test, assert) {
+test('integration', 'functions', 'signature typing', function() {
   parse('function nop {}; nop()');
 
   assert.throws(function() {
@@ -44,16 +42,13 @@ exports.testSignatureTyping = function(test, assert) {
   assert.throws(function() {
     parse('let a = 1; a()');
   }, /callable/i);
+});
 
-  test.finish();
-};
-
-exports.testFunctionTypes = function(test, assert) {
+test('integration', 'functions', 'function types', function() {
   parse('function a(i : int) {}; a(1)');
 
   assert.throws(function() {
     parse('function a(i : int) {}; a("hi")');
   }, /type/);
+});
 
-  test.finish();
-};

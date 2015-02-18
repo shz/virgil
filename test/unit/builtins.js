@@ -1,6 +1,6 @@
-var types = require('./util/require')('types')
-  , parser = require('./util/require')('parser')
-  , passes = require('./util/require')('passes')
+var types = require('../../lib/types')
+  , parser = require('../../lib/parser')
+  , passes = require('../../lib/passes')
   ;
 
 var calc = function(str) {
@@ -44,7 +44,7 @@ var checker = function(assert, t) {
   return o;
 };
 
-exports.testListMembers = function(test, assert) {
+test('unit', 'builtins', 'list members', function() {
   var c = checker(assert, 'list');
   c.method('empty', 'void');
   c.method('remove', 'int,void');
@@ -62,11 +62,9 @@ exports.testListMembers = function(test, assert) {
   assert.throws(function() {
     assert.ok(types.equal(types.make('int'), calc2('[1, 2, 3].foobam()')));
   });
+});
 
-  test.finish();
-};
-
-exports.testStrMembers = function(test, assert) {
+test('unit', 'builtins', 'str embers', function() {
   var c = checker(assert, 'str');
   c.method('upper', 'str');
   c.method('lower', 'str');
@@ -77,18 +75,14 @@ exports.testStrMembers = function(test, assert) {
   c.done();
 
   assert.equal('int', calc2('"foo".length'));
+});
 
-  test.finish();
-};
-
-exports.testBoolMembers = function(test, assert) {
+test('unit', 'builtins', 'bool members', function() {
   var c = checker(assert, 'bool');
   c.done();
+});
 
-  test.finish();
-};
-
-exports.testFloatMembers = function(test, assert) {
+test('unit', 'builtins', 'float members', function() {
   var c = checker(assert, 'float');
   c.method('format', 'int,str');
   c.method('floor', 'int');
@@ -98,22 +92,16 @@ exports.testFloatMembers = function(test, assert) {
   c.method('cos', 'float');
   c.method('sin', 'float');
   c.done();
+});
 
-  test.finish();
-};
-
-exports.testIntMembers = function(test, assert) {
+test('unit', 'builtins', 'int members', function() {
   var c = checker(assert, 'int');
   c.method('asFloat', 'float');
   c.method('asStr', 'str');
   c.done();
+});
 
-  test.finish();
-};
-
-exports.testCustomMethods = function(test, assert) {
+test('unit', 'builtins', 'custom methods', function() {
   assert.equal('int',
     calc2('method foo (l : list<int>) : int { return l[2] }; [1, 2, 3].foo()'));
-
-  test.finish();
-};
+});

@@ -18,6 +18,7 @@ var levels = { read: require('./read')
              , parse: require('./parse')
              , scope: require('./scope')
              , types: require('./types')
+             , passes: require('./passes')
              , js: require('./js')
              , cpp: require('./cpp')
              };

@@ -42,8 +42,29 @@ if (opts.coverage !== false) {
 
 // Test framework
 process.env.NODE_PATH += ':' + path.resolve(path.join(__dirname, '..', 'lib'));
-var tests = [];
 global.assert = require('assert');
+global.assert.isDefined = function(thing) {
+  if (thing === undefined)
+    throw new Error('Value is undefined');
+};
+global.assert.isUndefined = function(thing) {
+  if (thing !== undefined)
+    throw new Error('Expected value to be undefined');
+};
+global.assert.isNull = function(thing) {
+  if (thing !== null)
+    throw new Error('Expected value to be null');
+};
+global.assert.type = function(thing, type) {
+  var t = typeof thing;
+  if (t != type)
+    throw new Error('Expected value to be type ' + type + ', was ' + t);
+};
+global.assert.match = function(thing, re) {
+  if (!thing.match(re))
+    throw new Error('Value doesn\'t match ' + re.toString());
+};
+var tests = [];
 global.test = function() {
   var args = Array.prototype.slice.call(arguments);
   var f = args.pop();
@@ -81,6 +102,8 @@ global.test = function() {
 console.log('Running tests...');
 require('../test/levels');
 require('../test/functional');
+require('../test/integration');
+require('../test/unit');
 
 // On first exit, collect results info.  If any tests fail we'll re-exit
 // with a nonzero status code.
