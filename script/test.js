@@ -108,6 +108,29 @@ require('../test/unit');
 // On first exit, collect results info.  If any tests fail we'll re-exit
 // with a nonzero status code.
 process.once('exit', function() {
+  // Collate results
+  var results = {tests: {}, children: {}};
+  tests.forEach(function(t) {
+    var names = t[0];
+    var error = t[1];
+
+    var cur = results;
+    for (var i=0; i<names.length - 1; i++) {
+      if (!cur.children[names[i]]) {
+        cur.children[names[i]] = {
+          children: {},
+          tests: {}
+        };
+      }
+      cur = cur.children[names[i]];
+    }
+
+    var name = names[names.length - 1];
+    while (cur.tests[name])
+      name += '.';
+    cur.tests[name] = error;
+  });
+
   // Report test results
   var failures = tests.filter(function(t) {
     return !!t[1];
@@ -125,25 +148,61 @@ process.once('exit', function() {
   });
   console.log('');
 
-  // Write tap output
+  // Write test output
   if (process.env.TEST_RESULTS_DIR) { // Normalize
     process.env.TEST_DIR = process.env.TEST_RESULTS_DIR;
   }
   if (process.env.TEST_DIR) {
-    var tapOutput = '1..' + tests.length;
-    for (var i=0; i<tests.length; i++) {
-      var ok = !tests[i][1];
-      tapOutput += '\n';
-      tapOutput += ok ? 'ok' : 'not ok';
-      tapOutput += ' ' + (i + 1) + ' ';
-      tapOutput += tests[i][0].join('/');
-      if (!ok) {
-        tapOutput += [''].concat((tests[i][1].stack || tests[i][1].message)
-            .split(/\r?\n/)).join('\n    ');
+    // TAP
+    if (false) {
+      var tapOutput = '1..' + tests.length;
+      for (var i=0; i<tests.length; i++) {
+        var ok = !tests[i][1];
+        tapOutput += '\n';
+        tapOutput += ok ? 'ok' : 'not ok';
+        tapOutput += ' ' + (i + 1) + ' ';
+        tapOutput += tests[i][0].join('/');
+        if (!ok) {
+          tapOutput += [''].concat((tests[i][1].stack || tests[i][1].message)
+              .split(/\r?\n/)).join('\n    ');
+        }
       }
+      tapOutput += '\n';
+      fs.writeFileSync(path.join(process.env.TEST_DIR, 'results.tap'), tapOutput);
     }
-    tapOutput += '\n';
-    fs.writeFileSync(path.join(process.env.TEST_DIR, 'results.tap'), tapOutput);
+
+    // Junit
+    if (true) {
+      var junitOutput = {_name: 'testsuite', _content: []};
+      var walk = function(src, dst) {
+        Object.keys(src.tests).forEach(function(k) {
+          dst._content.push({
+            _name: 'testcase',
+            _attrs: {
+              name: k
+            },
+            _content: [
+              src.tests[k] ? {_name: 'failure', _content: src.tests[k].stack} : undefined
+            ]
+          });
+        });
+        Object.keys(src.children).forEach(function(k) {
+          var newDst = { _name: 'testsuite', _attrs: {name: k}, _content: [] };
+          dst._content.push(newDst);
+          walk(src.children[k], newDst);
+        });
+      };
+      walk(results, junitOutput);
+      fs.writeFileSync(path.join(process.env.TEST_DIR, 'results.xml'), jstoxml.toXML(junitOutput, {
+        filter: {
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            '\'': '&apos;',
+            '&': '&amp;'
+        }
+      }));
+    }
   }
 
 
@@ -163,7 +222,7 @@ process.once('exit', function() {
 
 
   if (process.env.TEST_DIR) {
-    console.log('Wrote test results to', path.join(process.env.TEST_DIR, 'results.tap'));
+    console.log('Wrote test results to', path.join(process.env.TEST_DIR, 'results.xml'));
   }
   if (typeof __coverage__ != 'undefined' && process.env.COVERAGE_DIR) {
     console.log('Wrote coverage results to', process.env.COVERAGE_DIR + path.sep);
