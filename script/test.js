@@ -80,6 +80,7 @@ global.test = function() {
 // Run the tests
 console.log('Running tests...');
 require('../test/levels');
+require('../test/functional');
 
 // On first exit, collect results info.  If any tests fail we'll re-exit
 // with a nonzero status code.
