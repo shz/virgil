@@ -85,7 +85,7 @@ global.test = function() {
       throw new Error('Tests must specify a test function');
     }
     d.run(function() {
-      var hasCallback = !!f.toString().match(/^function\s*[\w\$]*\(.+\)/);
+      var hasCallback = !!f.toString().match(/^function\s*[\w\$\d]*\s*\(.+\)/);
       if (hasCallback) {
         f(done);
       } else {
