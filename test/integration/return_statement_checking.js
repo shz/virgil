@@ -1,13 +1,13 @@
-var types = require('./util/require')('types')
-  , parser = require('./util/require')('parser')
-  , passes = require('./util/require')('passes')
+var types = require('../../lib/types')
+  , parser = require('../../lib/parser')
+  , passes = require('../../lib/passes')
   ;
 
 var parse = function(str) {
   passes.runAll(parser.snippet(str));
 };
 
-exports.testEmpty = function(test, assert) {
+test('integration', 'return statement checking', 'empty', function() {
   // These shouldn't fail
   parse('function a {}');
   parse('method foo(a : int) {}');
@@ -24,13 +24,9 @@ exports.testEmpty = function(test, assert) {
     parse('method foo(a : int) : int { return void }');
     parse('lambda : int { return void }');
   }, /retur/);
+});
 
-  test.finish();
-};
-
-exports.testUserDefined = function(test, assert) {
+test('integration', 'return statement checking', 'user defined', function() {
   // These shouldn't fail
   parse('struct A {}; function a : A { return null }');
-
-  test.finish();
-};
+});

@@ -1,6 +1,6 @@
-var types = require('./util/require')('types')
-  , parser = require('./util/require')('parser')
-  , passes = require('./util/require')('passes')
+var types = require('../../lib/types')
+  , parser = require('../../lib/parser')
+  , passes = require('../../lib/passes')
   ;
 
 var parse = function(str) {
@@ -17,13 +17,11 @@ var calc2 = function(str) {
   return types.calculate(parsed[parsed.length - 1]).toString();
 };
 
-exports.testGenericTyperef = function(test, assert) {
+test('unit', 'generics', 'generic typeref', function() {
   assert.equal('list<int>', calc2('let a : list<int> = null; a'));
+});
 
-  test.finish();
-};
-
-exports.testEnsureDefault = function(test, assert) {
+test('unit', 'generics', 'ensure default', function() {
   // Just make sure these don't fail
   parse("struct Foo<'T> { a : 'T = default }");
   parse("struct Foo<'T> { a : 'T = null }");
@@ -31,11 +29,9 @@ exports.testEnsureDefault = function(test, assert) {
   assert.throws(function() {
     parse("struct Foo<'T> { a : 'T = 1 }");
   }, /defined/);
+});
 
-  test.finish();
-};
-
-exports.testStruct = function(test, assert) {
+test('unit', 'generics', 'struct', function() {
   // All valid declarations, should be fine
   parse("struct Foo<'T> { a : 'T = default }");
   parse("struct Foo<'T> { a : 'T = default }; let a = new Foo<int>");
@@ -60,11 +56,9 @@ exports.testStruct = function(test, assert) {
   // Make sure types resolve properly
   assert.equal('int', calc2("struct Foo<'T> { a : 'T = default }; let f = new Foo<int>; f.a"));
   assert.equal('int', calc2("struct Foo<'T> { a : 'T = default }; let f = new Foo<Foo<int>>; f.a.a"));
+});
 
-  test.finish();
-};
-
-exports.testFunction = function(test, assert) {
+test('unit', 'generics', 'function', function() {
   // All valid declarations, should be fine
   parse("function nop(x : 'T) {}");
   parse("function nop(x : 'T) : 'T { return x }");
@@ -97,12 +91,10 @@ exports.testFunction = function(test, assert) {
   assert.equal('int', calc2("function nop(x : 'T) : 'T { return x }; nop(12)"));
   assert.equal('int', calc2("function first(x : list<'T>) : 'T { return x[0] }; first([1])"));
   assert.equal('int', calc2("function a(x : 'T) : 'T { function b(x : 'R) : 'R { return x }; return b(x) }; a(1)"));
-
-  test.finish();
-};
+});
 
 
-exports.testMethod = function(test, assert) {
+test('unit', 'generics', 'method', function() {
   // All valid declarations, should be fine
   parse("method nop(a : int, x : 'T) {}");
   parse("method nop(a : int, x : 'T) : 'T { return x }");
@@ -139,6 +131,4 @@ exports.testMethod = function(test, assert) {
 
   // Make sure access works
   parse("method halfLength(l : list<'T>) : int { return l.length / 2 }; [1, 2].halfLength()");
-
-  test.finish();
-};
+});

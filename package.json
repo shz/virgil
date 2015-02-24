@@ -17,7 +17,7 @@
     "mkdirp": "^0.5.0"
   },
   "scripts": {
-    "test": "script/test.sh",
+    "test": "script/test.js",
     "lint": "script/lint.sh"
   },
   "repository": {
@@ -27,10 +27,13 @@
   "author": "Patrick Stein <lpstein@yahoo-inc.com>",
   "license": "None",
   "devDependencies": {
-    "jshint": "^2.5.2",
-    "whiskey": "^0.8.4",
     "istanbul": "^0.3.0",
-    "mock-fs": "^2.3.1"
+    "jshint": "^2.5.2",
+    "minimist": "^1.1.0",
+    "mock-fs": "^2.3.1",
+    "whiskey": "^0.8.4",
+    "jstoxml": "^0.2.3",
+    "tmp": "0.0.24"
   },
   "yahoo": {
     "custodian": {

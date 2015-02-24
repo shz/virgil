@@ -1,23 +1,21 @@
-var types = require('./util/require')('types')
-  , parser = require('./util/require')('parser')
-  , js = require('./util/require')('converters/javascript')
+var types = require('../../lib/types')
+  , parser = require('../../lib/parser')
+  , js = require('../../lib/converters/javascript')
   ;
 
 var parse = function(str) {
   return js(parser.snippet(str));
 };
 
-exports.testAccess = function(test, assert) {
+test('unit', 'precedence', 'access', function() {
   assert.equal(parse('1 - a.b'), '1 - a.b;');
   assert.equal(parse('(1 - a.b)'), '1 - a.b;');
   assert.equal(parse('1 - (a.b)'), '1 - a.b;');
   assert.equal(parse('(1 - (a.b))'), '1 - a.b;');
   assert.equal(parse('a + b <= c + d'), 'a + b <= c + d;');
+});
 
-  test.finish();
-};
-
-exports.testArithmetic = function(test, assert) {
+test('unit', 'precedence', 'arithmetic', function() {
   assert.equal(parse('1 - 2 - 3'), '1 - 2 - 3;');
   assert.equal(parse('(1 - 2) - 3'), '1 - 2 - 3;');
   assert.equal(parse('1 - (2 - 3)'), '1 - (2 - 3);');
@@ -27,6 +25,4 @@ exports.testArithmetic = function(test, assert) {
   assert.equal(parse('1 + (2 + 3)'), '1 + (2 + 3);');
 
   assert.equal(parse('1 + 2 - 3'), '1 + 2 - 3;');
-
-  test.finish();
-};
+});

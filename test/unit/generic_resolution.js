@@ -1,6 +1,6 @@
-var types = require('./util/require')('types')
-  , parser = require('./util/require')('parser')
-  , passes = require('./util/require')('passes')
+var types = require('../../lib/types')
+  , parser = require('../../lib/parser')
+  , passes = require('../../lib/passes')
   ;
 
 var TR = types.TypeRef;
@@ -14,7 +14,7 @@ var calc2 = function(str) {
 };
 
 
-exports.testBasic = function(test, assert) {
+test('unit', 'generic resolution', 'basic', function() {
   var r = resolve( new TR("int")
                  , types.canned['int']
                  );
@@ -60,11 +60,9 @@ exports.testBasic = function(test, assert) {
            , new TR('list', [types.canned['str']])
            );
   }, /mismatch/i);
+});
 
-  test.finish();
-};
-
-exports.testMatching = function(test, assert) {
+test('unit', 'generic resolution', 'matching', function() {
   assert.equal(match( new TR('str')
                     , types.canned['str']
                     ), true);
@@ -84,13 +82,9 @@ exports.testMatching = function(test, assert) {
   assert.equal(match( new TR('list', [new TR("'T")])
                     , new TR('list', [new TR('str')])
                     ), true);
+});
 
-  test.finish();
-};
-
-exports.testReturnType = function(test, assert) {
+test('unit', 'generic resolution', 'return type', function() {
   assert.equal('int', calc2("function f(a : 'T) : 'T { return a }; f(1)"));
   assert.equal('int', calc2("method f(a : list<'T>) : 'T { return a[0] }; [1].f()"));
-
-  test.finish();
-};
+});

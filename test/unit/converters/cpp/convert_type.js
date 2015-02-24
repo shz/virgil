@@ -1,5 +1,5 @@
-var convert = require('../../util/require')('converters/cpp/convert_type')
-  , types = require('../../util/require')('types')
+var convert = require('../../../../lib/converters/cpp/convert_type')
+  , types = require('../../../../lib/types')
   ;
 
 var conv = function(s, generics, context) {
@@ -16,7 +16,7 @@ var conv = function(s, generics, context) {
   return convert(t, context, g);
 };
 
-exports.testForcedStack = function(test, assert) {
+test('unit', 'converters', 'cpp', 'forced stack', function() {
   // These guys are forced to stack mode
   assert.equal(conv('int', 'heap'), 'int');
   assert.equal(conv('float', 'heap'), 'double');
@@ -33,6 +33,4 @@ exports.testForcedStack = function(test, assert) {
   // Slightly more complex case
   assert.equal(conv('func', ['Foobar'], 'heap'), 'std::function<Foobar*()>');
   assert.equal(conv('list', ['Foobar'], 'heap'), 'std::vector<Foobar*>*');
-
-  test.finish();
-};
+});

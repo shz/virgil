@@ -1,6 +1,6 @@
-var types = require('./util/require')('types')
-  , parser = require('./util/require')('parser')
-  , passes = require('./util/require')('passes')
+var types = require('../../lib/types')
+  , parser = require('../../lib/parser')
+  , passes = require('../../lib/passes')
   ;
 
 var calc = function(str) {
@@ -23,7 +23,7 @@ exports.testEquality = function(test, assert) {
   test.finish();
 };
 
-exports.testDefinitions = function(test, assert) {
+test('integration', 'types', 'definitions', function() {
   // Just make sure there's don't fail
   calc('let a : int = 1');
   calc('let a : float = 1');
@@ -42,23 +42,19 @@ exports.testDefinitions = function(test, assert) {
   // References to undefined user types should fail
   assert.throws(function() {
     calc('let a : b = null');
-  }, /defined/);
+  }, /b/);
   assert.throws(function() {
     calc('let a = new B');
-  }, /defined/);
+  }, /B/);
+});
 
-  test.finish();
-};
-
-exports.testArithmetic = function(test, assert) {
+test('integration', 'types', 'arithmetic',  function() {
   assert.throws(function() {
     calc('function a : int { return 1 + "string" }');
   }, /numeric/);
+});
 
-  test.finish();
-};
-
-exports.testReturn = function(test, assert) {
+test('integration', 'types', 'return', function() {
   // Make sure return statements get walked
   assert.throws(function() {
     calc('function a : int { "string" }');
@@ -68,11 +64,9 @@ exports.testReturn = function(test, assert) {
   assert.throws(function() {
     calc('function a {}; a().b');
   }, /void/);
+});
 
-  test.finish();
-};
-
-exports.testLambdaOptionalTypes = function(test, assert) {
+test('integration', 'types', 'lambda types optional', function() {
   // Ensure these don't throw
   calc('function a(f : func<int, void>) {}; a(lambda(i) {})');
   calc('function b(f : func<int>) {}; b(lambda { return 1 })');
@@ -91,6 +85,4 @@ exports.testLambdaOptionalTypes = function(test, assert) {
   assert.throws(function() {
     calc('function c(f : func<int, void>) {}; c(lambda(s : str) { })');
   }, /type/i);
-
-  test.finish();
-};
+});

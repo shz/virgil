@@ -1,13 +1,13 @@
-var types = require('./util/require')('types')
-  , parser = require('./util/require')('parser')
-  , passes = require('./util/require')('passes')
+var types = require('../../lib/types')
+  , parser = require('../../lib/parser')
+  , passes = require('../../lib/passes')
   ;
 
 var parse = function(str) {
   passes.runAll(parser.snippet(str));
 };
 
-exports.testExternMethodLegality = function(test, assert) {
+test('integration', 'externs', 'method legality', function() {
   assert.throws(function() {
     parse('extern { method foo (s : str) }');
   }, /extern/);
@@ -17,6 +17,4 @@ exports.testExternMethodLegality = function(test, assert) {
 
   // Make sure this doesn't throw
   parse('extern { struct C {}; method foo (c : C) }');
-
-  test.finish();
-};
+});

@@ -1,9 +1,9 @@
-var World = require('./util/require')('world')
+var World = require('../../lib/world')
   , async = require('async')
   , path = require('path')
   ;
 
-exports.testFilenameResolution = function(test, assert) {
+test('unit', 'world', 'filename resolution', function() {
   var w = new World('/tmp/foo.vgl');
 
   assert.equal(w.entry, '/tmp/foo.vgl');
@@ -11,11 +11,9 @@ exports.testFilenameResolution = function(test, assert) {
   assert.equal(w.toFilename(w.base, 'something'), 'something.vgl');
   assert.equal(w.toFilename(w.base, 'sub.something'), 'sub/something.vgl');
   assert.equal(w.toFilename(w.base, 'sub.sub.something'), 'sub/sub/something.vgl');
+});
 
-  test.finish();
-};
-
-exports.testImports = function(test, assert) {
+test('unit', 'world', 'imports', function(done) {
   var w = new World(path.join(__dirname, '..', 'unit-files', 'import', 'main.vgl'));
 
   async.parallel([
@@ -29,11 +27,11 @@ exports.testImports = function(test, assert) {
     assert.isUndefined(w.compiling['a.vgl']);
     assert.isUndefined(w.compiling['b.vgl']);
 
-    test.finish();
+    done()
   });
-};
+});
 
-exports.testCircularDetection = function(test, assert) {
+test('unit', 'world', 'circular detection', function(done) {
   var w = new World(path.join(__dirname, '..', 'unit-files', 'circular', 'main.vgl'));
 
   async.parallel([
@@ -41,6 +39,6 @@ exports.testCircularDetection = function(test, assert) {
   ], function(err) {
     assert.isDefined(err);
 
-    test.finish();
+    done();
   });
-};
+});

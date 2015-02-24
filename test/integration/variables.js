@@ -1,6 +1,6 @@
-var types = require('./util/require')('types')
-  , parser = require('./util/require')('parser')
-  , passes = require('./util/require')('passes')
+var types = require('../../lib/types')
+  , parser = require('../../lib/parser')
+  , passes = require('../../lib/passes')
   ;
 
 var calc = function(str) {
@@ -13,7 +13,7 @@ var calc2 = function(str) {
   return types.calculate(parsed[parsed.length - 1]).toString();
 };
 
-exports.testDefaults = function(test, assert) {
+test('integration', 'variables', 'defaults', function() {
   // Just make sure these don't fail
   calc2('let a : int = default; a');
   calc2('let a : float = default; a');
@@ -28,11 +28,9 @@ exports.testDefaults = function(test, assert) {
   assert.throws(function() {
     calc2('let a = default; a');
   }, /default/);
+});
 
-  test.finish();
-};
-
-exports.testAssignmentAllowance = function(test, assert) {
+test('integration', 'variables', 'assignment allowance', function() {
   // Just attempt to trigger errors.  All of these are supposed to work.
   calc2('let a = 1; a');
   calc2('mut a = 1; a');
@@ -60,6 +58,4 @@ exports.testAssignmentAllowance = function(test, assert) {
   assert.throws(function() {
     calc2('function v {}; mut a = 1; a = v(); a');
   }, /void/);
-
-  test.finish();
-};
+});

@@ -1,7 +1,7 @@
-var types = require('./util/require')('types')
-  , scope = require('./util/require')('scope')
-  , parser = require('./util/require')('parser')
-  , passes = require('./util/require')('passes')
+var types = require('../../lib/types')
+  , scope = require('../../lib/scope')
+  , parser = require('../../lib/parser')
+  , passes = require('../../lib/passes')
   ;
 
 var calc = function(str) {
@@ -12,7 +12,7 @@ var calc2 = function(str) {
   passes.runAll(parsed);
 };
 
-exports.testBasic = function(test, assert) {
+test('integration', 'scope', 'basic', function() {
   var scope = calc('function foo { let a = 1; let b = 2}');
 
   assert.isDefined(scope.functions.foo);
@@ -20,29 +20,23 @@ exports.testBasic = function(test, assert) {
   assert.equal(scope.scopes[0].parent, scope);
   assert.isDefined(scope.scopes[0].variables.a);
   assert.isDefined(scope.scopes[0].variables.b);
+});
 
-  test.finish();
-};
-
-exports.testAllVariableDeclarations = function(test, assert) {
+test('integration', 'scope', 'all bariable declarations', function() {
   var scope = calc('let a = 1; out b = 1; mut c = 1; let d = 1');
 
   assert.isDefined(scope.variables.a);
   assert.isDefined(scope.variables.b);
   assert.isDefined(scope.variables.c);
+});
 
-  test.finish();
-};
-
-exports.testStruct = function(test, assert) {
+test('integration', 'scope', 'struct', function() {
   var scope = calc('struct Foo {}');
 
   assert.isDefined(scope.structs.Foo);
+});
 
-  test.finish();
-};
-
-exports.testNested = function(test, assert) {
+test('integration', 'scope', 'nested', function() {
   var scope = calc('function foo { let a = 1; function nested { let b = 2 } }');
 
   assert.equal(scope.scopes.length, 1);
@@ -51,32 +45,26 @@ exports.testNested = function(test, assert) {
   assert.isDefined(scope.scopes[0].functions.nested);
   assert.isDefined(scope.scopes[0].variables.a);
   assert.isDefined(scope.scopes[0].scopes[0].variables.b);
+});
 
-  test.finish();
-};
-
-exports.testWalking = function(test, assert) {
+test('integration', 'scope', 'walking', function() {
   var scope = calc('struct Foo {}; function bar {}');
 
   var root = scope;
   assert.isDefined(root);
   assert.equal(root.search('struct', 'Foo'), scope);
   assert.isNull(root.search('function', 'notdefined'));
+});
 
-  test.finish();
-};
-
-exports.testLambda = function(test, assert) {
+test('integration', 'scope', 'lambda', function() {
   var scope = calc('lambda(x) { return x }');
 
   assert.isDefined(scope);
   assert.equal(scope.scopes.length, 1);
   assert.isDefined(scope.scopes[0].variables.x);
+});
 
-  test.finish();
-};
-
-exports.testConflicts = function(test, assert) {
+test('integration', 'scope', 'conflicts', function() {
   assert.throws(function() {
     calc('let a = 1; let a = 2');
   }, /defined/);
@@ -89,12 +77,9 @@ exports.testConflicts = function(test, assert) {
 
   // Shouldn't throw
   calc('let a = 1; method a(i : int) {}');
+});
 
-  test.finish();
-};
-
-// This is failing, but I need to push a new version regardless
-exports.testAssignmentBlock = function(test, assert) {
+test('integration', 'scope', 'assignment block', function() {
   // Make sure these don't fail
   calc('let a = 1; struct Foo { a = 1 }; let b = new Foo { a = 1 }');
   calc('let a = 1; struct Foo { a = a }; let b = new Foo { a = a }');
@@ -109,11 +94,9 @@ exports.testAssignmentBlock = function(test, assert) {
   assert.throws(function() {
     calc2('struct Foo { a = 1 }; new Foo { z = 1 }');
   }, /property/);
+});
 
-  test.finish();
-};
-
-exports.testLoops = function(test, assert) {
+test('integration', 'scope', 'loops', function() {
   var scope = calc('for i = 0 upto 10 {}');
   assert.isDefined(scope);
   assert.equal(scope.scopes.length, 1);
@@ -131,7 +114,5 @@ exports.testLoops = function(test, assert) {
   assert.throws(function() {
     calc('for i = 0 upto 2 { for k = 0 upto 2 { let! i = 1 } }');
   }, /defined/i);
-
-  test.finish();
-};
+});
 

@@ -1,7 +1,7 @@
-var types = require('./util/require')('types')
-  , parser = require('./util/require')('parser')
-  , passes = require('./util/require')('passes')
-  , tokenizer = require('./util/require')('parser/tokenizer')
+var types = require('../../lib/types')
+  , parser = require('../../lib/parser')
+  , passes = require('../../lib/passes')
+  , tokenizer = require('../../lib/parser/tokenizer')
   ;
 
 var parse = function(str) {
@@ -19,17 +19,15 @@ var tokens = function() {
     assert.equal(t[i][0], args[i]);
 };
 
-exports.testSuperflousSemicolon = function(test, assert) {
+test('unit', 'tokenizer', 'superflous semicolon', function() {
   parse('let a = 1; let b = 2');
 
   assert.throws(function() {
     parse('let a = 1;\nlet b = 2');
   }, /semicolon/i);
+});
 
-  test.finish();
-};
-
-exports.testStrings = function(test, assert) {
+test('unit', 'tokenizer', 'strings', function() {
   var a = parse('let a = "this # has a hash"');
   assert.equal(a.length, 1);
   assert.equal(a[0].constructor.name, 'VariableDeclaration');
@@ -49,11 +47,9 @@ exports.testStrings = function(test, assert) {
   var d = parse('let d = "xyz\\""');
   assert.equal(d.length, 1);
   assert.equal(d[0].expression.value, 'xyz"');
+});
 
-  test.finish();
-};
-
-exports.testErrors = function(test, assert) {
+test('unit', 'tokenizer', 'errors', function() {
   var err = null;
   try {
     var a = tokenizer('%$#^');
@@ -68,11 +64,9 @@ exports.testErrors = function(test, assert) {
   assert.type(err.start.col, 'number');
   assert.type(err.end.line, 'number');
   assert.type(err.end.col, 'number');
+});
 
-  test.finish();
-};
-
-exports.testWhitespace = function(test, assert) {
+test('unit', 'tokenizer', 'whitespace', function() {
   tokens(assert, 'let i = 0\nlet  i2=1',
     'let', 'whitespace', 'identifier', 'whitespace', '=', 'whitespace', 'int',
     'newline',
@@ -88,6 +82,4 @@ exports.testWhitespace = function(test, assert) {
     'let', 'whitespace', 'identifier', '=', 'int', ';', 'whitespace',
     'let', 'whitespace', 'identifier', '=', 'float'
   );
-
-  test.finish();
-};
+});

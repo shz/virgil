@@ -14,7 +14,7 @@ each(l, lambda(x : int, i : int) {
 # information to be specified.  Instead, types will be inferred based
 # on the function/method definition.
 each(l, lambda(x, i) {
-  x + i
+  1 + i
 })
 
 # The same goes for lambda return types
