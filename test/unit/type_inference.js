@@ -53,6 +53,11 @@ test('unit', 'type inference', 'arithmetic', function() {
   }, /right/i);
 });
 
+test('unit', 'type inference', 'binary', function() {
+  assert.equal('int', calc('1 || 2'));
+  assert.equal('func<int>', calc('lambda : int { return 1 } || lambda : int { return 0 }'));
+});
+
 test('unit', 'type inference', 'ternary', function() {
   assert.equal('int', calc('true ? 1 : 2'));
   assert.throws(function() {
