@@ -16,7 +16,7 @@ var tokens = function() {
   var t = tokenizer(str);
   assert.equal(t.length - 2, args.length);
   for (var i=0; i<t.length-2; i++)
-    assert.equal(t[i][0], args[i]);
+    assert.equal(t[i].name, args[i], 'mistmatch at i', t[i].name, args[i]);
 };
 
 test('unit', 'tokenizer', 'superflous semicolon', function() {
@@ -58,12 +58,13 @@ test('unit', 'tokenizer', 'errors', function() {
   }
 
   assert.isDefined(err);
-  assert.isDefined(err.start);
-  assert.isDefined(err.end);
-  assert.type(err.start.line, 'number');
-  assert.type(err.start.col, 'number');
-  assert.type(err.end.line, 'number');
-  assert.type(err.end.col, 'number');
+  assert.isDefined(err.loc);
+  assert.isDefined(err.loc.start);
+  assert.isDefined(err.loc.end);
+  assert.type(err.loc.start.line, 'number');
+  assert.type(err.loc.start.col, 'number');
+  assert.type(err.loc.end.line, 'number');
+  assert.type(err.loc.end.col, 'number');
 });
 
 test('unit', 'tokenizer', 'whitespace', function() {
