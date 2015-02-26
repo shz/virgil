@@ -14,8 +14,17 @@ var domain = require('domain')
 
 // Parse options
 var opts = minimist(process.argv.slice(2));
-delete opts._;
-console.log('Test options:', opts);
+if (!opts._.length) {
+  delete opts._;
+}
+if (opts.help) {
+  console.log('Usage:');
+  console.log('  ./test.js [--help] [--no-coverage] [files...]');
+  console.log('');
+  process.exit(0);
+} else {
+  console.log('Test options:', opts);
+}
 
 // Set up coverage if asked for
 if (opts.coverage !== false) {
@@ -100,10 +109,16 @@ global.test = function() {
 
 // Run the tests
 console.log('Running tests...');
-require('../test/levels');
-require('../test/functional');
-require('../test/integration');
-require('../test/unit');
+if (opts._) {
+  opts._.forEach(function(f) {
+    require(path.resolve(f));
+  });
+} else {
+  require('../test/levels');
+  require('../test/functional');
+  require('../test/integration');
+  require('../test/unit');
+}
 
 // On first exit, collect results info.  If any tests fail we'll re-exit
 // with a nonzero status code.
