@@ -16,7 +16,7 @@ var tokens = function() {
   var t = tokenizer(str);
   assert.equal(t.length - 2, args.length);
   for (var i=0; i<t.length-2; i++)
-    assert.equal(t[i].name, args[i]);
+    assert.equal(t[i].name, args[i], 'mistmatch at i', t[i].name, args[i]);
 };
 
 test('unit', 'tokenizer', 'superflous semicolon', function() {
