@@ -49,7 +49,7 @@ if (opts.coverage !== false) {
   });
 }
 
-// Test framework
+// Test frameworkj
 process.env.NODE_PATH += ':' + path.resolve(path.join(__dirname, '..', 'lib'));
 global.assert = require('assert');
 global.assert.isDefined = function(thing) {
@@ -74,6 +74,10 @@ global.assert.match = function(thing, re) {
     throw new Error('Value doesn\'t match ' + re.toString());
 };
 var tests = [];
+var uncaught = 0;
+process.on('uncaughtException', function(err) {
+  tests.push([['uncaught exception', (++uncaught).toString()], err]);
+});
 global.test = function() {
   var args = Array.prototype.slice.call(arguments);
   var f = args.pop();
@@ -109,15 +113,19 @@ global.test = function() {
 
 // Run the tests
 console.log('Running tests...');
-if (opts._) {
-  opts._.forEach(function(f) {
-    require(path.resolve(f));
-  });
-} else {
-  require('../test/levels');
-  require('../test/functional');
-  require('../test/integration');
-  require('../test/unit');
+try {
+  if (opts._) {
+    opts._.forEach(function(f) {
+      require(path.resolve(f));
+    });
+  } else {
+    require('../test/levels');
+    require('../test/functional');
+    require('../test/integration');
+    require('../test/unit');
+  }
+} catch (err) {
+  tests.push([['uncaught exception', (++uncaught).toString()], err]);
 }
 
 // On first exit, collect results info.  If any tests fail we'll re-exit

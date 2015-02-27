@@ -1,13 +1,12 @@
-var tokenizer = require('../../lib/parser/tokenizer');
+var tokenizer = require('../../lib/tokenizer');
 
 module.exports = function(input, callback) {
   var tokens = tokenizer(input);
 
   // Ensure that each token has location info
-  // TODO
   tokens.forEach(function(t) {
     if (!t.loc) {
-      // throw new Error('Token ' + JSON.stringify(t) + ' is missing .loc');
+      throw new Error('Token ' + t + ' is missing .loc');
     }
   });
 
