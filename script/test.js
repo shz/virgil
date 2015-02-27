@@ -75,6 +75,7 @@ global.assert.match = function(thing, re) {
 };
 var tests = [];
 var uncaught = 0;
+var dots = 0;
 process.on('uncaughtException', function(err) {
   tests.push([['uncaught exception', (++uncaught).toString()], err]);
 });
@@ -85,6 +86,10 @@ global.test = function() {
   var done = function(err) {
     var pip = (err ? clc.red : clc.green)('.');
     process.stdout.write(pip);
+    if (++dots == 80) {
+      dots = 0;
+      process.stdout.write('\n');
+    }
     tests.push([args, err]);
   };
 

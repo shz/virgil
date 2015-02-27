@@ -8,7 +8,7 @@ module.exports = function(input, callback) {
   // Ensure that each token has location info
   ast.traverse(node, function(node) {
     if (!node.loc) {
-      // throw new Error('Node ' + node.constructor.name + ' is missing .loc');
+      throw new Error('Node ' + node.constructor.name + ' is missing .loc');
     }
   });
 
