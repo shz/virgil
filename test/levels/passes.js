@@ -7,5 +7,13 @@ module.exports = function(input, callback) {
     pass(input);
   });
 
+  // Checks
+  ast.traverse(input, function(node) {
+    if (node instanceof ast.Identifier) {
+      assert.isDefined(node.def);
+      assert.ok(node.def instanceof ast.Node);
+    }
+  });
+
   callback(input);
 };
