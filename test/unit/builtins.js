@@ -64,7 +64,7 @@ test('unit', 'builtins', 'list members', function() {
   });
 });
 
-test('unit', 'builtins', 'str embers', function() {
+test('unit', 'builtins', 'str members', function() {
   var c = checker(assert, 'str');
   c.method('upper', 'str');
   c.method('lower', 'str');
@@ -91,6 +91,7 @@ test('unit', 'builtins', 'float members', function() {
   c.method('abs', 'float');
   c.method('cos', 'float');
   c.method('sin', 'float');
+  c.method('abs', 'float');
   c.done();
 });
 
@@ -98,6 +99,7 @@ test('unit', 'builtins', 'int members', function() {
   var c = checker(assert, 'int');
   c.method('asFloat', 'float');
   c.method('asStr', 'str');
+  c.method('abs', 'int');
   c.done();
 });
 
