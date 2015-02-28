@@ -74,13 +74,19 @@ test('integration', 'types', 'return', function() {
 
 test('integration', 'types', 'lambda types optional', function() {
   // Ensure these don't throw
-  // calc('function a(f : func<int, void>) {}; a(lambda(i) {})');
-  // calc('function b(f : func<int>) {}; b(lambda { return 1 })');
-  // calc('function d(f : func<int, void>) {}; d(lambda(i) { i + 1 })');
+  calc('function a(f : func<int, void>) {}; a(lambda(i) {})');
+  calc('function b(f : func<int>) {}; b(lambda { return 1 })');
+  calc('function d(f : func<int, void>) {}; d(lambda(i) { i + 1 })');
   calc('function test(l: list<\'T>, f: func<\'T, int, void>) { f(l[0], 1) };' +
        'test([1, 2, 3], lambda(x, i) { x + i * 2 })');
   calc('method test(l: list<\'T>, f: func<\'T, int, void>) { f(l[0], 1) };' +
        '[1, 2, 3].test(lambda(x, i) { x + i * 2 })');
+  calc("struct Foo<'A, 'B> { a: 'A = default b: 'B = default };" +
+       "method test(foo: Foo<'A, 'B>, f: func<Foo<'A, 'B>, void>) {};" +
+       "(new Foo<int, int>).test(lambda(x) { x.a + x.b })");
+  calc("struct Foo<'A, 'B> { a: 'A = default b: 'B = default };" +
+       "function test(foo: Foo<'A, 'B>, f: func<Foo<'A, 'B>, void>) {};" +
+       "test(new Foo<int, int>, lambda(x) { x.a + x.b })");
 
   // In cases where we can't infer the type, it should bail
   assert.throws(function() {
