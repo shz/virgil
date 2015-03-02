@@ -1,0 +1,32 @@
+#
+# The "standard library" is really just a collection of methods
+# on builtin types.  These are detailed in full in the documentation,
+# but here are a few examples.
+#
+
+# Numbers
+
+let num = 10
+let numFloat = num.asFloat()
+let numStr = num.asStr()
+let anotherNum = (-10).abs()
+let nice : str = numFloat.format(2)
+
+let f = 100.456f
+mut anInt = 0
+anInt = f.floor() # 100
+anInt = f.ceil() # 101
+anInt = f.round() # 100
+
+mut f2 = f.abs() # 100.456
+f2 = 0f.sin() # 1.0
+f2 = 0f.cos() # 0.0
+
+# Strings
+
+mut s = "hello world"
+s = s.upper() # "HELLO WORLD"
+s = s.lower() # "hello world"
+let c = s.at(1) # "e"
+let someInt = "100".asInt() # 100
+let someFloat = "100.1".asFloat() # 100.1

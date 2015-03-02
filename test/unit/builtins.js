@@ -91,7 +91,6 @@ test('unit', 'builtins', 'float members', function() {
   c.method('abs', 'float');
   c.method('cos', 'float');
   c.method('sin', 'float');
-  c.method('abs', 'float');
   c.done();
 });
 
