@@ -66,11 +66,15 @@ test('unit', 'builtins', 'list members', function() {
 
 test('unit', 'builtins', 'str members', function() {
   var c = checker(assert, 'str');
+  c.method('trimStart', 'str');
+  c.method('trimEnd', 'str');
+  c.method('trim', 'str');
   c.method('upper', 'str');
   c.method('lower', 'str');
   c.method('at', 'int,str');
   c.method('asInt', 'int');
   c.method('asFloat', 'float');
+  c.method('substr', 'int,int,str');
   c.attr('length', 'int');
   c.done();
 

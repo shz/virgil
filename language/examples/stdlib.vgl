@@ -24,9 +24,14 @@ f2 = 0f.cos() # 0.0
 
 # Strings
 
-mut s = "hello world"
-s = s.upper() # "HELLO WORLD"
-s = s.lower() # "hello world"
-let c = s.at(1) # "e"
+mut s = " hello world "
+s = s.upper() # " HELLO WORLD "
+s = s.lower() # " hello world "
+let c = s.at(2) # "e"
 let someInt = "100".asInt() # 100
 let someFloat = "100.1".asFloat() # 100.1
+
+s = s.trimStart() # "hello world "
+s = s.trimEnd() # "hello world"
+s = s.trim() # Equivalent of the above two lines
+s = s.substr(1, 4) # "ello"
