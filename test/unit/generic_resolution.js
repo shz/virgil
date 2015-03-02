@@ -14,7 +14,7 @@ var calc2 = function(str) {
 };
 
 
-test('unit', 'generic resolution', 'basic', function() {
+test('unit', 'generic resolution', 'basic resolution', function() {
   var r = resolve( new TR("int")
                  , types.canned['int']
                  );
@@ -60,6 +60,19 @@ test('unit', 'generic resolution', 'basic', function() {
            , new TR('list', [types.canned['str']])
            );
   }, /mismatch/i);
+});
+
+test('unit', 'generic resolution', 'advanced resolution', function() {
+  var r = resolve( new TR("list", [new TR("'T")])
+                 , types.canned['inferred']
+                 );
+  assert.equal(Object.keys(r).length, 0);
+
+  var r = resolve( new TR("list", [new TR("'T")])
+                 , types.canned['null']
+                 );
+  assert.equal(Object.keys(r).length, 0);
+
 });
 
 test('unit', 'generic resolution', 'matching', function() {

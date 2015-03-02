@@ -15,13 +15,19 @@ var calc2 = function(str) {
   return types.calculate(parsed[parsed.length - 1]).toString();
 };
 
-exports.testEquality = function(test, assert) {
+test('integration', 'types', 'equality', function() {
   assert.ok(types.equal(new types.TypeRef('foo'), new types.TypeRef('foo')));
   assert.ok(types.equal(new types.TypeRef('int'), types.canned['int']));
   assert.ok(types.equal(new types.TypeRef('foo', ['bar']), new types.TypeRef('foo', ['bar'])));
+});
 
-  test.finish();
-};
+test('integration', 'types', 'null equality', function() {
+  assert.ok(types.equal(new types.TypeRef('null'), types.canned['null']));
+  assert.ok(!types.equal(new types.TypeRef('int'), types.canned['null']));
+  assert.ok(types.equal(new types.TypeRef('func', ['int']), types.canned['null']));
+  assert.ok(types.equal(new types.TypeRef('Shazam'), types.canned['null']));
+  assert.ok(types.equal(new types.TypeRef('\'T'), types.canned['null']));
+});
 
 test('integration', 'types', 'definitions', function() {
   // Just make sure there's don't fail
@@ -71,17 +77,33 @@ test('integration', 'types', 'lambda types optional', function() {
   calc('function a(f : func<int, void>) {}; a(lambda(i) {})');
   calc('function b(f : func<int>) {}; b(lambda { return 1 })');
   calc('function d(f : func<int, void>) {}; d(lambda(i) { i + 1 })');
+  calc('function test(l: list<\'T>, f: func<\'T, int, void>) { f(l[0], 1) };' +
+       'test([1, 2, 3], lambda(x, i) { x + i * 2 })');
+  calc('method test(l: list<\'T>, f: func<\'T, int, void>) { f(l[0], 1) };' +
+       '[1, 2, 3].test(lambda(x, i) { x + i * 2 })');
+  calc("struct Foo<'A, 'B> { a: 'A = default b: 'B = default };" +
+       "method test(foo: Foo<'A, 'B>, f: func<Foo<'A, 'B>, void>) {};" +
+       "(new Foo<int, int>).test(lambda(x) { x.a + x.b })");
+  calc("struct Foo<'A, 'B> { a: 'A = default b: 'B = default };" +
+       "function test(foo: Foo<'A, 'B>, f: func<Foo<'A, 'B>, void>) {};" +
+       "test(new Foo<int, int>, lambda(x) { x.a + x.b })");
 
   // In cases where we can't infer the type, it should bail
   assert.throws(function() {
     calc('let a = lambda(b) {}');
   }, /type/i);
+
+  // We don't support this shorthand for variable assignment
   assert.throws(function() {
     calc('let a : func<int, void> = lambda(i) {}');
   }, /type/i);
+
+  // Make sure argument number is enforced
   assert.throws(function() {
     calc('function c(f : func<int>) {}; c(lambda { return "hi" })');
   }, /type/i);
+
+  // Make sure argument types are not explicitly wrong
   assert.throws(function() {
     calc('function c(f : func<int, void>) {}; c(lambda(s : str) { })');
   }, /type/i);

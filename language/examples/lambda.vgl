@@ -14,7 +14,7 @@ each(l, lambda(x : int, i : int) {
 # information to be specified.  Instead, types will be inferred based
 # on the function/method definition.
 each(l, lambda(x, i) {
-  1 + i
+  1 + i + x
 })
 
 # The same goes for lambda return types
@@ -24,3 +24,7 @@ function inc(f : func<int>) : int {
 inc(lambda {
   return 5
 })
+
+# You may pass null to a lambda, but unless the receiver is prepared
+# to deal with that null, you'll get a runtime error.
+inc(null) # This will crash
