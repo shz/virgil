@@ -33,7 +33,8 @@
     "mock-fs": "^2.3.1",
     "whiskey": "^0.8.4",
     "jstoxml": "^0.2.3",
-    "tmp": "0.0.24"
+    "tmp": "0.0.24",
+    "benchmark": "^1.0.0"
   },
   "yahoo": {
     "custodian": {
