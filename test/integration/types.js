@@ -37,11 +37,30 @@ test('integration', 'types', 'definitions', function() {
   calc('let a: str = "hi"');
   calc('let a: func<void> = null');
   calc('let a: list<int> = []');
+  calc('let a : datetime = default');
+  calc('let a : datetime = null');
+  calc('let a : datetime = new datetime');
+  calc('let a : datetime = new datetime { ts = 1 offset = -60*60*5 }');
 
   // Void cannot be used as a type
   assert.throws(function() {
     calc('let a : void = null');
   }, /void/);
+
+  // Cannot use 'new' to create a built-in type (with one exception: datetime)
+  assert.throws(function() {
+    calc('let a : str = new str');
+  }, /new.*str/);
+
+  // Validate known members of the one built-in for which "new" is supported
+  assert.throws(function() {
+    calc('let a : datetime = new datetime { notknown = 3 }');
+  }, /no property.*notknown/);
+
+  // Validate types on members of the one built-in for which "new" is supported
+  assert.throws(function() {
+    calc('let a : datetime = new datetime { ts = 3f }');
+  }, /.*/);
 
   // References to user types should work
   calc('struct A {}; let a : A = null');
