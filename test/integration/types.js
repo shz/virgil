@@ -31,11 +31,12 @@ test('integration', 'types', 'null equality', function() {
 
 test('integration', 'types', 'definitions', function() {
   // Just make sure there's don't fail
-  calc('let a : int = 1');
-  calc('let a : float = 1');
-  calc('let a : bool = true');
-  calc('let a : str = "hi"');
-  calc('let a : func<void> = null');
+  calc('let a: int = 1');
+  calc('let a: float = 1');
+  calc('let a: bool = true');
+  calc('let a: str = "hi"');
+  calc('let a: func<void> = null');
+  calc('let a: list<int> = []');
 
   // Void cannot be used as a type
   assert.throws(function() {
@@ -107,4 +108,8 @@ test('integration', 'types', 'lambda types optional', function() {
   assert.throws(function() {
     calc('function c(f : func<int, void>) {}; c(lambda(s : str) { })');
   }, /type/i);
+});
+
+test('integration', 'types', 'list inference', function() {
+  calc('mut a: list<int> = null; a = []');
 });
