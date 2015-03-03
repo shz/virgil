@@ -1,0 +1,13 @@
+#!/usr/bin/env node
+
+if (process.argv.length < 5 || process.argv[2] == '-h' || process.argv[2] == '--help') {
+  console.log('Usage: virgil-test file_to_test.vgl test_script.vgl');
+  console.log('');
+}
+
+var fileToTest = process.argv[3];
+var testScript = process.argv[4];
+
+console.log('Testing', fileToTest, 'with', testScript + '...');
+
+console.log('Done');

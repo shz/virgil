@@ -1,0 +1,32 @@
+#
+# Testing framework for Virgil code
+#
+
+struct Test {
+  name = ""
+  failed = false
+}
+
+struct TestSuite {
+  results: list<Test> = []
+  suites: list<TestSuite> = []
+  name: str = null
+}
+
+export method assert(ts: TestSuite, thing: str, result: bool) {
+  ts.results.push(new Test { name = thing; failed = !result })
+}
+
+export method equal(ts: TestSuite, msg: str, a: 'T, b: 'T) {
+  ts.assert(msg, a == b)
+}
+
+export method suite(ts: TestSuite, name: str, f: func<TestSuite, void>) {
+  let newSuite = new TestSuite { name: name }
+  ts.suites.push(newSuite)
+  f(newSuite)
+}
+
+export method report(ts: TestSuite) {
+
+}
