@@ -60,7 +60,7 @@ test('integration', 'types', 'definitions', function() {
   // Validate types on members of the one built-in for which "new" is supported
   assert.throws(function() {
     calc('let a : datetime = new datetime { ts = 3f }');
-  }, /.*/);
+  }, /type int.*float/);
 
   // References to user types should work
   calc('struct A {}; let a : A = null');
