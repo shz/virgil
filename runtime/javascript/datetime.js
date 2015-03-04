@@ -23,6 +23,8 @@ function canUseInternationalizationAPI() {
 }
 
 
+var tzOption = {timeZone: "UTC"};
+
 /* 
 
 Currently, any defined value for specForDate/Time means "show that particular component".
@@ -35,13 +37,17 @@ function formatSophisticated (specForDate, specForTime) {
   var retval = "";
   var jsDate = new Date(this.ts + this.offset);
   if (specForDate) {
-    retval = jsDate.toLocaleDateString();  // offset has already been done via manip of the timestamp
+    retval = jsDate.toLocaleDateString(undefined, tzOption);  // offset has already been done via manip of the timestamp
   }
   if (specForTime) {
-    retval += (retval ? " " : "") + jsDate.toLocaleTimeString();  // offset has already been done via manip of the timestamp
+    retval += (retval ? " " : "") + jsDate.toLocaleTimeString(undefined, tzOption);  // offset has already been done via manip of the timestamp
   }
   return retval;
 };
+
+function zeroPad(n) {
+  return ('00000'+n).slice(-2);
+}
 
 function formatFallback (specForDate, specForTime) {
   var retval = "";
@@ -49,11 +55,11 @@ function formatFallback (specForDate, specForTime) {
   if (specForDate) {
     // Right now: just american style mm/dd/yyyy
     // We will want to do a better job, more sensitive to the major other locales, soon.
-    retval = (jsDate.getMonth()+1) + "/" + (jsDate.getDay()+1) + "/" + (jsDate.getYear()+1900);  // offset has already been done via manip of the timestamp
+    retval = (jsDate.getUTCMonth()+1) + "/" + (jsDate.getUTCDate()) + "/" + (jsDate.getUTCFullYear());  // offset has already been done via manip of the timestamp
   }
   if (specForTime) {
     // Right now: just a basic hh:mm:ss in military time
-    retval += (retval ? " " : "") + jsDate.toLocaleTimeString();  // offset has already been done via manip of the timestamp
+    retval += (retval ? " " : "") + zeroPad(jsDate.getUTCHours()) + ':' + zeroPad(jsDate.getUTCMinutes()) + ':' + zeroPad(jsDate.getUTCSeconds());  // offset has already been done via manip of the timestamp
   }
   return retval;
 };

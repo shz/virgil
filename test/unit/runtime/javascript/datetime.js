@@ -16,11 +16,11 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'constructor', function() {
 test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
   var timestampFixed = 1425430319083;
 
-  var dtUTC = new DateTime({ts: timestampFixed});
+  var dtUTC = new DateTime({ts: timestampFixed, offset: 0});
   var strdtUTC = dtUTC.format('short', 'short');
 
   // This assumes NodeJS v0.10.x -- upon move to newest NodeJS, this test will need mods.
-  assert.equal("3/3/2015 16:51:59", strdtUTC);
+  assert.equal("3/4/2015 00:51:59", strdtUTC);
 
   var dtLocal = dtUTC.toLocal();
   var strdtLocal = dtLocal.format('short', 'short');
