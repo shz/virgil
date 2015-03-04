@@ -1,0 +1,14 @@
+extern console {
+  function log(s: str)
+  function blargh
+}
+
+method doThing(s: str) : str {
+  return s.upper()
+}
+
+function main {
+  log("Hello world".doThing())
+}
+
+main()
