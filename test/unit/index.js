@@ -13,5 +13,6 @@ var loadDir = function(p) {
 
 loadDir(__dirname);
 loadDir(path.join(__dirname, 'tokenizer'));
+loadDir(path.join(__dirname, 'runtime', 'javascript'));
 loadDir(path.join(__dirname, 'converters', 'javascript'));
 loadDir(path.join(__dirname, 'converters', 'cpp'));
