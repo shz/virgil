@@ -14,21 +14,21 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'constructor', function() {
 });  
 
 test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
-  var timestampFixed = 1425430319;
+  var timestampFixed = 1181056120;
 
   var dtUTC = new DateTime({ts: timestampFixed, offset: 0});
-  var strdtUTC = dtUTC.format('short', 'short');
+  var strdtUTC = dtUTC.format('fullnumeric', 'full');
 
   // This assumes NodeJS v0.10.x -- upon move to newest NodeJS, this test will need mods.
-  assert.equal("3/4/2015 00:51:59", strdtUTC);
+  assert.equal("6/5/2007 15:08:40", strdtUTC);
 
   var dtLocal = dtUTC.toLocal();
   var strdtLocal = dtLocal.format('full', 'full');
 
   if (dtUTC.canUseInternationalizationAPI()) {
-    assert("Mar 3, 2015 4:51pm" != strdtLocal);
+    assert("Jun 5, 2007 8:08am" == strdtLocal);
   }else{
-    assert("3/3/2015 16:51:59" != strdtLocal);
+    assert("6/5/2007 08:08:40" == strdtLocal);
   }
 
   var strdtLocalTimeOnly = dtLocal.format(null, 'short');

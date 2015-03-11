@@ -70,6 +70,7 @@ var fullWeekdayFromShortWeekday = {
 };
 
 DateTime.prototype.canUseSafariSpecialFallback = function() {
+  return false;
   var jsDate = new Date();
   return jsDate.toLocaleString().match(safariParser);
 };
