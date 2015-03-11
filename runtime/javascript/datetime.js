@@ -3,12 +3,20 @@ var DateTime = function DateTime(spec) {
   this.offset = (spec && typeof spec.offset == 'number') ? (spec.offset) : 0;
 };
 
+// This is NOT exposed in the Virgil language but is of key import here.
+DateTime.prototype.toJSDate = function() {
+  return new Date((this.ts + this.offset) * 1000);
+}
+
 DateTime.prototype.toGMT = function() {
   return new DateTime({ts: this.ts, offset: 0});
 }
 
 DateTime.prototype.toLocal = function() {
-  return new DateTime({ts: this.ts, offset: new Date().getTimezoneOffset() * 60});
+  // Keep in mind: getTimezoneOffset() returns its value in terms of *minutes*.
+  // Keep in mind: getTimezoneOffset() returns a *positive* number for TZs in the USA,
+  //    e.g. its polarity is opposite of what we're looking for.
+  return new DateTime({ts: this.ts, offset: new Date().getTimezoneOffset() * -60});
 }
 
 DateTime.prototype.toOffset = function(newoffset) {
@@ -23,7 +31,7 @@ DateTime.prototype.canUseInternationalizationAPI = function() {
 };
 
 // On safari, the toLocaleString returns this type of string: "March 10, 2015 at 6:08:33 PM PDT"
-var safariParser = /^(\w+) (\d+), (\d\d\d\d) at (\d+)\:(\d+)\:(\d+) ([AP]M) (\w+)$/;
+var safariParser = /^(\w+) (\d+), (\d\d\d\d) at (\d+)\:(\d+)\:(\d+) ([AP]M) (\w+)$/i;
 var idxSafariComponent = {
   monthFull: 1,
   day: 2,
@@ -51,12 +59,21 @@ var monthNumberFromEnglish = {
   "Dec": 12
 };
 
+var fullWeekdayFromShortWeekday = {
+  "Sun": "Sunday",
+  "Mon": "Monday",
+  "Tue": "Tuesday",
+  "Wed": "Wednesday",
+  "Thu": "Thursday",
+  "Fri": "Friday",
+  "Sat": "Saturday"
+};
+
 DateTime.prototype.canUseSafariSpecialFallback = function() {
   var jsDate = new Date();
   return jsDate.toLocaleString().match(safariParser);
 };
 
-var tzOption = {timeZone: "UTC"};
 
 /* 
 Currently, any defined value for specForDate/Time means "show that particular component".
@@ -67,34 +84,34 @@ We have two formatters -- we deploy the one that best uses the JS environment's 
 
 var mapVirgilspecToJSspec = {
   date: {
-    full: { month:"short", day:"numeric", year:"numeric" },
-    fullnumeric: { month:"numeric", day:"numeric", year:"numeric" },
-    year: { year:"numeric" },
-    month: { month:"short" },
-    fullmonth: { month:"long" },
-    monthyear: { month:"short", year:"numeric" },
-    fullmonthyear: { month:"long", year:"numeric" },
-    daymonth: { month:"short", day:"2-digit" },
-    weekday: { weekday:"short" },
-    fullweekday: { weekday:"long" }
+    full: { month:"short", day:"numeric", year:"numeric", timeZone: "UTC"},
+    fullnumeric: { month:"numeric", day:"numeric", year:"numeric", timeZone: "UTC" },
+    year: { year:"numeric", timeZone: "UTC" },
+    month: { month:"short", timeZone: "UTC" },
+    fullmonth: { month:"long", timeZone: "UTC" },
+    monthyear: { month:"short", year:"numeric", timeZone: "UTC" },
+    fullmonthyear: { month:"long", year:"numeric", timeZone: "UTC" },
+    daymonth: { month:"short", day:"2-digit", timeZone: "UTC" },
+    weekday: { weekday:"short", timeZone: "UTC" },
+    fullweekday: { weekday:"long", timeZone: "UTC" }
   },
   time: {
-    abbrev: { hour:"numeric" },
-    full: { hour:"numeric", minute:"2-digit" }
+    abbrev: { hour:"numeric", timeZone: "UTC" },
+    full: { hour:"numeric", minute:"2-digit", timeZone: "UTC" }
   }
 };
 
 
 function formatSophisticated (specForDate, specForTime) {
   var retval = "";
-  var jsDate = new Date((this.ts*1000) + this.offset);
+  var jsDate = this.toJSDate();
 
   if (specForDate) {
-    var spec = Object.merge((mapVirgilspecToJSspec.date[specForDate] || {}), tzOption);
+    var spec = mapVirgilspecToJSspec.date[specForDate];
     retval = jsDate.toLocaleDateString(undefined, spec);  // offset has already been done via manip of the timestamp
   }
   if (specForTime) {
-    var spec = Object.merge((mapVirgilspecToJSspec.time[specForTime] || {}), tzOption);
+    var spec = mapVirgilspecToJSspec.time[specForTime];
     retval += (retval ? " " : "") + (jsDate.toLocaleTimeString(undefined, spec).replace(/ AM$/,"am").replace(/ PM$/,"pm"));  // offset has already been done via manip of the timestamp
   }
   return retval;
@@ -122,7 +139,7 @@ function zeroPad(n) {
 
 function formatFallbackBase (specForDate, specForTime) {
   var retval = "";
-  var jsDate = new Date(this.ts*1000 + this.offset);
+  var jsDate = this.toJSDate();
   if (specForDate) {
     // Right now: just american style mm/dd/yyyy
     // We will want to do a better job, more sensitive to the major other locales, soon.
@@ -138,13 +155,34 @@ function formatFallbackBase (specForDate, specForTime) {
 // On safari: "March 10, 2015 at 6:08:33 PM PDT"
 function formatFallbackSafari (specForDate, specForTime) {
   var retval = "";
-  var jsDate = new Date(this.ts*1000 + this.offset);
+
+  // This gets pretty funky.  We cannot use this.toJSDate() to produce the JS Date that
+  // will govern this rendering, but we *do* need to use this.toJSDate() to get the timezone offset.
+  // It is NOT correct to use:  new Date().getTimezoneOffset() to get that offset because
+  // that would not handle DST correctly; it would determine DST based on the current date
+  // not based on the date represented by this datetime object.
+  var jsDate = new Date( (this.ts+this.offset)*1000 + (this.toJSDate().getTimezoneOffset()*60*1000) );
+
   var renderedComponents = jsDate.toLocaleString().match(safariParser);
+
   if (renderedComponents) {
+    // IF WE GET HERE, toLocaleString() is producing a result that exactly matches
+    // the signature of English-locale Safari.
+
+    // We can thus perform a sophisticated fallback via the already-extracted components.
+
     // Derive the short month (3-alpha) from the full month
     renderedComponents.push(renderedComponents[idxSafariComponent.monthFull].slice(0,3));
+
+    // One problem: weekday name is NOT available fro toLocaleString, thus:
+    // Compute the weekday name via toString()
+    var weekdayShort = jsDate.toString().match(/^(...)/)[1];
+    var weekdayLong  = fullWeekdayFromShortWeekday[weekdayShort];
+
+    // Abbreviations to simplify below code
     var rc = renderedComponents;
     var idx = idxSafariComponent;
+
     if (specForDate) {
       var strDate = "";
       switch(specForDate) {
@@ -170,7 +208,11 @@ function formatFallbackSafari (specForDate, specForTime) {
         strDate = rc[idx.monthShort] + " " + zeroPad(rc[idx.day]);
         break;
       case "weekday": 
+        strDate = weekdayShort;
+        break;
       case "fullweekday": 
+        strDate = weekdayLong;
+        break;
       case "fullnumeric":
       default:
         strDate = monthNumberFromEnglish[rc[idx.monthShort]] + "/" + rc[idx.day] + "/" + rc[idx.year]; 
@@ -182,11 +224,11 @@ function formatFallbackSafari (specForDate, specForTime) {
       var strTime = "";
       switch(specForTime) {
       case "abbrev":
-        strTime = rc[idx.hour] + rc[idx.ampm]; 
+        strTime = rc[idx.hour] + rc[idx.ampm].toLowerCase(); 
         break;
       case "full":
       default:
-        strTime = rc[idx.hour] + ":" + rc[idx.minute] + rc[idx.ampm]; 
+        strTime = rc[idx.hour] + ":" + rc[idx.minute] + rc[idx.ampm].toLowerCase(); 
         break;
       }
       retval += (retval ? " " : "") + strTime;
@@ -221,7 +263,7 @@ else {
   // 1) Visit sugarjs.com
   // 2) Open up JS console
   // 3) Paste this entire file's contents into the JS console.  
-  var x = new DateTime({ts:1107615820});
+  var x = new DateTime({ts:1181056120});
   function test(specDate, specTime, target) {
     var result = x.format(specDate, specTime);
     if (target != result) {
@@ -231,29 +273,21 @@ else {
 
   console.log("START OF TESTING!  Only failures will be reported.");
   console.log("Testing date formatting...");
-  test("full",null,"Feb 5, 2005");
-  test("fullnumeric",null,"2/5/2005");
-  test("year",null,"2005");
-  test("month",null,"Feb");
-  test("fullmonth",null,"February");
-  test("monthyear",null,"Feb 2005");
-  test("fullmonthyear",null,"February 2005");
-  test("daymonth",null,"Feb 05");
-  test("weekday",null,"Sat");
-  test("fullweekday",null,"Saturday");
+  test("full",null,"Jun 5, 2007");
+  test("fullnumeric",null,"6/5/2007");
+  test("year",null,"2007");
+  test("month",null,"Jun");
+  test("fullmonth",null,"June");
+  test("monthyear",null,"Jun 2007");
+  test("fullmonthyear",null,"June 2007");
+  test("daymonth",null,"Jun 05");
+  test("weekday",null,"Tue");
+  test("fullweekday",null,"Tuesday");
   console.log("Testing time formatting...");
-  test(null, "full", "3:03pm");
+  test(null, "full", "3:08pm");
   test(null, "abbrev", "3pm");
   console.log("END OF TESTING!  Please address any failures noted above.");
 }
-
-
-
-
-
-
-
-
 
 
 
