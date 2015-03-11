@@ -14,7 +14,7 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'constructor', function() {
 });  
 
 test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
-  var timestampFixed = 1425430319083;
+  var timestampFixed = 1425430319;
 
   var dtUTC = new DateTime({ts: timestampFixed, offset: 0});
   var strdtUTC = dtUTC.format('short', 'short');
@@ -23,10 +23,13 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
   assert.equal("3/4/2015 00:51:59", strdtUTC);
 
   var dtLocal = dtUTC.toLocal();
-  var strdtLocal = dtLocal.format('short', 'short');
+  var strdtLocal = dtLocal.format('full', 'full');
 
-  // This assumes we are not running this test in Merrie Olde England :-) !
-  assert("3/3/2015 16:51:59" != strdtLocal);
+  if (dtUTC.canUseInternationalizationAPI()) {
+    assert("Mar 3, 2015 4:51pm" != strdtLocal);
+  }else{
+    assert("3/3/2015 16:51:59" != strdtLocal);
+  }
 
   var strdtLocalTimeOnly = dtLocal.format(null, 'short');
   assert(strdtLocalTimeOnly.length < strdtLocal.length);
