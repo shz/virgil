@@ -24,6 +24,33 @@ DateTime.prototype.canUseInternationalizationAPI = function() {
 
 // On safari, the toLocaleString returns this type of string: "March 10, 2015 at 6:08:33 PM PDT"
 var safariParser = /^(\w+) (\d+), (\d\d\d\d) at (\d+)\:(\d+)\:(\d+) ([AP]M) (\w+)$/;
+var idxSafariComponent = {
+  monthFull: 1,
+  day: 2,
+  year: 3,
+  hour : 4,
+  minute: 5,
+  second: 6,
+  ampm: 7,
+  tz: 8,
+  monthShort: 9  // derived
+};
+
+var monthNumberFromEnglish = {
+  "Jan": 1,
+  "Feb": 2,
+  "Mar": 3,
+  "Apr": 4,
+  "May": 5,
+  "Jun": 6,
+  "Jul": 7,
+  "Aug": 8,
+  "Sep": 9,
+  "Oct": 10,
+  "Nov": 11,
+  "Dec": 12
+};
+
 DateTime.prototype.canUseSafariSpecialFallback = function() {
   var jsDate = new Date();
   return jsDate.toLocaleString().match(safariParser);
@@ -108,19 +135,67 @@ function formatFallbackBase (specForDate, specForTime) {
   return retval;
 };
 
+// On safari: "March 10, 2015 at 6:08:33 PM PDT"
 function formatFallbackSafari (specForDate, specForTime) {
   var retval = "";
   var jsDate = new Date(this.ts*1000 + this.offset);
-  if (specForDate) {
-    // Right now: just american style mm/dd/yyyy
-    // We will want to do a better job, more sensitive to the major other locales, soon.
-    retval = (jsDate.getUTCMonth()+1) + "/" + (jsDate.getUTCDate()) + "/" + (jsDate.getUTCFullYear());  // offset has already been done via manip of the timestamp
+  var renderedComponents = jsDate.toLocaleString().match(safariParser);
+  if (renderedComponents) {
+    // Derive the short month (3-alpha) from the full month
+    renderedComponents.push(renderedComponents[idxSafariComponent.monthFull].slice(0,3));
+    var rc = renderedComponents;
+    var idx = idxSafariComponent;
+    if (specForDate) {
+      var strDate = "";
+      switch(specForDate) {
+      case "full": 
+        strDate = rc[idx.monthFull] + " " + rc[idx.day] + ", " + rc[idx.year]; 
+        break;
+      case "year": 
+        strDate = rc[idx.year]; 
+        break;
+      case "month":
+        strDate = rc[idx.monthShort];
+        break;
+      case "fullmonth":
+        strDate = rc[idx.monthFull];
+        break;
+      case "monthyear":
+        strDate = rc[idx.monthShort] + " " + rc[idx.day] + ", " + rc[idx.year]; 
+        break;
+      case "fullmonthyear": 
+        strDate = rc[idx.monthFull] + " " + rc[idx.year]; 
+        break;
+      case "daymonth": 
+        strDate = rc[idx.monthShort] + " " + rc[idx.day];
+        break;
+      case "weekday": 
+      case "fullweekday": 
+      case "fullnumeric":
+      default:
+        strDate = monthNumberFromEnglish[rc[idx.monthShort]] + "/" + rc[idx.day] + "/" + rc[idx.year]; 
+        break;
+      }
+      retval = strDate;
+    }
+    if (specForTime) {
+      var strTime = "";
+      switch(specForTime) {
+      case "abbrev":
+        strTime = rc[idx.hour] + rc[idx.ampm]; 
+        break;
+      case "full":
+      default:
+        strTime = rc[idx.hour] + ":" + rc[idx.minute] + rc[idx.ampm]; 
+        break;
+      }
+      retval += (retval ? " " : "") + strTime;
+    }
+    return retval;
+  }else{
+    // Wow, we are no longer feeling like this is a safari-format string!
+    return formatFallbackBase(specForDate, specForTime);
   }
-  if (specForTime) {
-    // Right now: just a basic hh:mm:ss in military time
-    retval += (retval ? " " : "") + zeroPad(jsDate.getUTCHours()) + ':' + zeroPad(jsDate.getUTCMinutes()) + ':' + zeroPad(jsDate.getUTCSeconds());  // offset has already been done via manip of the timestamp
-  }
-  return retval;
 };
 
 DateTime.prototype.format = DateTime.prototype.canUseInternationalizationAPI() 
@@ -139,4 +214,15 @@ DateTime.prototype.format = DateTime.prototype.canUseInternationalizationAPI()
 //
 if (typeof(module) != "undefined") {
   module.exports = DateTime;
+}
+else {
+  // When this entire JS code has been pasted into a browser console, run sanity checks (for a human to vet) automatically:
+  var x = new DateTime();
+  console.log(x.format("full"));
+  console.log(x.format("fullnumeric"));
+  console.log(x.format("year"));
+  console.log(x.format("month"));
+  console.log(x.format("fullmonth"));
+  console.log(x.format("monthyear"));
+  console.log(x.format("fullmonthyear"));
 }
