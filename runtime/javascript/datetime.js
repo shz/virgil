@@ -149,7 +149,7 @@ function formatFallbackSafari (specForDate, specForTime) {
       var strDate = "";
       switch(specForDate) {
       case "full": 
-        strDate = rc[idx.monthFull] + " " + rc[idx.day] + ", " + rc[idx.year]; 
+        strDate = rc[idx.monthShort] + " " + rc[idx.day] + ", " + rc[idx.year]; 
         break;
       case "year": 
         strDate = rc[idx.year]; 
@@ -161,13 +161,13 @@ function formatFallbackSafari (specForDate, specForTime) {
         strDate = rc[idx.monthFull];
         break;
       case "monthyear":
-        strDate = rc[idx.monthShort] + " " + rc[idx.day] + ", " + rc[idx.year]; 
+        strDate = rc[idx.monthShort] + " " + rc[idx.year]; 
         break;
       case "fullmonthyear": 
         strDate = rc[idx.monthFull] + " " + rc[idx.year]; 
         break;
       case "daymonth": 
-        strDate = rc[idx.monthShort] + " " + rc[idx.day];
+        strDate = rc[idx.monthShort] + " " + zeroPad(rc[idx.day]);
         break;
       case "weekday": 
       case "fullweekday": 
@@ -216,13 +216,45 @@ if (typeof(module) != "undefined") {
   module.exports = DateTime;
 }
 else {
-  // When this entire JS code has been pasted into a browser console, run sanity checks (for a human to vet) automatically:
-  var x = new DateTime();
-  console.log(x.format("full"));
-  console.log(x.format("fullnumeric"));
-  console.log(x.format("year"));
-  console.log(x.format("month"));
-  console.log(x.format("fullmonth"));
-  console.log(x.format("monthyear"));
-  console.log(x.format("fullmonthyear"));
+  // When this entire JS code has been pasted into a browser console, run sanity checks (for a human to vet) automatically.
+  // To run this browser-specific test, just:
+  // 1) Visit sugarjs.com
+  // 2) Open up JS console
+  // 3) Paste this entire file's contents into the JS console.  
+  var x = new DateTime({ts:1107615820});
+  function test(specDate, specTime, target) {
+    var result = x.format(specDate, specTime);
+    if (target != result) {
+      console.log("FAILURE: format("+specDate+", "+specTime+") produced '" + result + "' != expected '" + target + "'");
+    }
+  }
+
+  console.log("START OF TESTING!  Only failures will be reported.");
+  console.log("Testing date formatting...");
+  test("full",null,"Feb 5, 2005");
+  test("fullnumeric",null,"2/5/2005");
+  test("year",null,"2005");
+  test("month",null,"Feb");
+  test("fullmonth",null,"February");
+  test("monthyear",null,"Feb 2005");
+  test("fullmonthyear",null,"February 2005");
+  test("daymonth",null,"Feb 05");
+  test("weekday",null,"Sat");
+  test("fullweekday",null,"Saturday");
+  console.log("Testing time formatting...");
+  test(null, "full", "3:03pm");
+  test(null, "abbrev", "3pm");
+  console.log("END OF TESTING!  Please address any failures noted above.");
 }
+
+
+
+
+
+
+
+
+
+
+
+
