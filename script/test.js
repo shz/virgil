@@ -30,7 +30,8 @@ if (opts.help) {
 if (opts.coverage !== false) {
   var coverageDirs = [
     path.resolve(path.join(__dirname, '..', 'lib')),
-    path.resolve(path.join(__dirname, '..', 'bin'))
+    path.resolve(path.join(__dirname, '..', 'bin')),
+    path.resolve(path.join(__dirname, '..', 'runtime', 'javascript'))
   ];
   var istanbul = require('istanbul');
   var ins = new istanbul.Instrumenter();

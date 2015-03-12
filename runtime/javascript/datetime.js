@@ -76,14 +76,10 @@ DateTime.prototype.canUseSafariSpecialFallback = function() {
 };
 
 
-/* 
-Currently, any defined value for specForDate/Time means "show that particular component".
-Eventually, we will support variations such as "short", "long", etc.
 
-We have two formatters -- we deploy the one that best uses the JS environment's internationalization capabilities.
-*/
-
-var mapVirgilspecToJSspec = {
+// This is NOT exposed in the virgil language.
+// But it is exposed in the prototype for the purposes of test scripting.
+DateTime.prototype.mapVirgilspecToJSspec = {
   date: {
     full: { month:"short", day:"numeric", year:"numeric", timeZone: "UTC"},
     fullnumeric: { month:"numeric", day:"numeric", year:"numeric", timeZone: "UTC" },
@@ -103,16 +99,18 @@ var mapVirgilspecToJSspec = {
 };
 
 
-function formatSophisticated (specForDate, specForTime) {
+// This is NOT exposed in the virgil language.
+// But it is exposed in the prototype for the purposes of test scripting.
+DateTime.prototype.formatSophisticated = function (specForDate, specForTime) {
   var retval = "";
   var jsDate = this.toJSDate();
 
   if (specForDate) {
-    var spec = mapVirgilspecToJSspec.date[specForDate];
+    var spec = this.mapVirgilspecToJSspec.date[specForDate];
     retval = jsDate.toLocaleDateString(undefined, spec);  // offset has already been done via manip of the timestamp
   }
   if (specForTime) {
-    var spec = mapVirgilspecToJSspec.time[specForTime];
+    var spec = this.mapVirgilspecToJSspec.time[specForTime];
     retval += (retval ? " " : "") + (jsDate.toLocaleTimeString(undefined, spec).replace(/ AM$/,"am").replace(/ PM$/,"pm"));  // offset has already been done via manip of the timestamp
   }
   return retval;
@@ -253,7 +251,7 @@ DateTime.prototype.formatViaParseExtract = function (jsDateLocaleStr, jsDateStr,
 // Runtime determination of the best-fit formatter for this environment.
 DateTime.prototype.format = DateTime.prototype.canUseInternationalizationAPI() 
     ? 
-    formatSophisticated 
+    DateTime.prototype.formatSophisticated 
     : 
     (DateTime.prototype.canUseSafariSpecialFallback() ? DateTime.prototype.formatFallbackSafari : DateTime.prototype.formatFallbackBase);
 
