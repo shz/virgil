@@ -155,16 +155,23 @@ DateTime.prototype.formatFallbackBase = function (specForDate, specForTime) {
 
 // Intentionally "exported" to allow test utilities to directly access.
 DateTime.prototype.formatFallbackSafari = function (specForDate, specForTime) {
-  var retval = "";
-
   // This gets pretty funky.  We cannot use this.toJSDate() to produce the JS Date that
   // will govern this rendering, but we *do* need to use this.toJSDate() to get the timezone offset.
   // It is NOT correct to use:  new Date().getTimezoneOffset() to get that offset because
   // that would not handle DST correctly; it would determine DST based on the current date
   // not based on the date represented by this datetime object.
+  // Q: Why do we need to undo the getTimezoneOffset at all?  Why not call toJSDate?
+  // A: Because on these old systems, .toLocaleString and .toString both unconditionally
+  // try to convert to local TZ and thus we need to add back the tz offset to undo that fascism.
   var jsDate = new Date( (this.ts+this.offset)*1000 + (this.toJSDate().getTimezoneOffset()*60*1000) );
 
-  var renderedComponents = jsDate.toLocaleString().match(safariParser);
+  return this.formatViaParseExtract(jsDate.toLocaleString(), jsDate.toString(), specForDate, specForTime);
+};
+
+DateTime.prototype.formatViaParseExtract = function (jsDateLocaleStr, jsDateStr, specForDate, specForTime) {
+  var retval = "";
+
+  var renderedComponents = jsDateLocaleStr.match(safariParser);
 
   if (renderedComponents) {
     // IF WE GET HERE, toLocaleString() is producing a result that exactly matches
@@ -177,7 +184,7 @@ DateTime.prototype.formatFallbackSafari = function (specForDate, specForTime) {
 
     // One problem: weekday name is NOT available fro toLocaleString, thus:
     // Compute the weekday name via toString()
-    var weekdayShort = jsDate.toString().match(/^(...)/)[1];
+    var weekdayShort = jsDateStr.match(/^(...)/)[1];
     var weekdayLong  = fullWeekdayFromShortWeekday[weekdayShort];
 
     // Abbreviations to simplify below code
@@ -221,6 +228,7 @@ DateTime.prototype.formatFallbackSafari = function (specForDate, specForTime) {
       }
       retval = strDate;
     }
+
     if (specForTime) {
       var strTime = "";
       switch(specForTime) {
@@ -290,7 +298,3 @@ else {
   test(null, "abbrev", "3pm");
   console.log("END OF TESTING!  Please address any failures noted above.");
 }
-
-
-
-

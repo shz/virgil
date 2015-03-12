@@ -53,3 +53,4 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
 
 });
 
+// Safari string to parse: June 5, 2007 at 3:08:40 PM PDT
