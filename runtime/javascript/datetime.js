@@ -3,7 +3,7 @@ var DateTime = function DateTime(spec) {
   this.offset = (spec && typeof spec.offset == 'number') ? (spec.offset) : 0;
 };
 
-// This is NOT exposed in the Virgil language but is of key import here.
+// This is NOT exposed in the Virgil language.
 DateTime.prototype.toJSDate = function() {
   return new Date((this.ts + this.offset) * 1000);
 }
@@ -23,6 +23,7 @@ DateTime.prototype.toOffset = function(newoffset) {
   return new DateTime({ts: this.ts, offset: newoffset});
 }
 
+// This is NOT exposed in the Virgil language.
 // Intentionally "exported" to allow applications and *most importantly:* test utilities
 // to vary their behavior if necessary.
 DateTime.prototype.canUseInternationalizationAPI = function() {
