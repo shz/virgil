@@ -267,33 +267,36 @@ if (typeof(module) != "undefined") {
   module.exports = DateTime;
 }
 else {
-  // When this entire JS code has been pasted into a browser console, run sanity checks (for a human to vet) automatically.
-  // To run this browser-specific test, just:
-  // 1) Visit sugarjs.com
-  // 2) Open up JS console
-  // 3) Paste this entire file's contents into the JS console.  
-  var x = new DateTime({ts:1181056120});
-  function test(specDate, specTime, target) {
-    var result = x.format(specDate, specTime);
-    if (target != result) {
-      console.log("FAILURE: format("+specDate+", "+specTime+") produced '" + result + "' != expected '" + target + "'");
+  /* istanbul ignore next */
+  (function(){
+    // When this entire JS code has been pasted into a browser console, run sanity checks (for a human to vet) automatically.
+    // To run this browser-specific test, just:
+    // 1) Visit sugarjs.com
+    // 2) Open up JS console
+    // 3) Paste this entire file's contents into the JS console.  
+    var x = new DateTime({ts:1181056120});
+    function test(specDate, specTime, target) {
+      var result = x.format(specDate, specTime);
+      if (target != result) {
+        console.log("FAILURE: format("+specDate+", "+specTime+") produced '" + result + "' != expected '" + target + "'");
+      }
     }
-  }
 
-  console.log("START OF TESTING!  Only failures will be reported.");
-  console.log("Testing date formatting...");
-  test("full",null,"Jun 5, 2007");
-  test("fullnumeric",null,"6/5/2007");
-  test("year",null,"2007");
-  test("month",null,"Jun");
-  test("fullmonth",null,"June");
-  test("monthyear",null,"Jun 2007");
-  test("fullmonthyear",null,"June 2007");
-  test("daymonth",null,"Jun 05");
-  test("weekday",null,"Tue");
-  test("fullweekday",null,"Tuesday");
-  console.log("Testing time formatting...");
-  test(null, "full", "3:08pm");
-  test(null, "abbrev", "3pm");
-  console.log("END OF TESTING!  Please address any failures noted above.");
+    console.log("START OF TESTING!  Only failures will be reported.");
+    console.log("Testing date formatting...");
+    test("full",null,"Jun 5, 2007");
+    test("fullnumeric",null,"6/5/2007");
+    test("year",null,"2007");
+    test("month",null,"Jun");
+    test("fullmonth",null,"June");
+    test("monthyear",null,"Jun 2007");
+    test("fullmonthyear",null,"June 2007");
+    test("daymonth",null,"Jun 05");
+    test("weekday",null,"Tue");
+    test("fullweekday",null,"Tuesday");
+    console.log("Testing time formatting...");
+    test(null, "full", "3:08pm");
+    test(null, "abbrev", "3pm");
+    console.log("END OF TESTING!  Please address any failures noted above.");
+  })();
 }

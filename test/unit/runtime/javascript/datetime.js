@@ -23,7 +23,10 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
   assert.equal("6/5/2007 15:08:40", strdtUTC);
 
   //////////////////////////////
+  var dtGMT = dtUTC.toGMT();
+  assert.equal(strdtUTC, dtGMT.format('fullnumeric', 'full'));
 
+  ////////////////////////////
   var dtLocal = dtUTC.toLocal();
   var strdtLocal = dtLocal.format('full', 'full');
 
@@ -57,8 +60,30 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
     localeStr: "June 5, 2007 at 3:08:40 PM PDT",
     str: "Tue Jun 05 2007 15:08:40 GMT-0700 (PDT)"
   };
-  var safariTest = dtLocal.formatViaParseExtract(safariSimulator.localeStr, safariSimulator.str, "full", "full");
-  assert.equal(safariTest, "Jun 5, 2007 3:08pm");
-});
 
-// Safari string to parse: June 5, 2007 at 3:08:40 PM PDT
+  function test(specDate, specTime, target) {
+    var safariTest = dtLocal.formatViaParseExtract(safariSimulator.localeStr, safariSimulator.str, specDate, specTime);
+    assert.equal(safariTest, target);
+  }
+
+  test("full",null,"Jun 5, 2007");
+  test("fullnumeric",null,"6/5/2007");
+  test("year",null,"2007");
+  test("month",null,"Jun");
+  test("fullmonth",null,"June");
+  test("monthyear",null,"Jun 2007");
+  test("fullmonthyear",null,"June 2007");
+  test("daymonth",null,"Jun 05");
+  test("weekday",null,"Tue");
+  test("fullweekday",null,"Tuesday");
+
+  test(null, "full", "3:08pm");
+  test(null, "abbrev", "3pm");
+
+  /////////////////////////////////
+  // For the sake of coverage, this is done even though on NodeJS < 0.12
+  // it will simply call the base fallback alg.
+  assert.equal(dtLocal.formatFallbackSafari("full", "full"), "6/5/2007 08:08:40");
+  assert.equal(dtLocal.formatSophisticated("full", "full"), "Tuesday, June 05, 2007 01:08:40");
+
+});
