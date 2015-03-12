@@ -13,13 +13,16 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'constructor', function() {
   assert.equal(dt.offset, dt2.offset);
 });  
 
+
+// These assume NodeJS circa 2014 -- upon move to NodeJS versions with internationalization,
+// this test will need mods and will likely fail.
+
 test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
   var timestampFixed = 1181056120;
 
   var dtUTC = new DateTime({ts: timestampFixed, offset: 0});
   var strdtUTC = dtUTC.format('fullnumeric', 'full');
 
-  // This assumes NodeJS v0.10.x -- upon move to newest NodeJS, this test will need mods.
   assert.equal("6/5/2007 15:08:40", strdtUTC);
 
   //////////////////////////////
@@ -27,13 +30,28 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
   assert.equal(strdtUTC, dtGMT.format('fullnumeric', 'full'));
 
   ////////////////////////////
+  // This test is tricky because the results will indeed vary,
+  // based on the timezone of the nodejs engine and even
+  // if DST is in effect.
+  // I will thus exact-check the result only if local==GMT 
+  // (which seems to be the case in screwdriverland).
+  // For others, I will just check the minutes/seconds and
+  // ignore the hour.
   var dtLocal = dtUTC.toLocal();
   var strdtLocal = dtLocal.format('full', 'full');
 
-  if (dtUTC.canUseInternationalizationAPI()) {
-    assert.equal("Jun 5, 2007 8:08am", strdtLocal);
+  if (dtLocal.offset == 0) {
+    if (dtUTC.canUseInternationalizationAPI()) {
+      assert.equal("Jun 5, 2007 8:08am", strdtLocal);
+    }else{
+      assert.equal("6/5/2007 08:08:40", strdtLocal);
+    }
   }else{
-    assert.equal("6/5/2007 08:08:40", strdtLocal);
+    if (dtUTC.canUseInternationalizationAPI()) {
+      assert(strdtLocal.match(/Jun 5, 2007 \d+\:08[ap]m/i));
+    }else{
+      assert(strdtLocal.match(/6\/5\/2007 \d+\:08\:40/));
+    }
   }
 
   //////////////////////////////
@@ -80,10 +98,31 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
   test(null, "full", "3:08pm");
   test(null, "abbrev", "3pm");
 
+  test("fullweekday", "full", "Tuesday 3:08pm");
+
+
   /////////////////////////////////
   // For the sake of coverage, this is done even though on NodeJS < 0.12
   // it will simply call the base fallback alg.
   assert.equal(dtLocal.formatFallbackSafari("full", "full"), "6/5/2007 08:08:40");
   assert.equal(dtLocal.formatSophisticated("full", "full"), "Tuesday, June 05, 2007 01:08:40");
 
+
+  //////////////////////
+  // IF this environment does not support truly localized date formattin,
+  // for the sake of coverage, we monkeypatch JS's Date class toLocaleDateString() to fake
+  // such support.
+  if ( ! (dtLocal.canUseInternationalizationAPI())) {
+    Date.prototype.toLocaleDateStringOrig = Date.prototype.toLocaleDateString;
+    Date.prototype.toLocaleDateString = function(localeselector) {
+      return localeselector; // ensures 
+    }
+    DateTime.prototype.chooseFormatter();
+
+    var dt = new DateTime();
+    var resultIsUnimportant = dt.format("full","full");
+
+    // Undo the monkey patch
+    Date.prototype.toLocaleDateString = Date.prototype.toLocaleDateStringOrig;
+  }
 });

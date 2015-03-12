@@ -249,11 +249,20 @@ DateTime.prototype.formatViaParseExtract = function (jsDateLocaleStr, jsDateStr,
 };
 
 // Runtime determination of the best-fit formatter for this environment.
-DateTime.prototype.format = DateTime.prototype.canUseInternationalizationAPI() 
+// This is executed only once in production environments.
+// However, unit testing has the right to directly execute this to simulate
+// various environments.
+DateTime.prototype.chooseFormatter = function() {
+  DateTime.prototype.format = DateTime.prototype.canUseInternationalizationAPI() 
     ? 
     DateTime.prototype.formatSophisticated 
     : 
     (DateTime.prototype.canUseSafariSpecialFallback() ? DateTime.prototype.formatFallbackSafari : DateTime.prototype.formatFallbackBase);
+};
+//
+// The singleton invocation that is done just once in true production environments:
+DateTime.prototype.chooseFormatter();
+
 
 ////////////////////////////
 // The below conditional exportation allows this JS file to be 100% compatible with browser JS engines
