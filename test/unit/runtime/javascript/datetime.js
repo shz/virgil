@@ -51,6 +51,14 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
   assert(strdtLocalDateOnly.length < strdtLocal.length);
   assert(strdtLocalDateOnly != strdtLocalTimeOnly);
 
+  ///////////////////////////////////////
+
+  var safariSimulator = {
+    localeStr: "June 5, 2007 at 3:08:40 PM PDT",
+    str: "Tue Jun 05 2007 15:08:40 GMT-0700 (PDT)"
+  };
+  var safariTest = dtLocal.formatViaParseExtract(safariSimulator.localeStr, safariSimulator.str, "full", "full");
+  assert.equal(safariTest, "Jun 5, 2007 3:08pm");
 });
 
 // Safari string to parse: June 5, 2007 at 3:08:40 PM PDT
