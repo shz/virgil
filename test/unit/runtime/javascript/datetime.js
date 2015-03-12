@@ -28,9 +28,9 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
   var strdtLocal = dtLocal.format('full', 'full');
 
   if (dtUTC.canUseInternationalizationAPI()) {
-    assert("Jun 5, 2007 8:08am" == strdtLocal);
+    assert.equal("Jun 5, 2007 8:08am", strdtLocal);
   }else{
-    assert("6/5/2007 08:08:40" == strdtLocal);
+    assert.equal("6/5/2007 08:08:40", strdtLocal);
   }
 
   //////////////////////////////
