@@ -22,6 +22,8 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
   // This assumes NodeJS v0.10.x -- upon move to newest NodeJS, this test will need mods.
   assert.equal("6/5/2007 15:08:40", strdtUTC);
 
+  //////////////////////////////
+
   var dtLocal = dtUTC.toLocal();
   var strdtLocal = dtLocal.format('full', 'full');
 
@@ -29,6 +31,17 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
     assert("Jun 5, 2007 8:08am" == strdtLocal);
   }else{
     assert("6/5/2007 08:08:40" == strdtLocal);
+  }
+
+  //////////////////////////////
+
+  var dtPacificSummer = dtUTC.toOffset(-7*60*60);
+  strdtLocal = dtPacificSummer.format('full', 'full');
+
+  if (dtUTC.canUseInternationalizationAPI()) {
+    assert.equal("Jun 5, 2007 8:08am", strdtLocal);
+  }else{
+    assert.equal("6/5/2007 08:08:40", strdtLocal);
   }
 
   var strdtLocalTimeOnly = dtLocal.format(null, 'short');

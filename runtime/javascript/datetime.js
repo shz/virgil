@@ -16,7 +16,7 @@ DateTime.prototype.toLocal = function() {
   // Keep in mind: getTimezoneOffset() returns its value in terms of *minutes*.
   // Keep in mind: getTimezoneOffset() returns a *positive* number for TZs in the USA,
   //    e.g. its polarity is opposite of what we're looking for.
-  return new DateTime({ts: this.ts, offset: new Date().getTimezoneOffset() * -60});
+  return new DateTime({ts: this.ts, offset: this.toJSDate().getTimezoneOffset() * -60});
 }
 
 DateTime.prototype.toOffset = function(newoffset) {
@@ -70,7 +70,6 @@ var fullWeekdayFromShortWeekday = {
 };
 
 DateTime.prototype.canUseSafariSpecialFallback = function() {
-  return false;
   var jsDate = new Date();
   return jsDate.toLocaleString().match(safariParser);
 };
@@ -138,7 +137,8 @@ function zeroPad(n) {
   will be used, not the intelligent parser-based format.
 */
 
-function formatFallbackBase (specForDate, specForTime) {
+// Intentionally "exported" to allow test utilities to directly access.
+DateTime.prototype.formatFallbackBase = function (specForDate, specForTime) {
   var retval = "";
   var jsDate = this.toJSDate();
   if (specForDate) {
@@ -153,8 +153,8 @@ function formatFallbackBase (specForDate, specForTime) {
   return retval;
 };
 
-// On safari: "March 10, 2015 at 6:08:33 PM PDT"
-function formatFallbackSafari (specForDate, specForTime) {
+// Intentionally "exported" to allow test utilities to directly access.
+DateTime.prototype.formatFallbackSafari = function (specForDate, specForTime) {
   var retval = "";
 
   // This gets pretty funky.  We cannot use this.toJSDate() to produce the JS Date that
@@ -237,15 +237,16 @@ function formatFallbackSafari (specForDate, specForTime) {
     return retval;
   }else{
     // Wow, we are no longer feeling like this is a safari-format string!
-    return formatFallbackBase(specForDate, specForTime);
+    return this.formatFallbackBase(specForDate, specForTime);
   }
 };
 
+// Runtime determination of the best-fit formatter for this environment.
 DateTime.prototype.format = DateTime.prototype.canUseInternationalizationAPI() 
     ? 
     formatSophisticated 
     : 
-    (DateTime.prototype.canUseSafariSpecialFallback() ? formatFallbackSafari : formatFallbackBase);
+    (DateTime.prototype.canUseSafariSpecialFallback() ? DateTime.prototype.formatFallbackSafari : DateTime.prototype.formatFallbackBase);
 
 ////////////////////////////
 // The below conditional exportation allows this JS file to be 100% compatible with browser JS engines
