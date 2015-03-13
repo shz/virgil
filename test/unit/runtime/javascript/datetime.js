@@ -40,11 +40,11 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
   var dtLocal = dtUTC.toLocal();
   var strdtLocal = dtLocal.format('full', 'full');
 
-  if (dtLocal.offset == 0) {
+  if (dtLocal.offset == 0) {  //GMT
     if (dtUTC.canUseInternationalizationAPI()) {
-      assert.equal("Jun 5, 2007 8:08am", strdtLocal);
+      assert.equal("Jun 5, 2007 3:08pm", strdtLocal);
     }else{
-      assert.equal("6/5/2007 08:08:40", strdtLocal);
+      assert.equal("6/5/2007 15:08:40", strdtLocal);
     }
   }else{
     if (dtUTC.canUseInternationalizationAPI()) {
