@@ -80,9 +80,12 @@ var fullWeekdayFromShortWeekday = {
 // But it is exposed in the prototype for the purposes of test scripting.
 DateTime.prototype.canUseSafariSpecialFallback = function() {
   var jsDate = new Date();
-  console.log("+++++++++++++++++++++++++");
-  console.log(jsDate.toLocaleString());
-  return (jsDate.toLocaleString().match(this.safariParser).length > 1);
+  var retMatch = jsDate.toLocaleString().match(safariParser);
+  
+  // Coverage of the next line will never be 100% because in NodeJS, str.match() returns null instead of [] or [""].
+  // Thus, our fascistic approach to coverage (100% mandated!) requires the following "ignore".
+  /* istanbul ignore next */
+  return (retMatch) && (retMatch.length > 1);
 };
 
 
@@ -254,8 +257,6 @@ DateTime.prototype.formatViaParseExtract = function (jsDateLocaleStr, jsDateStr,
     return retval;
   }else{
     // Wow, we are no longer feeling like this is a safari-format string!
-    console.log("**********************");
-    console.log(jsDateLocaleStr);
     return this.formatFallbackBase(specForDate, specForTime);
   }
 };
