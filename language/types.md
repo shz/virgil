@@ -10,6 +10,7 @@ types via [structs](structs.md).
  * `bool` - Standard boolean type, either `true` or `false`
  * `str` - String type
  * `list<'T>` - [Generic](generics.md) list type
+ * `DateTime` - Stores a point in time, with precision of one second
 
 <hr />
 ### `int`
@@ -147,3 +148,55 @@ let c = [ 6, 7, 9, ]
 **`push(el : T)`** - Adds element to the end of the list
 
 **`pop()`** - Removes element from the end of the list and returns it
+
+<hr />
+### `datetime`
+
+Stores a one-second-precision point in time, independent of any
+particular time zone.
+
+To initialize to the current time, simply instantiate with overriding
+any properties.
+
+To initialize to a particular point in time, set the ts property to a UNIX-style
+timestamp (at resolution of one second).  You may also optionally
+provide a timezone offset (also in terms of number of seconds)
+that affects how the time is converted to a string by the format() method.
+
+```c#
+let now = new datetime
+let birthtime = new datetime { ts = 1107615820 }
+```
+
+#### Properties:
+
+**`ts`** - representation of a point in time, in the form of a
+UNIX timestamp (the number of seconds since Jan 01 1970, UTC).
+
+**`offset`** - timezone offset, in number of
+  seconds.
+  E.g. Pacific Daylight Time would be represented by (-7) * 60 * 60.
+  The sole effect of this is to
+  adjust the "point of view" used when producing a
+  rendering of this point in time via the format() method.
+   
+
+#### Methods:
+
+**`format(fmtDate: str, fmtTime: str)`** - Produces a string
+  representation of either/both the date portion and/or time
+  portion. Send null to one of the "fmt" parameters to suppress a particular
+  portion.  Details on the supported values for the two "fmt"
+  parameters is forthcoming.
+
+**`toLocal()`** - Returns a new datetime object that is identical
+except in that the offset has been automatically set to represent
+the timezone in which the virgil engine is running.
+
+**`toGMT()`** - Returns a new datetime object that is identical
+except in that the offset has been set to 0.
+
+**`toOffset(offset)`** - Returns a new datetime object that is identical
+except in that the offset has been set to the number of seconds
+specified via the parameter.  E.g. to set the offset to Pacific
+Daylight (Summertime), use -7 * 60 * 60 as the offset.

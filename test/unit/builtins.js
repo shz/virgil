@@ -64,6 +64,13 @@ test('unit', 'builtins', 'list members', function() {
   });
 });
 
+test('unit', 'builtins', 'datetime members', function() {
+  var c = checker(assert, 'datetime');
+  c.attr('offset', 'int');
+  c.attr('ts', 'int');
+  c.done();
+});
+
 test('unit', 'builtins', 'str members', function() {
   var c = checker(assert, 'str');
   c.method('trimStart', 'str');

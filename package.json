@@ -1,6 +1,6 @@
 {
   "name": "virgil",
-  "version": "1.1.0",
+  "version": "1.1.13",
   "description": "Universal language for frontend animation",
   "main": "lib/index.js",
   "directories": {
@@ -34,7 +34,8 @@
     "whiskey": "^0.8.4",
     "jstoxml": "^0.2.3",
     "tmp": "0.0.24",
-    "benchmark": "^1.0.0"
+    "benchmark": "^1.0.0",
+    "require-internal": "^1.0.1"
   },
   "yahoo": {
     "custodian": {
