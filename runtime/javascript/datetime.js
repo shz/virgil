@@ -33,6 +33,7 @@ DateTime.prototype.canUseInternationalizationAPI = function() {
 
 // On safari, the toLocaleString returns this type of string: "March 10, 2015 at 6:08:33 PM PDT"
 var safariParser = /^(\w+) (\d+), (\d\d\d\d) at (\d+)\:(\d+)\:(\d+) ([AP]M) (\w+)$/i;
+
 var idxSafariComponent = {
   monthFull: 1,
   day: 2,
@@ -70,9 +71,18 @@ var fullWeekdayFromShortWeekday = {
   "Sat": "Saturday"
 };
 
+
+// Also: the forceReturnTrue is ONLY used by testing scripts to ensure
+// the mandated 100% branch coverage by allowing the testing environment
+// to force-emulate safari.
+
+// This is NOT exposed in the virgil language.
+// But it is exposed in the prototype for the purposes of test scripting.
 DateTime.prototype.canUseSafariSpecialFallback = function() {
   var jsDate = new Date();
-  return jsDate.toLocaleString().match(safariParser);
+  console.log("+++++++++++++++++++++++++");
+  console.log(jsDate.toLocaleString());
+  return (jsDate.toLocaleString().match(this.safariParser).length > 1);
 };
 
 
@@ -244,6 +254,8 @@ DateTime.prototype.formatViaParseExtract = function (jsDateLocaleStr, jsDateStr,
     return retval;
   }else{
     // Wow, we are no longer feeling like this is a safari-format string!
+    console.log("**********************");
+    console.log(jsDateLocaleStr);
     return this.formatFallbackBase(specForDate, specForTime);
   }
 };
@@ -272,6 +284,7 @@ DateTime.prototype.chooseFormatter();
 //    b) NODEver<12 does not produce results even remotely similar to Safari's fallback formatter
 //    c) Thus, testing in Safari's engine is key to ensuring fallback support in vizapps
 //
+/* istanbul ignore next */
 if (typeof(module) != "undefined") {
   module.exports = DateTime;
 }

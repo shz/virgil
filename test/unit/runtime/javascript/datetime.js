@@ -106,8 +106,9 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
   // it will simply call the base fallback alg.
   assert.equal(dtLocal.formatFallbackSafari("full", "full"), "6/5/2007 08:08:40");
   assert.equal(dtLocal.formatSophisticated("full", "full"), "Tuesday, June 05, 2007 01:08:40");
-
-
+  assert.equal(dtLocal.formatSophisticated(null, "full"), "01:08:40");
+  assert.equal(dtLocal.formatSophisticated("full", null), "Tuesday, June 05, 2007");
+  
   //////////////////////
   // IF this environment does not support truly localized date formattin,
   // for the sake of coverage, we monkeypatch JS's Date class toLocaleDateString() to fake
@@ -124,5 +125,11 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
 
     // Undo the monkey patch
     Date.prototype.toLocaleDateString = Date.prototype.toLocaleDateStringOrig;
+
+    // For the sake of coverage, we force safari-environment:
+    DateTime.prototype.canUseSafariSpecialFallback = function() { return true; };
+    DateTime.prototype.chooseFormatter();
+    dt = new DateTime();
+    resultIsUnimportant = dt.format("full","full");
   }
 });
