@@ -105,10 +105,15 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
   // For the sake of coverage, this is done even though on NodeJS < 0.12
   // it will simply call the base fallback alg.
   // To simplify the string compare, we force use of Pacific Daylight time.
+
   assert.equal(dtPacificSummer.formatFallbackSafari("full", "full"), "6/5/2007 08:08:40");
-  assert.equal(dtPacificSummer.formatSophisticated("full", "full"), "Tuesday, June 05, 2007 01:08:40");
-  assert.equal(dtPacificSummer.formatSophisticated(null, "full"), "01:08:40");
   assert.equal(dtPacificSummer.formatSophisticated("full", null), "Tuesday, June 05, 2007");
+  if ( ! (dtLocal.canUseInternationalizationAPI())) {
+    assert.match(dtPacificSummer.formatSophisticated("full", "full"), /Tuesday, June 05, 2007 \d\d:08:40/);
+    assert.match(dtPacificSummer.formatSophisticated(null, "full"), /\d\d:08:40/);
+  }
+  assert.match(dtPacificSummer.format(null, "full"), /8:08/);
+
   
   //////////////////////
   // IF this environment does not support truly localized date formattin,

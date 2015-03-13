@@ -320,6 +320,13 @@ else {
     console.log("Testing time formatting...");
     test(null, "full", "3:08pm");
     test(null, "abbrev", "3pm");
+    x = x.toOffset(-7*60*60);
+    test(null, "full", "8:08am");
+    test(null, "abbrev", "8am");
+    console.log("Testing local (will only work in Pacific Daylight time)..");
+    x = x.toLocal();
+    test(null, "full", "8:08am");
+    test(null, "abbrev", "8am");
     console.log("END OF TESTING!  Please address any failures noted above.");
   })();
 }
