@@ -6,6 +6,9 @@ We have a few different kind of tests, loosely defined.  The prevailing
 philosophy is, more testing, less worrying about what exactly to call
 the tests.
 
+ * Complete tests - Compiles Virgil files to native code, and runs that
+   native code.  Tests fail if the resulting executable doesn't exit
+   cleanly.
  * Level tests - Runs the compiler through its paces in discrete steps
    (tokenizing, parsing, scope pass, type pass, and more), verifying
    that the state is as expected after each one.  This runs on all
