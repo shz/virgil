@@ -117,12 +117,27 @@ var mapVirgilspecToJSspec = {
   }
 };
 
+//
+//
+// ENVIRONMENT-SPECIFIC DETERMINATION OF THE .format IMPLEMENTATION
+//
+// At runtime, exactly once, the environment is analyzed to determine
+// which of the following DateTime.prototype methods:
+//    formatSophisticated
+//    formatFallbackSafari
+//    formatFallbackBase
+// should be used to implement this:
+//    format(...)
+// 
+// Below you will find the three "candidate" formatting methods.
+//
+// The runtime selection of the proper candidate to use is done by
+// the internal function:
+//    chooseFormatter
 
-// This is NOT exposed in the virgil language.
-// But it is exposed in the DateTime prototype for the purposes of testing;
-// this allows the test harness to directly force use of this algorithm
-// even if it is not the "natural" algorithm for the NodeJS environment running
-// the test harness.
+//
+// CANDIDATE FORMATTER #1
+//
 DateTime.prototype.formatSophisticated = function (specForDate, specForTime) {
   var retval = "";
   var jsDate = this.toJSDate();
@@ -158,11 +173,9 @@ function zeroPad(n) {
   will be used, not the intelligent parser-based format.
 */
 
-// This is NOT exposed in the virgil language.
-// But it is exposed in the DateTime prototype for the purposes of testing;
-// this allows the test harness to directly force use of this algorithm
-// even if it is not the "natural" algorithm for the NodeJS environment running
-// the test harness.
+//
+// CANDIDATE FORMATTER #2
+//
 DateTime.prototype.formatFallbackBase = function (specForDate, specForTime) {
   var retval = "";
   var jsDate = this.toJSDate();
@@ -177,11 +190,9 @@ DateTime.prototype.formatFallbackBase = function (specForDate, specForTime) {
   return retval;
 };
 
-// This is NOT exposed in the virgil language.
-// But it is exposed in the DateTime prototype for the purposes of testing;
-// this allows the test harness to directly force use of this algorithm
-// even if it is not the "natural" algorithm for the NodeJS environment running
-// the test harness.
+//
+// CANDIDATE FORMATTER #3
+//
 DateTime.prototype.formatFallbackSafari = function (specForDate, specForTime) {
   // This gets pretty funky.  We cannot use this.toJSDate() to produce the JS Date that
   // will govern this rendering, but we *do* need to use this.toJSDate() to get the timezone offset.
@@ -196,11 +207,9 @@ DateTime.prototype.formatFallbackSafari = function (specForDate, specForTime) {
   return this.formatViaParseExtract(jsDate.toLocaleString(), jsDate.toString(), specForDate, specForTime);
 };
 
-// This is NOT exposed in the virgil language.
-// But it is exposed in the DateTime prototype for the purposes of testing;
-// this allows the test harness to directly force use of this algorithm
-// even if it is not the "natural" algorithm for the NodeJS environment running
-// the test harness.
+// This "helper" method for formatFallbackSafari has been made a distinct method in this class
+// to allow the test harness to access it for testing purposes, since the test environment
+// will not necessarily have access to a sophisticated implementation of Date#toLocaleString().
 DateTime.prototype.formatViaParseExtract = function (jsDateLocaleStr, jsDateStr, specForDate, specForTime) {
   var retval = "";
 
@@ -298,8 +307,8 @@ var chooseFormatter = function() {
     : 
     (canUseSafariSpecialFallback() ? DateTime.prototype.formatFallbackSafari : DateTime.prototype.formatFallbackBase);
 };
-//
-// The singleton invocation that is done just once in true production environments:
+
+// The load-time invocation that is done just once in true production environments:
 chooseFormatter();
 
 
@@ -309,7 +318,7 @@ chooseFormatter();
 // specifically in browsers, since:
 //    a) NODEver<12 does not support the sophisticated formatting functionality.
 //    b) NODEver<12 does not produce results even remotely similar to Safari's fallback formatter.
-//    c) Thus, testing in Safari's engine is key to ensuring fallback support in vizapps.
+//    c) Thus, testing in Safari's actual JS environment is essential to ensuring fallback support in vizapps.
 //
 /* istanbul ignore next */
 if (typeof(module) != "undefined") {
