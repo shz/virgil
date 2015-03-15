@@ -3,7 +3,9 @@ var DateTime = function DateTime(spec) {
   this.offset = (spec && typeof spec.offset == 'number') ? (spec.offset) : 0;
 };
 
-// This is NOT exposed in the Virgil language.
+// This is NOT exposed in the Virgil language, but is valuable for
+// converting from a Virgil DateTime object to a JS Date object for
+// internal processing.
 DateTime.prototype.toJSDate = function() {
   return new Date((this.ts + this.offset) * 1000);
 }
@@ -15,7 +17,8 @@ DateTime.prototype.toGMT = function() {
 DateTime.prototype.toLocal = function() {
   // Keep in mind: getTimezoneOffset() returns its value in terms of *minutes*.
   // Keep in mind: getTimezoneOffset() returns a *positive* number for TZs in the USA,
-  //    e.g. its polarity is opposite of what we're looking for.
+  //    e.g. its polarity is opposite of what we're looking for, thus the
+  //    negation being done via "* -60".
   return new DateTime({ts: this.ts, offset: this.toJSDate().getTimezoneOffset() * -60});
 }
 
@@ -23,10 +26,12 @@ DateTime.prototype.toOffset = function(newoffset) {
   return new DateTime({ts: this.ts, offset: newoffset});
 }
 
-// This is NOT exposed in the Virgil language.
-// Intentionally "exported" to allow applications and *most importantly:* test utilities
-// to vary their behavior if necessary.
-DateTime.prototype.canUseInternationalizationAPI = function() {
+//
+// HELPER FUNCTIONS
+//
+// Internal helper functions used to determine the
+// amount of sophistication present in the runtime environment.
+var canUseInternationalizationAPI = function() {
   var jsDate = new Date();
   return (typeof(jsDate.toLocaleDateString) == 'function') && (jsDate.toLocaleDateString('en-US') != jsDate.toLocaleDateString('de-AT'));
 };
@@ -34,6 +39,28 @@ DateTime.prototype.canUseInternationalizationAPI = function() {
 // On safari, the toLocaleString returns this type of string: "March 10, 2015 at 6:08:33 PM PDT"
 var safariParser = /^(\w+) (\d+), (\d\d\d\d) at (\d+)\:(\d+)\:(\d+) ([AP]M) (\w+)$/i;
 
+// Modified by the test harness to allow NodeJS to test with 100% coverage, simulating even browser environments.
+var forceUseOfSafariFallback = false;  
+
+var canUseSafariSpecialFallback = function() {
+  if (forceUseOfSafariFallback) {
+    return true;
+  }else{
+    var jsDate = new Date();
+    var retMatch = jsDate.toLocaleString().match(safariParser);
+    
+    // Coverage of the next line will never be 100% because in NodeJS, str.match() returns null instead of 
+    // the [] or [""] used in some other JS environments.
+    // Thus, our fascistic approach to coverage (100% mandated!) requires the following "ignore".
+    /* istanbul ignore next */
+    return (retMatch) && (retMatch.length > 1);
+  }
+};
+
+
+//
+// ASSISTANCE IN CONVERTING DATA WHEN USING FALLBACK ALGORITHMS:
+//
 var idxSafariComponent = {
   monthFull: 1,
   day: 2,
@@ -71,28 +98,7 @@ var fullWeekdayFromShortWeekday = {
   "Sat": "Saturday"
 };
 
-
-// Also: the forceReturnTrue is ONLY used by testing scripts to ensure
-// the mandated 100% branch coverage by allowing the testing environment
-// to force-emulate safari.
-
-// This is NOT exposed in the virgil language.
-// But it is exposed in the prototype for the purposes of test scripting.
-DateTime.prototype.canUseSafariSpecialFallback = function() {
-  var jsDate = new Date();
-  var retMatch = jsDate.toLocaleString().match(safariParser);
-  
-  // Coverage of the next line will never be 100% because in NodeJS, str.match() returns null instead of [] or [""].
-  // Thus, our fascistic approach to coverage (100% mandated!) requires the following "ignore".
-  /* istanbul ignore next */
-  return (retMatch) && (retMatch.length > 1);
-};
-
-
-
-// This is NOT exposed in the virgil language.
-// But it is exposed in the prototype for the purposes of test scripting.
-DateTime.prototype.mapVirgilspecToJSspec = {
+var mapVirgilspecToJSspec = {
   date: {
     full: { month:"short", day:"numeric", year:"numeric", timeZone: "UTC"},
     fullnumeric: { month:"numeric", day:"numeric", year:"numeric", timeZone: "UTC" },
@@ -113,17 +119,20 @@ DateTime.prototype.mapVirgilspecToJSspec = {
 
 
 // This is NOT exposed in the virgil language.
-// But it is exposed in the prototype for the purposes of test scripting.
+// But it is exposed in the DateTime prototype for the purposes of testing;
+// this allows the test harness to directly force use of this algorithm
+// even if it is not the "natural" algorithm for the NodeJS environment running
+// the test harness.
 DateTime.prototype.formatSophisticated = function (specForDate, specForTime) {
   var retval = "";
   var jsDate = this.toJSDate();
 
   if (specForDate) {
-    var spec = this.mapVirgilspecToJSspec.date[specForDate];
+    var spec = mapVirgilspecToJSspec.date[specForDate];
     retval = jsDate.toLocaleDateString(undefined, spec);  // offset has already been done via manip of the timestamp
   }
   if (specForTime) {
-    var spec = this.mapVirgilspecToJSspec.time[specForTime];
+    var spec = mapVirgilspecToJSspec.time[specForTime];
     retval += (retval ? " " : "") + (jsDate.toLocaleTimeString(undefined, spec).replace(/ AM$/,"am").replace(/ PM$/,"pm"));  // offset has already been done via manip of the timestamp
   }
   return retval;
@@ -149,23 +158,30 @@ function zeroPad(n) {
   will be used, not the intelligent parser-based format.
 */
 
-// Intentionally "exported" to allow test utilities to directly access.
+// This is NOT exposed in the virgil language.
+// But it is exposed in the DateTime prototype for the purposes of testing;
+// this allows the test harness to directly force use of this algorithm
+// even if it is not the "natural" algorithm for the NodeJS environment running
+// the test harness.
 DateTime.prototype.formatFallbackBase = function (specForDate, specForTime) {
   var retval = "";
   var jsDate = this.toJSDate();
   if (specForDate) {
-    // Right now: just american style mm/dd/yyyy
-    // We will want to do a better job, more sensitive to the major other locales, soon.
+    // Very basic: just american style mm/dd/yyyy
     retval = (jsDate.getUTCMonth()+1) + "/" + (jsDate.getUTCDate()) + "/" + (jsDate.getUTCFullYear());  // offset has already been done via manip of the timestamp
   }
   if (specForTime) {
-    // Right now: just a basic hh:mm:ss in military time
+    // Very basic: just a basic hh:mm:ss in military time
     retval += (retval ? " " : "") + zeroPad(jsDate.getUTCHours()) + ':' + zeroPad(jsDate.getUTCMinutes()) + ':' + zeroPad(jsDate.getUTCSeconds());  // offset has already been done via manip of the timestamp
   }
   return retval;
 };
 
-// Intentionally "exported" to allow test utilities to directly access.
+// This is NOT exposed in the virgil language.
+// But it is exposed in the DateTime prototype for the purposes of testing;
+// this allows the test harness to directly force use of this algorithm
+// even if it is not the "natural" algorithm for the NodeJS environment running
+// the test harness.
 DateTime.prototype.formatFallbackSafari = function (specForDate, specForTime) {
   // This gets pretty funky.  We cannot use this.toJSDate() to produce the JS Date that
   // will govern this rendering, but we *do* need to use this.toJSDate() to get the timezone offset.
@@ -180,13 +196,18 @@ DateTime.prototype.formatFallbackSafari = function (specForDate, specForTime) {
   return this.formatViaParseExtract(jsDate.toLocaleString(), jsDate.toString(), specForDate, specForTime);
 };
 
+// This is NOT exposed in the virgil language.
+// But it is exposed in the DateTime prototype for the purposes of testing;
+// this allows the test harness to directly force use of this algorithm
+// even if it is not the "natural" algorithm for the NodeJS environment running
+// the test harness.
 DateTime.prototype.formatViaParseExtract = function (jsDateLocaleStr, jsDateStr, specForDate, specForTime) {
   var retval = "";
 
   var renderedComponents = jsDateLocaleStr.match(safariParser);
 
   if (renderedComponents) {
-    // IF WE GET HERE, toLocaleString() is producing a result that exactly matches
+    // IF WE GET HERE, the given jsDateLocaleStr exactly matches
     // the signature of English-locale Safari.
 
     // We can thus perform a sophisticated fallback via the already-extracted components.
@@ -255,35 +276,40 @@ DateTime.prototype.formatViaParseExtract = function (jsDateLocaleStr, jsDateStr,
       retval += (retval ? " " : "") + strTime;
     }
     return retval;
+
   }else{
-    // Wow, we are no longer feeling like this is a safari-format string!
+
+    // What we were given was NOT an English-safari-format string!
+    // So we have no choice but to fallback even further, to our very basic
+    // rudimentary formatter.
     return this.formatFallbackBase(specForDate, specForTime);
+
   }
 };
 
 // Runtime determination of the best-fit formatter for this environment.
 // This is executed only once in production environments.
-// However, unit testing has the right to directly execute this to simulate
+// However, the test harness has the right to directly execute this to simulate
 // various environments.
-DateTime.prototype.chooseFormatter = function() {
-  DateTime.prototype.format = DateTime.prototype.canUseInternationalizationAPI() 
+var chooseFormatter = function() {
+  DateTime.prototype.format = canUseInternationalizationAPI() 
     ? 
     DateTime.prototype.formatSophisticated 
     : 
-    (DateTime.prototype.canUseSafariSpecialFallback() ? DateTime.prototype.formatFallbackSafari : DateTime.prototype.formatFallbackBase);
+    (canUseSafariSpecialFallback() ? DateTime.prototype.formatFallbackSafari : DateTime.prototype.formatFallbackBase);
 };
 //
 // The singleton invocation that is done just once in true production environments:
-DateTime.prototype.chooseFormatter();
+chooseFormatter();
 
 
 ////////////////////////////
 // The below conditional exportation allows this JS file to be 100% compatible with browser JS engines
 // when copied/pasted into a JS console.  This facilitates testing this functionality
 // specifically in browsers, since:
-//    a) NODEver<12 does not support the sophisticated formatting functionality
-//    b) NODEver<12 does not produce results even remotely similar to Safari's fallback formatter
-//    c) Thus, testing in Safari's engine is key to ensuring fallback support in vizapps
+//    a) NODEver<12 does not support the sophisticated formatting functionality.
+//    b) NODEver<12 does not produce results even remotely similar to Safari's fallback formatter.
+//    c) Thus, testing in Safari's engine is key to ensuring fallback support in vizapps.
 //
 /* istanbul ignore next */
 if (typeof(module) != "undefined") {
@@ -291,12 +317,13 @@ if (typeof(module) != "undefined") {
 }
 else {
   /* istanbul ignore next */
+  //
+  // The following is executed ONLY when this JS is copied as-is in-full into a browser's JS console.
+  // This allows for testing this in true-browser environments, performing testing that is not possible
+  // in automated test nodejs-based environments, thus achieving super-high accuracy in testing this package's
+  // highly-sensitive-to-the-runtime-environment logic.
+  //
   (function(){
-    // When this entire JS code has been pasted into a browser console, run sanity checks (for a human to vet) automatically.
-    // To run this browser-specific test, just:
-    // 1) Visit sugarjs.com
-    // 2) Open up JS console
-    // 3) Paste this entire file's contents into the JS console.  
     var x = new DateTime({ts:1181056120});
     function test(specDate, specTime, target) {
       var result = x.format(specDate, specTime);

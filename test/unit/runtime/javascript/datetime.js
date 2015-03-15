@@ -1,4 +1,11 @@
-var DateTime = require('../../../../runtime/javascript/datetime');
+var reqInternal = require('require-internal');
+var DateTime = reqInternal.require('../../../../runtime/javascript/datetime');
+
+var DateTimeInternals = reqInternal.getInternals(DateTime);
+var canUseInternationalizationAPI = DateTimeInternals.canUseInternationalizationAPI;
+var canUseSafariSpecialFallback = DateTimeInternals.canUseSafariSpecialFallback;
+
+
 
 test('unit', 'runtime', 'javascript', 'DateTime', 'constructor', function() {
   var ahora = +new Date();
@@ -41,13 +48,13 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
   var strdtLocal = dtLocal.format('full', 'full');
 
   if (dtLocal.offset == 0) {  //GMT
-    if (dtUTC.canUseInternationalizationAPI()) {
+    if (canUseInternationalizationAPI()) {
       assert.equal("Jun 5, 2007 3:08pm", strdtLocal);
     }else{
       assert.equal("6/5/2007 15:08:40", strdtLocal);
     }
   }else{
-    if (dtUTC.canUseInternationalizationAPI()) {
+    if (canUseInternationalizationAPI()) {
       assert(strdtLocal.match(/Jun 5, 2007 \d+\:08[ap]m/i));
     }else{
       assert(strdtLocal.match(/6\/5\/2007 \d+\:08\:40/));
@@ -59,7 +66,7 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
   var dtPacificSummer = dtUTC.toOffset(-7*60*60);
   strdtLocal = dtPacificSummer.format('full', 'full');
 
-  if (dtUTC.canUseInternationalizationAPI()) {
+  if (canUseInternationalizationAPI()) {
     assert.equal("Jun 5, 2007 8:08am", strdtLocal);
   }else{
     assert.equal("6/5/2007 08:08:40", strdtLocal);
@@ -108,7 +115,7 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
 
   assert.equal(dtPacificSummer.formatFallbackSafari("full", "full"), "6/5/2007 08:08:40");
   assert.equal(dtPacificSummer.formatSophisticated("full", null), "Tuesday, June 05, 2007");
-  if ( ! (dtLocal.canUseInternationalizationAPI())) {
+  if ( ! (canUseInternationalizationAPI())) {
     assert.match(dtPacificSummer.formatSophisticated("full", "full"), /Tuesday, June 05, 2007 \d\d:08:40/);
     assert.match(dtPacificSummer.formatSophisticated(null, "full"), /\d\d:08:40/);
   }
@@ -119,12 +126,12 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
   // IF this environment does not support truly localized date formattin,
   // for the sake of coverage, we monkeypatch JS's Date class toLocaleDateString() to fake
   // such support.
-  if ( ! (dtLocal.canUseInternationalizationAPI())) {
+  if ( ! (canUseInternationalizationAPI())) {
     Date.prototype.toLocaleDateStringOrig = Date.prototype.toLocaleDateString;
     Date.prototype.toLocaleDateString = function(localeselector) {
       return localeselector; // ensures 
     }
-    DateTime.prototype.chooseFormatter();
+    DateTimeInternals.chooseFormatter();
 
     var dt = new DateTime();
     var resultIsUnimportant = dt.format("full","full");
@@ -133,8 +140,8 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
     Date.prototype.toLocaleDateString = Date.prototype.toLocaleDateStringOrig;
 
     // For the sake of coverage, we force safari-environment:
-    DateTime.prototype.canUseSafariSpecialFallback = function() { return true; };
-    DateTime.prototype.chooseFormatter();
+    DateTimeInternals.forceUseOfSafariFallback = true;
+    DateTimeInternals.chooseFormatter();
     dt = new DateTime();
     resultIsUnimportant = dt.format("full","full");
   }
