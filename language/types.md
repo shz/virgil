@@ -183,12 +183,6 @@ UNIX timestamp (the number of seconds since Jan 01 1970, UTC).
 
 #### Methods:
 
-**`format(fmtDate: str, fmtTime: str)`** - Produces a string
-  representation of either/both the date portion and/or time
-  portion. Send null to one of the "fmt" parameters to suppress a particular
-  portion.  Details on the supported values for the two "fmt"
-  parameters is forthcoming.
-
 **`toLocal()`** - Returns a new datetime object that is identical
 except in that the offset has been automatically set to represent
 the timezone in which the virgil engine is running.
@@ -200,3 +194,41 @@ except in that the offset has been set to 0.
 except in that the offset has been set to the number of seconds
 specified via the parameter.  E.g. to set the offset to Pacific
 Daylight (Summertime), use -7 * 60 * 60 as the offset.
+
+**`format(fmtDate: str, fmtTime: str)`** - Produces a string
+  representation of either/both the date portion and/or time
+  portion. Send null to one of the "fmt" parameters to suppress a particular
+  portion.
+
+  The values supported for the fmtDate parameters are listed below,
+  along with typical samples of English-US results when executed
+  in modern JS environments:
+
+*** `full` produces "Jun 5, 2007"
+
+*** `fullnumeric` produces "6/5/2007"
+
+*** `year` produces "2007"
+
+*** `month` produces "Jun"
+
+*** `fullmonth` produces "June"
+
+*** `monthyear` produces "Jun 2007"
+
+*** `fullmonthyear` produces "June 2007"
+
+*** `daymonth` produces "Jun 05"
+
+*** `weekday` produces "Tue"
+
+*** `fullweekday` produces "Tuesday"
+
+  The values supported for the fmtTime parameters are listed below,
+  along with typical samples of English-US results when executed
+  in modern JS environments:
+
+*** `full` produces "3:08pm"
+
+*** `abbrev` produces "3pm"
+
