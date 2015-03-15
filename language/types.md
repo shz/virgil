@@ -204,31 +204,30 @@ Daylight (Summertime), use -7 * 60 * 60 as the offset.
   along with typical samples of English-US results when executed
   in modern JS environments:
 
-*** `full` produces "Jun 5, 2007"
+- `full` produces "Jun 5, 2007"
 
-*** `fullnumeric` produces "6/5/2007"
+- `fullnumeric` produces "6/5/2007"
 
-*** `year` produces "2007"
+- `year` produces "2007"
 
-*** `month` produces "Jun"
+- `month` produces "Jun"
 
-*** `fullmonth` produces "June"
+- `fullmonth` produces "June"
 
-*** `monthyear` produces "Jun 2007"
+- `monthyear` produces "Jun 2007"
 
-*** `fullmonthyear` produces "June 2007"
+- `fullmonthyear` produces "June 2007"
 
-*** `daymonth` produces "Jun 05"
+- `daymonth` produces "Jun 05"
 
-*** `weekday` produces "Tue"
+- `weekday` produces "Tue"
 
-*** `fullweekday` produces "Tuesday"
+- `fullweekday` produces "Tuesday"
 
   The values supported for the fmtTime parameters are listed below,
   along with typical samples of English-US results when executed
   in modern JS environments:
 
-*** `full` produces "3:08pm"
+- `full` produces "3:08pm"
 
-*** `abbrev` produces "3pm"
-
+- `abbrev` produces "3pm"
