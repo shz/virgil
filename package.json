@@ -1,6 +1,6 @@
 {
   "name": "virgil",
-  "version": "1.1.13",
+  "version": "1.1.20",
   "description": "Universal language for frontend animation",
   "main": "lib/index.js",
   "directories": {
