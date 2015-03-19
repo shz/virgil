@@ -42,9 +42,9 @@ var safariParser = /^(\w+) (\d+), (\d\d\d\d) at (\d+)\:(\d+)\:(\d+) ([AP]M) (\w+
 // This "force" feature is used by the test harness to allow NodeJS to 
 // test with 100% coverage, simulating the "Safari-like" browser environment which is
 // special to this logic.
-var forceUseOfSafariFallback = false;  
-var doForceUseOfSafariFallback = function() {
-  forceUseOfSafariFallback = true;
+var forceUseOfSafariFallback = false;
+var doForceUseOfSafariFallback = function(val) {
+  forceUseOfSafariFallback = val;
 };
 
 // Are we using an environment (e.g. Safari circa 2014) that does not
