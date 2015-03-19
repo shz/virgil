@@ -39,9 +39,19 @@ var canUseInternationalizationAPI = function() {
 // On safari, the toLocaleString returns this type of string: "March 10, 2015 at 6:08:33 PM PDT"
 var safariParser = /^(\w+) (\d+), (\d\d\d\d) at (\d+)\:(\d+)\:(\d+) ([AP]M) (\w+)$/i;
 
-// Modified by the test harness to allow NodeJS to test with 100% coverage, simulating even browser environments.
+// This "force" feature is used by the test harness to allow NodeJS to 
+// test with 100% coverage, simulating the "Safari-like" browser environment which is
+// special to this logic.
 var forceUseOfSafariFallback = false;  
+var doForceUseOfSafariFallback = function() {
+  forceUseOfSafariFallback = true;
+};
 
+// Are we using an environment (e.g. Safari circa 2014) that does not
+// have rich support for localization of date/time BUT which has a result
+// that meets the aforementioned safariParser regex pattern?  If so, we
+// have a semi-rich fallback that we can use to produce fairly good
+// results.
 var canUseSafariSpecialFallback = function() {
   if (forceUseOfSafariFallback) {
     return true;
@@ -53,7 +63,7 @@ var canUseSafariSpecialFallback = function() {
     // the [] or [""] used in some other JS environments.
     // Thus, our fascistic approach to coverage (100% mandated!) requires the following "ignore".
     /* istanbul ignore next */
-    return (retMatch) && (retMatch.length > 1);
+    return (!!retMatch) && (retMatch.length > 1);
   }
 };
 
