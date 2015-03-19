@@ -8,21 +8,48 @@ var canUseSafariSpecialFallback = DateTimeInternals.canUseSafariSpecialFallback;
 
 
 test('unit', 'runtime', 'javascript', 'DateTime', 'constructor', function() {
-  var ahora = +new Date();
-  var dt = new DateTime();
-  assert.equal(dt.offset, 0);
+  var dtInMS = +new Date();  // result is in milliseconds
+  var dt = new DateTime();  // dt.ts is in seconds
+  var dt2 = new DateTime(dt);  // clone
+  
+  // Default for DateTime is GMT
+  assert.equal(dt.offset, 0);  
 
-  // The difference between the two timestamps should really not be exceeding one second, in most cases will be zero of course.
-  assert((dt.ts - ahora) < 2);
+  // The difference between the Date and DateTime timestamps should 
+  // be similar but not identical -- should not exceed two seconds.
+  // The difference is not going to be zero due to the difference in resolution.
+  assert(Math.abs(dt.ts - (dtInMS/1000)) < 2);
 
-  var dt2 = new DateTime(dt);
+  // But the difference between the two DateTime objects should be zero, as
+  // one was created as a clone of the other.
   assert.equal(dt.ts, dt2.ts);
   assert.equal(dt.offset, dt2.offset);
 });  
 
 
-// These assume NodeJS circa 2014 -- upon move to NodeJS versions with internationalization,
-// this test will need mods and will likely fail.
+// BE AWARE: this test is highly environment-dependent.
+// Future changes in the screwdriver environment (e.g. moving to new NodeJS version)
+// may cause this test to fail, in which case the test must be updated to match
+// the new environment.
+test('unit', 'runtime', 'javascript', 'DateTime', 'environment-detection', function() {
+  // This assert assumes the NodeJS that was in use in screwdriver environment in 2014 and early 2015.
+  // Upon any move to more-modern NodeJS versions with sophisticated Date/Time localization support,
+  // this test will need modifications!
+  assert.equal(canUseInternationalizationAPI(), false);
+
+  // Unfortunately, this test cannot be hyper-specific because "canUse...()" function
+  // will return different values in different NodeJS environments.  All we can really
+  // do here is test that the function:  1) exists, and 2) does not throw an exception.
+  // I have tested it in specific environments (including browser JS-consoles of course)
+  // using "manual" test techniques.
+  assert.ok(!!canUseSafariSpecialFallback);
+  assert.ok(canUseSafariSpecialFallback() || true); // << just to ensure no exception thrown
+  
+  // Test the backdoor override that allows this test module to test even portions
+  // of the runtime class that it should not have access to:
+  DateTimeInternals.doForceUseOfSafariFallback();
+  assert.equal(canUseSafariSpecialFallback(), true);
+});
 
 test('unit', 'runtime', 'javascript', 'DateTime', 'localization', function() {
   var timestampFixed = 1181056120;
