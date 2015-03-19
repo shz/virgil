@@ -10,7 +10,7 @@ types via [structs](structs.md).
  * `bool` - Standard boolean type, either `true` or `false`
  * `str` - String type
  * `list<'T>` - [Generic](generics.md) list type
- * `DateTime` - Stores a point in time, with precision of one second
+ * `datetime` - Represents a point in time, with precision of one second
 
 <hr />
 ### `int`
