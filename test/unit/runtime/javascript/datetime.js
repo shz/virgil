@@ -62,6 +62,12 @@ var timestampFixed = 1181056120;
 
 
 
+test('unit', 'runtime', 'javascript', 'DateTime', 'toJSDate', function() {
+  var dtUTC = new DateTime({ts: timestampFixed, offset: 0});
+  var jsdateUTC = dtUTC.toJSDate();
+  assert.equal(jsdateUTC.toJSON(), "2007-06-05T15:08:40.000Z");
+});
+
 
 
 test('unit', 'runtime', 'javascript', 'DateTime', 'offset-modification', function() {
@@ -77,9 +83,11 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'offset-modification', functio
 
   var dtGMT = dtUTC.toGMT();
   assert.equal(dtGMT.offset, 0);
+  assert.equal(dtGMT.ts, timestampFixed);
 
   var dtMalaysia = dtUTC.toOffset(8*60*60);
   assert.equal(dtMalaysia.offset, 8*60*60);
+  assert.equal(dtMalaysia.ts, timestampFixed);
 
   // The result of toLocal() is of course completely dependent upon
   // the NodeJS environment.  All we can do here is test that 
@@ -89,6 +97,7 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'offset-modification', functio
   // screwdriver tests are sometimes/(always?) executed in GMT context!)
   var dtLocal = dtUTC.toLocal();
   assert.equal(typeof(dtLocal.offset), 'number');
+  assert.equal(dtLocal.ts, timestampFixed);
 });
 
 
