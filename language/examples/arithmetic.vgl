@@ -1,8 +1,10 @@
-let a = 1
-let b = 2 / 3
+function main {
+  let a = 1
+  let b = 2 / 3
 
-mut success = true
+  mut success = true
 
-if a != b {
-  success = false
+  if a != b {
+    success = false
+  }
 }
