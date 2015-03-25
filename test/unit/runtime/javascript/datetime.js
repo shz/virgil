@@ -26,18 +26,23 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'constructor', function() {
   assert.equal(dt.offset, dt2.offset);
 });  
 
-
-
-
-// BE AWARE: this test is highly environment-dependent.
-// Future changes in the screwdriver environment (e.g. moving to new NodeJS version)
-// may cause this test to fail, in which case the test must be updated to match
-// the new environment.
-test('unit', 'runtime', 'javascript', 'DateTime', 'environment-detection', function() {
-  // This assert assumes the NodeJS that was in use in screwdriver environment in 2014 and early 2015.
-  // Upon any move to more-modern NodeJS versions with sophisticated Date/Time localization support,
-  // this test will need modifications!
+test('unit', 'runtime', 'javascript', 'DateTime', 'environment-detection-internationalization', function() {
+  // Let's use monkeypatching to simulate an environment in which the
+  // rich internationalization support is NOT available.
+  var DateFromVictim = DateTimeInternals.Date;
+  var restorePrototype = DateFromVictim.prototype.toLocaleDateString;
+  DateFromVictim.prototype.toLocaleDateString = function(locale) {
+    return "constant-that-ignores-the-locale-param";  
+  };
   assert.equal(canUseInternationalizationAPI(), false);
+  DateFromVictim.prototype.toLocaleDateString = function(locale) {
+    return "constant-that-varies-based-on-the-locale-param" + locale;
+  };
+  assert.equal(canUseInternationalizationAPI(), true);
+  DateFromVictim.prototype.toLocaleDateString = restorePrototype;
+});
+
+test('unit', 'runtime', 'javascript', 'DateTime', 'environment-detection-safari', function() {
 
   // Unfortunately, this test cannot be hyper-specific because "canUse...()" function
   // will return different values in different NodeJS environments.  All we can really
