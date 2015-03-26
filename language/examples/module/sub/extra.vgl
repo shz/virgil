@@ -3,3 +3,4 @@ import b
 export method extra(b : Bojangles) : bool {
   return true
 }
+
