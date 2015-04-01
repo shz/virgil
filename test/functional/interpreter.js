@@ -33,3 +33,11 @@ test('functional', 'interpreter', 'basic function', function() {
   assert.equal(result.value, 7);
 });
 
+test('functional', 'interpreter', 'variables', function() {
+  var result;
+
+  result = interpreter.run(buildFunc('function main : int { let a = 1; return a }'));
+  assert.isDefined(result);
+  assert.ok(result instanceof ast.IntegerLiteral);
+  assert.equal(result.value, 1);
+});
