@@ -26,5 +26,10 @@ test('functional', 'interpreter', 'basic function', function() {
   assert.isDefined(result);
   assert.ok(result instanceof ast.IntegerLiteral);
   assert.equal(result.value, -4);
+
+  result = interpreter.run(buildFunc('function main : int { return [1 + 1, 7, -3][1] }'));
+  assert.isDefined(result);
+  assert.ok(result instanceof ast.IntegerLiteral);
+  assert.equal(result.value, 7);
 });
 

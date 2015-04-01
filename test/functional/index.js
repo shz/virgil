@@ -1,1 +1,2 @@
 require('./compiler');
+require('./interpreter');
