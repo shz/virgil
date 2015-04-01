@@ -19,7 +19,10 @@ var buildModules = function(snippets) {
       }
     });
   });
-  var world = new World();
+  var world = new World({
+    baseDir: 'doom',
+    mainModule: 'gloom'
+  });
   world.modules = modules;
   passes.runAll(world, {});
 

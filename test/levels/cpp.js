@@ -1,12 +1,13 @@
-var cpp = require('../../lib/converters/cpp')
+var CPPConverter = require('../../lib/converters/cpp')
   , ast = require('../../lib/ast')
   ;
 
 module.exports = function(input, callback) {
-  var serialized = cpp(input);
+  var converter = new CPPConverter();
+  var serialized = converter.compile(new ast.Module(input, 'file.vgl'));
 
-  assert.equal(typeof serialized, 'string');
-  assert.ok(serialized.length > 0);
+  assert.equal(typeof serialized, 'object');
+  assert.ok(Object.keys(serialized).length > 0);
 
   callback(input);
 };

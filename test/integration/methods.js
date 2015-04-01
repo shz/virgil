@@ -14,7 +14,7 @@ var calc2 = function(str) {
 };
 
 test('integration', 'methods', 'Natural', function() {
-  var node = parser.module('struct Foo {} ; method bar(f : Foo) {}');
+  var node = parser('struct Foo {} ; method bar(f : Foo) {}');
   passes.runAll(node);
 
   assert.equal(node.scope.methods.length, 1);
@@ -23,7 +23,7 @@ test('integration', 'methods', 'Natural', function() {
 
 test('integration', 'methods', 'Extern', function() {
 
-  var node = parser.module('extern { struct Foo {} \n method barNat(f : Foo) } \n method barNoNat(f : Foo) {}');
+  var node = parser('extern { struct Foo {} \n method barNat(f : Foo) } \n method barNoNat(f : Foo) {}');
   passes.runAll(node);
 
   assert.equal(node.scope.methods.length, 2);
@@ -32,7 +32,7 @@ test('integration', 'methods', 'Extern', function() {
 });
 
 test('integration', 'methods', 'Unnatural', function() {
-  var node = parser.module('struct Foo {} \n method barNat(f: Foo) {} \n function baz { method unnatBar(f : Foo){} }');
+  var node = parser('struct Foo {} \n method barNat(f: Foo) {} \n function baz { method unnatBar(f : Foo){} }');
   passes.runAll(node);
 
   assert.equal(node.scope.methods.length, 1);

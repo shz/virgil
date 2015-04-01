@@ -1,10 +1,11 @@
 var types = require('../../lib/types')
   , parser = require('../../lib/parser')
-  , js = require('../../lib/converters/javascript')
+  , JSConverter = require('../../lib/converters/javascript')
   ;
 
 var parse = function(str) {
-  return js(parser.snippet(str));
+  var c = new JSConverter();
+  return c.compile(parser.snippet(str));
 };
 
 test('unit', 'precedence', 'access', function() {

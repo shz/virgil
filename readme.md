@@ -39,7 +39,6 @@ virgil-cpp [options] [files...]
 
  * `-d`/`--debug` - Use to debug the compiler
  * `-w`/`--watch` - Runs continuously, recompiling when input files change
- * `-s`/`--snippet` - Compiles using snippet mode
  * `-n`/`--namespace` - Specifies namespace to use for generated output
  * `-o LOCATION`/`--output LOCATION` - Specifies output directory, or
                                        output file in snippet mode

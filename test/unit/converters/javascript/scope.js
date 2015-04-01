@@ -1,4 +1,4 @@
-var converter = require('../../../../lib/converters/javascript')
+var JSConverter = require('../../../../lib/converters/javascript')
   , scope = require('../../../../lib/scope')
   , parser = require('../../../../lib/parser')
   ;
@@ -10,7 +10,8 @@ var calc = function(str) {
 };
 
 var convert = function(str) {
-  return converter(calc(str));
+  var converter = new JSConverter();
+  return converter.compile(calc(str));
 };
 
 test('unit', 'converters', 'javascript', 'scope', 'variable renaming', function() {
