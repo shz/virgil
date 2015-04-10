@@ -23,6 +23,7 @@ test('integration', 'types', 'equality', function() {
 
 test('integration', 'types', 'null equality', function() {
   assert.ok(types.equal(new types.TypeRef('null'), types.canned['null']));
+  assert.ok(types.equal(new types.TypeRef('list', [new types.TypeRef('int')]), types.canned['null']));
   assert.ok(!types.equal(new types.TypeRef('int'), types.canned['null']));
   assert.ok(types.equal(new types.TypeRef('func', ['int']), types.canned['null']));
   assert.ok(types.equal(new types.TypeRef('Shazam'), types.canned['null']));
@@ -74,7 +75,34 @@ test('integration', 'types', 'definitions', function() {
   }, /B/);
 });
 
-test('integration', 'types', 'arithmetic',  function() {
+test('integration', 'types', 'nulls in struct definition', function() {
+  // primitives can't be null
+  assert.throws(function() {
+    calc('struct A { b:int = null }');
+  }, /null/);
+  assert.throws(function() {
+    calc('struct A { b:float = null }');
+  }, /null/);
+  assert.throws(function() {
+    calc('struct A { b:bool = null }');
+  }, /null/);
+  assert.throws(function() {
+    calc('struct A { b:str = null }');
+  }, /null/);
+
+  // structs, lists, funcs can be null
+  assert.ok(function() {
+    calc('struct B {}; struct A { b:B = null }');
+  });
+  assert.ok(function() {
+    calc('struct A { b:func<void> = null }');
+  });
+  assert.ok(function() {
+    calc('struct A { b:list<int> = null }');
+  });
+});
+
+test('integration', 'types', 'arithmetic', function() {
   assert.throws(function() {
     calc('function a : int { return 1 + "string" }');
   }, /numeric/);
