@@ -22,10 +22,14 @@ test('unit', 'generics', 'generic typeref', function() {
 });
 
 test('unit', 'generics', 'ensure default', function() {
-  // Just make sure these don't fail
   parse("struct Foo<'T> { a : 'T = default }");
-  parse("struct Foo<'T> { a : 'T = null }");
 
+  // Can't assign null to generic
+  assert.throws(function () {
+    parse("struct Foo<'T> { a : 'T = null }");
+  }, /null/);
+
+  // Can't assign concrete values to generic
   assert.throws(function() {
     parse("struct Foo<'T> { a : 'T = 1 }");
   }, /defined/);
