@@ -2,27 +2,60 @@ var ast = require('./../../../../lib/ast')
   , moduleUtils = require('./../../../../lib/converters/javascript/module_utils')
   ;
 
-var tool = function(baseDir, currentFilename, parts, underlying, lib) {
-  var m = new ast.Module([], underlying, '');
-  m.lib = lib || null;
-  var imp = new ast.ImportStatement(parts);
-  imp.ast = m;
+var mod = function(baseDir, filename) {
+  return {
+    imp: function(parts, lib) {
+      var m = new ast.Module([], filename, '');
+      m.lib = lib || null;
+      var imp = new ast.ImportStatement(parts);
+      imp.ast = m;
 
-  var wrap = function(thing) {
-    return { get: function() { return thing } };
+      return moduleUtils.getDeclarationForImport.call({
+        _moduleNames: lib ? {} : undefined, // Nasty ugly crappy hack to get full test coverage
+        baseDir: baseDir,
+        currentModule: { filename: filename },
+        getIdentifierForModule: moduleUtils.getIdentifierForModule
+      }, imp).declarations[0].init.arguments[0].value;
+    }
   };
-
-  return Object.create(moduleUtils, {
-    node: wrap(imp),
-    m: wrap(m),
-    baseDir: wrap(baseDir),
-    currentModule: wrap({ filename: currentFilename }),
-    jsRequirePath: { get: function() {
-      return this.getDeclarationForImport(this.node).declarations[0].init.arguments[0].value;
-    }}
-  });
 };
 
-test('unit', 'converters', 'javascript', 'module_utils', function() {
-  assert.equal('./foo/bar.js', tool('base', 'base/baz.vgl', ['foo', 'bar'], 'base/foo/bar.vgl').jsRequirePath);
+test('unit', 'converters', 'javascript', 'module_utils', 'getDeclarationForImport()', function() {
+  var m = mod('base', 'base/baz.vgl');
+
+  // Basic tests relative to a base
+  assert.equal('./foo/bar.js', m.imp(['foo', 'bar']));
+  assert.equal('./foo.js', m.imp(['foo']));
+
+  // Lib imports
+  assert.equal('./mylib/foo.js', m.imp(['mylib', 'foo'], {
+    name: 'mylib',
+    importPath: ['mylib', 'foo']
+  }));
+
+  // Absolute tests
+  m = mod('/src', '/src/main.vgl');
+  assert.equal('./foo.js', m.imp(['foo']));
+  assert.equal('./mylib/bar.js', m.imp(['mylib', 'foo'], {
+    name: 'mylib',
+    importPath: ['mylib', 'bar']
+  }));
+});
+
+// This test isn't the greatest, but it does get the job done
+test('unit', 'converters', 'javascript', 'module_utils', 'getIdentifierForModule()', function() {
+  var o = {};
+
+  var call = function(filename) {
+    return (moduleUtils.getIdentifierForModule.call(o, {filename: filename}) || {}).name;
+  };
+
+  // If o is missing moduleNames, make sure it doesn't throw
+  call('missing.vgl');
+
+  // Manually set up
+  o._moduleNames = {
+    'foo.vgl': 'booga'
+  };
+  assert.equal('booga', call('foo.vgl'));
 });
