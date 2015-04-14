@@ -74,6 +74,8 @@ global.assert.match = function(thing, re) {
   if (!thing.match(re))
     throw new Error('Value doesn\'t match ' + re.toString());
 };
+var outstandingDones = {};
+var todo = 0;
 var tests = [];
 var uncaught = 0;
 var dots = 0;
@@ -81,10 +83,12 @@ process.on('uncaughtException', function(err) {
   tests.push([['uncaught exception', (++uncaught).toString()], err]);
 });
 global.test = function() {
+  var cleanup = null;
   var args = Array.prototype.slice.call(arguments);
   var f = args.pop();
   var d = domain.create();
   var done = function(err) {
+    delete outstandingDones[args.join(' / ')];
     var pip = (err ? clc.red : clc.green)('.');
     process.stdout.write(pip);
     if (++dots == 80) {
@@ -92,6 +96,26 @@ global.test = function() {
       process.stdout.write('\n');
     }
     tests.push([args, err]);
+    if (cleanup) {
+      try { cleanup() }
+      catch (err) {
+        console.error('Error when cleaning up from ' + args.join(' '));
+        console.error(err.stack);
+      }
+    }
+
+    todo--;
+    if (todo == 0) {
+      setImmediate(function() {
+        if (todo == 0) {
+          runIsolate();
+        }
+      });
+    }
+  };
+  done.cleanup = function(f) {
+    console.log('have a cleanup');
+    cleanup = f;
   };
 
   // Record failure
@@ -103,6 +127,8 @@ global.test = function() {
     if (!f) {
       throw new Error('Tests must specify a test function');
     }
+    todo++;
+    outstandingDones[args.join(' / ')] = true;
     d.run(function() {
       var hasCallback = !!f.toString().match(/^function\s*[\w\$\d]*\s*\(.+\)/);
       if (hasCallback) {
@@ -115,6 +141,19 @@ global.test = function() {
   } catch (err) {
     d.emit('error', err);
   }
+};
+
+// Isolated tests
+var isolates = [];
+var runIsolate = function() {
+  if (isolates.length) {
+    global.test.apply(this, isolates.shift());
+  }
+};
+global.test.isolate = function() {
+  isolates.push(Array.prototype.slice.call(arguments));
+  // Make sure beforeExit happens at least once
+  setImmediate(function() {});
 };
 
 // Run the tests
@@ -172,10 +211,19 @@ process.once('exit', function() {
   );
   failures.forEach(function(f) {
     console.log('');
-    console.log(clc.red('FAIL:'), clc.blue(f[0].join(' - ')));
+    console.log(clc.red('FAIL:'), clc.cyan(f[0].join(' / ')));
     console.log(f[1].stack);
   });
   console.log('');
+
+  if (Object.keys(outstandingDones).length) {
+    console.log(clc.red('Some tests never called done():'));
+    console.log('');
+    Object.keys(outstandingDones).forEach(function(k) {
+      console.log('  ' + k);
+    });
+    console.log('');
+  }
 
   // Write test output
   if (process.env.TEST_RESULTS_DIR) { // Normalize

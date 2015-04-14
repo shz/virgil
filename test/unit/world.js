@@ -17,4 +17,9 @@ test('unit', 'world', 'creation', function() {
   var w = new World({baseDir: 'a', mainModule: 'm'});
 });
 
-// Should really test the rest of this...
+test.isolate('unit', 'world', 'basic', function(done) {
+  done.cleanup(function() {
+
+  });
+  done();
+});
