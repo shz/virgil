@@ -19,11 +19,14 @@ if (!opts._.length) {
 }
 if (opts.help) {
   console.log('Usage:');
-  console.log('  ./test.js [--help] [--no-coverage] [files...]');
+  console.log('  ./test.js [--help] [--no-coverage|--no-print-coverage] [--coverage-dir PATH] [files...]');
   console.log('');
   process.exit(0);
 } else {
   console.log('Test options:', opts);
+}
+if (opts['coverage-dir']) {
+  process.env.COVERAGE_DIR = opts['coverage-dir'];
 }
 
 // Set up coverage if asked for
@@ -114,7 +117,6 @@ global.test = function() {
     }
   };
   done.cleanup = function(f) {
-    console.log('have a cleanup');
     cleanup = f;
   };
 
