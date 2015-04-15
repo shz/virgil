@@ -290,7 +290,9 @@ process.once('exit', function() {
     collector.add(__coverage__);
 
     var reporter = new istanbul.Reporter(false, process.env.COVERAGE_DIR);
-    reporter.add('text');
+    if (opts['print-coverage'] !== false) {
+      reporter.add('text');
+    }
     if (process.env.COVERAGE_DIR) {
       reporter.add('lcov');
     }
