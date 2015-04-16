@@ -173,6 +173,12 @@ test('integration', 'types', 'return', function() {
   }, /void/);
 });
 
+test('integration', 'types', 'list inferrence', function() {
+  // Make sure these work
+  calc('function a(l: list<list<int>>) { l.push([]) }');
+  calc('function a: list<int> { return [] }');
+});
+
 test('integration', 'types', 'lambda types optional', function() {
   // Ensure these don't throw
   calc('function a(f : func<int, void>) {}; a(lambda(i) {})');
