@@ -154,8 +154,12 @@ var runIsolate = function() {
 };
 global.test.isolate = function() {
   isolates.push(Array.prototype.slice.call(arguments));
-  // Make sure beforeExit happens at least once
-  setImmediate(function() {});
+  // Make sure we trigger isolate tests if that's all we have
+  setImmediate(function() {
+    if (todo === 0) {
+      runIsolate();
+    }
+  });
 };
 
 // Run the tests
