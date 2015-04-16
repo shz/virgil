@@ -163,6 +163,7 @@ global.test.isolate = function() {
 };
 
 // Run the tests
+var firstCwd = process.cwd();
 console.log('Running tests...');
 try {
   if (opts._) {
@@ -182,6 +183,12 @@ try {
 // On first exit, collect results info.  If any tests fail we'll re-exit
 // with a nonzero status code.
 process.once('exit', function() {
+  // Rebase our cwd
+  if (firstCwd != process.cwd()) {
+    console.warn('\n\nWarning: a test changed process.cwd() without restoring');
+  }
+  process.chdir(firstCwd);
+
   // Collate results
   var results = {tests: {}, children: {}};
   tests.forEach(function(t) {

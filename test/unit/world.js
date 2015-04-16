@@ -175,7 +175,13 @@ test('unit', 'world', '_processModule()', 'import exceptions', function(done) {
 // _loadImport()
 //
 
-test('unit', 'world', '_loadImport()', 'circular import', function(done) {
+test.isolate('unit', 'world', '_loadImport()', 'circular import', function(done) {
+  var cwd = process.cwd();
+  process.chdir('/home');
+  done.cleanup(function() {
+    process.chdir(cwd);
+  });
+
   var i = new ast.ImportStatement(['foo', 'bar']);
   var m = new ast.Module([i], 'main.vgl');
   var w = new World({
@@ -184,7 +190,7 @@ test('unit', 'world', '_loadImport()', 'circular import', function(done) {
   });
 
   // Manually flag the import as circular
-  w.compiling['./foo/bar.vgl'] = true;
+  w.compiling['/home/base/foo/bar.vgl'] = true;
   w._loadImport(m, i, function(err, mod) {
     assert.isDefined(err);
     assert.match(err.message, /circular/i);
@@ -193,7 +199,13 @@ test('unit', 'world', '_loadImport()', 'circular import', function(done) {
   });
 });
 
-test('unit', 'world', '_loadImport()', 'memoization', function(done) {
+test.isolate('unit', 'world', '_loadImport()', 'memoization', function(done) {
+  var cwd = process.cwd();
+  process.chdir('/home');
+  done.cleanup(function() {
+    process.chdir(cwd);
+  });
+
   var i = new ast.ImportStatement(['foo', 'bar']);
   var m = new ast.Module([i], 'main.vgl');
   var w = new World({
@@ -202,7 +214,7 @@ test('unit', 'world', '_loadImport()', 'memoization', function(done) {
   });
 
   // Manually flag the import as circular
-  w.modules['./foo/bar.vgl'] = 'my value is so unique';
+  w.modules['/home/base/foo/bar.vgl'] = 'my value is so unique';
   w._loadImport(m, i, function(err, mod) {
     assert.ifError(err);
     assert.equal(mod, 'my value is so unique');
@@ -212,6 +224,8 @@ test('unit', 'world', '_loadImport()', 'memoization', function(done) {
 });
 
 test.isolate('unit', 'world', '_loadImport()', 'regular import', 'success', function(done) {
+  var cwd = process.cwd();
+  process.chdir('/home');
   var i = new ast.ImportStatement(['foo', 'bar']);
   var m = new ast.Module([i], 'main.vgl');
   var w = new World({
@@ -221,10 +235,11 @@ test.isolate('unit', 'world', '_loadImport()', 'regular import', 'success', func
 
   // Mock our FS, and cleanup when done
   mockfs({
-    'base/foo/bar.vgl': 'export function magic {}'
+    '/home/base/foo/bar.vgl': 'export function magic {}'
   });
   done.cleanup(function() {
     mockfs.restore();
+    process.chdir(cwd);
   });
 
   // Skip _processModule for now
@@ -240,7 +255,7 @@ test.isolate('unit', 'world', '_loadImport()', 'regular import', 'success', func
     assert.ifError(err);
     assert.isDefined(mod);
     assert.equal(mod.constructor, ast.Module);
-    assert.equal(mod.filename, './foo/bar.vgl');
+    assert.equal(mod.filename, '/home/base/foo/bar.vgl');
     assert.ok(!mod.lib);
     assert.isUndefined(w.compiling[mod.filename]);
 
@@ -323,14 +338,16 @@ test.isolate('unit', 'world', '_loadImport()', 'regular import', 'missing file',
 });
 
 test.isolate('unit', 'world', '_loadImport()', 'lib import', 'success', function(done) {
+  var cwd = process.cwd();
+  process.chdir('/');
   var i = new ast.ImportStatement(['kronk', 'zonk']);
   var m = new ast.Module([i], 'main.vgl');
   var w = new World({
-    baseDir: '/base/',
+    baseDir: 'base/',
     mainModule: m,
     libs: {
       'boguz': '/bogii',
-      'kronk': '../kronk'
+      'kronk': 'kronk'
     }
   });
 
@@ -340,6 +357,7 @@ test.isolate('unit', 'world', '_loadImport()', 'lib import', 'success', function
   });
   done.cleanup(function() {
     mockfs.restore();
+    process.chdir(cwd);
   });
 
   // Skip _processModule for now
@@ -358,7 +376,7 @@ test.isolate('unit', 'world', '_loadImport()', 'lib import', 'success', function
     assert.ifError(err);
     assert.isDefined(mod);
     assert.equal(mod.constructor, ast.Module);
-    assert.equal(mod.filename, '../kronk/zonk.vgl');
+    assert.equal(mod.filename, '/kronk/zonk.vgl');
     assert.isUndefined(w.compiling[mod.filename]);
 
     // Note that we AREN'T testing this:
@@ -400,15 +418,15 @@ test.isolate('unit', 'world', 'everything', 'absolute', function(done) {
 
     assert.equal(Object.keys(w.modules).length, 6);
     assert.isDefined(w.modules['main.vgl']);
-    assert.isDefined(w.modules['./foo.vgl']);
-    assert.isDefined(w.modules['./bar/baz.vgl']);
+    assert.isDefined(w.modules['/home/kraken/code/foo.vgl']);
+    assert.isDefined(w.modules['/home/kraken/code/bar/baz.vgl']);
     assert.isDefined(w.modules['/usr/local/lib/mylib/core.vgl']);
     assert.isDefined(w.modules['/usr/local/lib/mylib/thefunk.vgl']);
     assert.isDefined(w.modules['/usr/local/lib/mylib/bar/baz.vgl']);
 
     assert.ok(!w.modules['main.vgl'].lib);
-    assert.ok(!w.modules['./foo.vgl'].lib);
-    assert.ok(!w.modules['./bar/baz.vgl'].lib);
+    assert.ok(!w.modules['/home/kraken/code/foo.vgl'].lib);
+    assert.ok(!w.modules['/home/kraken/code/bar/baz.vgl'].lib);
     assert.ok(!!w.modules['/usr/local/lib/mylib/core.vgl'].lib);
     assert.ok(!!w.modules['/usr/local/lib/mylib/thefunk.vgl'].lib);
     assert.ok(!!w.modules['/usr/local/lib/mylib/bar/baz.vgl'].lib);
@@ -428,14 +446,14 @@ test.isolate('unit', 'world', 'everything', 'absolute', function(done) {
 test.isolate('unit', 'world', 'everything', 'relative', function(done) {
   // Build out a big 'ol filesystem
   var cwd = process.cwd();
-  process.chdir(process.env.HOME);
+  process.chdir('/home');
   mockfs({
-    'code/main.vgl': 'import foo',
-    'code/foo.vgl': 'import bar.baz',
-    'code/bar/baz.vgl': 'import mylib.core',
-    'lib/mylib/core.vgl': 'import thefunk',
-    'lib/mylib/thefunk.vgl': 'import bar.baz',
-    'lib/mylib/bar/baz.vgl': 'export function jazzhands {}'
+    '/home/code/main.vgl': 'import foo',
+    '/home/code/foo.vgl': 'import bar.baz',
+    '/home/code/bar/baz.vgl': 'import mylib.core',
+    '/home/lib/mylib/core.vgl': 'import thefunk',
+    '/home/lib/mylib/thefunk.vgl': 'import bar.baz',
+    '/home/lib/mylib/bar/baz.vgl': 'export function jazzhands {}'
   });
   done.cleanup(function() {
     mockfs.restore();
@@ -445,33 +463,33 @@ test.isolate('unit', 'world', 'everything', 'relative', function(done) {
   var w = new World({
     baseDir: 'code/',
     mainModule: new ast.Module(null, 'main.vgl', 'import foo'), // Same as in our mockfs
-    libs: { mylib: '../lib/mylib' }
+    libs: { mylib: 'lib/mylib' }
   });
   w.load(function(err, m) {
     assert.ifError(err);
 
     assert.equal(Object.keys(w.modules).length, 6);
     assert.isDefined(w.modules['main.vgl']);
-    assert.isDefined(w.modules['./foo.vgl']);
-    assert.isDefined(w.modules['./bar/baz.vgl']);
-    assert.isDefined(w.modules['../lib/mylib/core.vgl']);
-    assert.isDefined(w.modules['../lib/mylib/thefunk.vgl']);
-    assert.isDefined(w.modules['../lib/mylib/bar/baz.vgl']);
+    assert.isDefined(w.modules['/home/code/foo.vgl']);
+    assert.isDefined(w.modules['/home/code/bar/baz.vgl']);
+    assert.isDefined(w.modules['/home/lib/mylib/core.vgl']);
+    assert.isDefined(w.modules['/home/lib/mylib/thefunk.vgl']);
+    assert.isDefined(w.modules['/home/lib/mylib/bar/baz.vgl']);
 
     assert.ok(!w.modules['main.vgl'].lib);
-    assert.ok(!w.modules['./foo.vgl'].lib);
-    assert.ok(!w.modules['./bar/baz.vgl'].lib);
-    assert.ok(!!w.modules['../lib/mylib/core.vgl'].lib);
-    assert.ok(!!w.modules['../lib/mylib/thefunk.vgl'].lib);
-    assert.ok(!!w.modules['../lib/mylib/bar/baz.vgl'].lib);
+    assert.ok(!w.modules['/home/code/foo.vgl'].lib);
+    assert.ok(!w.modules['/home/code/bar/baz.vgl'].lib);
+    assert.ok(!!w.modules['/home/lib/mylib/core.vgl'].lib);
+    assert.ok(!!w.modules['/home/lib/mylib/thefunk.vgl'].lib);
+    assert.ok(!!w.modules['/home/lib/mylib/bar/baz.vgl'].lib);
 
-    assert.equal(w.modules['../lib/mylib/core.vgl'].lib.name, 'mylib');
-    assert.equal(w.modules['../lib/mylib/thefunk.vgl'].lib.name, 'mylib');
-    assert.equal(w.modules['../lib/mylib/bar/baz.vgl'].lib.name, 'mylib');
+    assert.equal(w.modules['/home/lib/mylib/core.vgl'].lib.name, 'mylib');
+    assert.equal(w.modules['/home/lib/mylib/thefunk.vgl'].lib.name, 'mylib');
+    assert.equal(w.modules['/home/lib/mylib/bar/baz.vgl'].lib.name, 'mylib');
 
-    assert.deepEqual(w.modules['../lib/mylib/core.vgl'].lib.importPath, ['mylib', 'core']);
-    assert.deepEqual(w.modules['../lib/mylib/thefunk.vgl'].lib.importPath, ['mylib', 'thefunk']);
-    assert.deepEqual(w.modules['../lib/mylib/bar/baz.vgl'].lib.importPath, ['mylib', 'bar', 'baz']);
+    assert.deepEqual(w.modules['/home/lib/mylib/core.vgl'].lib.importPath, ['mylib', 'core']);
+    assert.deepEqual(w.modules['/home/lib/mylib/thefunk.vgl'].lib.importPath, ['mylib', 'thefunk']);
+    assert.deepEqual(w.modules['/home/lib/mylib/bar/baz.vgl'].lib.importPath, ['mylib', 'bar', 'baz']);
 
     done();
   });
@@ -480,11 +498,11 @@ test.isolate('unit', 'world', 'everything', 'relative', function(done) {
 test.isolate('unit', 'world', 'everything', 'a regression courtesy cedrich', function(done) {
   // Build out a big 'ol filesystem
   var cwd = process.cwd();
-  process.chdir(process.env.HOME);
+  process.chdir('/home');
   var files = {
-    'src/main.vgl': 'import lib.nothing\n export function foo(n: Nothing) { n.name = "asdf" }',
-    'lib/something.vgl': 'export struct Something { name: str = "i am something" }',
-    'lib/nothing.vgl': 'import something\n export struct Nothing { name: str = "I am nothing"\n otherThing: Something = null }'
+    '/home/src/main.vgl': 'import lib.nothing\n export function foo(n: Nothing) { n.name = "asdf" }',
+    '/home/lib/something.vgl': 'export struct Something { name: str = "i am something" }',
+    '/home/lib/nothing.vgl': 'import something\n export struct Nothing { name: str = "I am nothing"\n otherThing: Something = null }'
   };
   mockfs(files);
   done.cleanup(function() {
@@ -494,26 +512,26 @@ test.isolate('unit', 'world', 'everything', 'a regression courtesy cedrich', fun
 
   var w = new World({
     baseDir: 'src/',
-    mainModule: new ast.Module(null, 'main.vgl', files['src/main.vgl']),
-    libs: { lib: '../lib' }
+    mainModule: new ast.Module(null, 'main.vgl', files['/home/src/main.vgl']),
+    libs: { lib: 'lib' }
   });
   w.load(function(err, m) {
     assert.ifError(err);
 
     assert.equal(Object.keys(w.modules).length, 3);
     assert.isDefined(w.modules['main.vgl']);
-    assert.isDefined(w.modules['../lib/something.vgl']);
-    assert.isDefined(w.modules['../lib/nothing.vgl']);
+    assert.isDefined(w.modules['/home/lib/something.vgl']);
+    assert.isDefined(w.modules['/home/lib/nothing.vgl']);
 
     assert.ok(!w.modules['main.vgl'].lib);
-    assert.ok(!!w.modules['../lib/something.vgl'].lib);
-    assert.ok(!!w.modules['../lib/nothing.vgl'].lib);
+    assert.ok(!!w.modules['/home/lib/something.vgl'].lib);
+    assert.ok(!!w.modules['/home/lib/nothing.vgl'].lib);
 
-    assert.equal(w.modules['../lib/something.vgl'].lib.name, 'lib');
-    assert.equal(w.modules['../lib/nothing.vgl'].lib.name, 'lib');
+    assert.equal(w.modules['/home/lib/something.vgl'].lib.name, 'lib');
+    assert.equal(w.modules['/home/lib/nothing.vgl'].lib.name, 'lib');
 
-    assert.deepEqual(w.modules['../lib/something.vgl'].lib.importPath, ['lib', 'something']);
-    assert.deepEqual(w.modules['../lib/nothing.vgl'].lib.importPath, ['lib', 'nothing']);
+    assert.deepEqual(w.modules['/home/lib/something.vgl'].lib.importPath, ['lib', 'something']);
+    assert.deepEqual(w.modules['/home/lib/nothing.vgl'].lib.importPath, ['lib', 'nothing']);
 
     done();
   });
