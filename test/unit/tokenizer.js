@@ -21,6 +21,7 @@ var tokens = function() {
 
 test('unit', 'tokenizer', 'superflous semicolon', function() {
   parse('let a = 1; let b = 2');
+  parse('let a = 1 #; let b = 2;');
 
   assert.throws(function() {
     parse('let a = 1;\nlet b = 2');

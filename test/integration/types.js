@@ -125,6 +125,42 @@ test('integration', 'types', 'arithmetic', function() {
   }, /numeric/);
 });
 
+test('integration', 'types', 'logic', function() {
+  // Make sure these work
+  calc('function a: bool { return 100 > 1 }');
+  calc('function a: bool { return 100 == 101 }');
+  calc('function a: bool { return "bar" == "bar" }');
+  calc('function a: bool { return !!true }');
+
+  assert.throws(function() {
+    calc('function a: bool { return "foo" == 100 }');
+  }, /type/i);
+  assert.throws(function() {
+    calc('function a: bool { return 100f == 100 }');
+  }, /type/i);
+  assert.throws(function() {
+    calc('function a: bool { return true == 100 }');
+  }, /type/i);
+  assert.throws(function() {
+    calc('function a: bool { return true == 100 }');
+  }, /type/i);
+  assert.throws(function() {
+    calc('function a: bool { return 100 > "zoink" }');
+  }, /type/i);
+  assert.throws(function() {
+    calc('function a: bool { return 100 > true }');
+  }, /type/i);
+  assert.throws(function() {
+    calc('function a: bool { return !100 }');
+  }, /bool/i);
+  assert.throws(function() {
+    calc('function a: bool { return !"wat" }');
+  }, /bool/i);
+  assert.throws(function() {
+    calc('function a: bool { return "this" > "that" }');
+  }, /type/);
+});
+
 test('integration', 'types', 'return', function() {
   // Make sure return statements get walked
   assert.throws(function() {
@@ -135,6 +171,12 @@ test('integration', 'types', 'return', function() {
   assert.throws(function() {
     calc('function a {}; a().b');
   }, /void/);
+});
+
+test('integration', 'types', 'list inferrence', function() {
+  // Make sure these work
+  calc('function a(l: list<list<int>>) { l.push([]) }');
+  calc('function a: list<int> { return [] }');
 });
 
 test('integration', 'types', 'lambda types optional', function() {
