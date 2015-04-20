@@ -28,6 +28,7 @@ test('integration', 'types', 'null equality', function() {
   assert.ok(types.equal(new types.TypeRef('func', ['int']), types.canned['null']));
   assert.ok(types.equal(new types.TypeRef('Shazam'), types.canned['null']));
   assert.ok(!types.equal(new types.TypeRef('\'T'), types.canned['null']));
+  assert.ok(types.equal(new types.TypeRef('func', ['int']), types.canned['null']));
 });
 
 test('integration', 'types', 'definitions', function() {
