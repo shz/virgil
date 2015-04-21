@@ -68,6 +68,10 @@ test('unit', 'builtins', 'datetime members', function() {
   var c = checker(assert, 'datetime');
   c.attr('offset', 'int');
   c.attr('ts', 'int');
+  c.method('toLocal', 'datetime');
+  c.method('toGMT', 'datetime');
+  c.method('toOffset', 'int,datetime');
+  c.method('format', 'str,str,str');
   c.done();
 });
 
