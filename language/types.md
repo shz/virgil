@@ -179,7 +179,7 @@ UNIX timestamp (the number of seconds since Jan 01 1970, UTC).
   The sole effect of this is to
   adjust the "point of view" used when producing a
   rendering of this point in time via the format() method.
-   
+
 
 #### Methods:
 
@@ -196,38 +196,28 @@ specified via the parameter.  E.g. to set the offset to Pacific
 Daylight (Summertime), use -7 * 60 * 60 as the offset.
 
 **`format(fmtDate: str, fmtTime: str)`** - Produces a string
-  representation of either/both the date portion and/or time
-  portion. Send null to one of the "fmt" parameters to suppress a particular
-  portion.
+representation of either/both the date portion and/or time
+portion. Send null to one of the "fmt" parameters to suppress a particular
+portion.
 
-  The values supported for the fmtDate parameters are listed below,
-  along with typical samples of English-US results when executed
-  in modern JS environments:
+The values supported for the fmtDate parameters are listed below,
+along with typical samples of English-US results when executed
+in modern JS environments:
 
-- `full` produces "Jun 5, 2007"
+ * `full` produces "Jun 5, 2007"
+ * `fullnumeric` produces "6/5/2007"
+ * `year` produces "2007"
+ * `month` produces "Jun"
+ * `fullmonth` produces "June"
+ * `monthyear` produces "Jun 2007"
+ * `fullmonthyear` produces "June 2007"
+ * `daymonth` produces "Jun 05"
+ * `weekday` produces "Tue"
+ * `fullweekday` produces "Tuesday"
 
-- `fullnumeric` produces "6/5/2007"
+ The values supported for the fmtTime parameters are listed below,
+ along with typical samples of English-US results when executed
+ in modern JS environments:
 
-- `year` produces "2007"
-
-- `month` produces "Jun"
-
-- `fullmonth` produces "June"
-
-- `monthyear` produces "Jun 2007"
-
-- `fullmonthyear` produces "June 2007"
-
-- `daymonth` produces "Jun 05"
-
-- `weekday` produces "Tue"
-
-- `fullweekday` produces "Tuesday"
-
-  The values supported for the fmtTime parameters are listed below,
-  along with typical samples of English-US results when executed
-  in modern JS environments:
-
-- `full` produces "3:08pm"
-
-- `abbrev` produces "3pm"
+ * `full` produces "3:08pm"
+ * `abbrev` produces "3pm"

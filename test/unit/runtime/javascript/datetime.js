@@ -1,21 +1,27 @@
-var reqInternal = require('require-internal');
-var DateTime = reqInternal.require('../../../../runtime/javascript/datetime');
+// var reqInternal = require('require-internal');
+// var DateTime = reqInternal.require('../../../../runtime/javascript/datetime');
 
-var DateTimeInternals = reqInternal.getInternals(DateTime);
-var canUseInternationalizationAPI = DateTimeInternals.canUseInternationalizationAPI;
-var canUseSafariSpecialFallback = DateTimeInternals.canUseSafariSpecialFallback;
+// var DateTimeInternals = reqInternal.getInternals(DateTime);
 
+// We need a monkey patch around the include of DateTime in order to
+// trick the module into believing that it can use the i18n api.
+var tmp = Date.prototype.toLocaleString;
+Date.prototype.toLocaleString = function(x) { return x };
+var DateTime = require('../../../../runtime/javascript/datetime');
+Date.prototype.toLocaleString = tmp;
+
+var THE_BEST_TIME = 1181056120;
 
 
 test('unit', 'runtime', 'javascript', 'DateTime', 'constructor', function() {
   var dtInMS = +new Date();  // result is in milliseconds
   var dt = new DateTime();  // dt.ts is in seconds
   var dt2 = new DateTime(dt);  // clone
-  
-  // Default for DateTime is GMT
-  assert.equal(dt.offset, 0);  
 
-  // The difference between the Date and DateTime timestamps should 
+  // Default for DateTime is GMT
+  assert.equal(dt.offset, 0);
+
+  // The difference between the Date and DateTime timestamps should
   // be similar but not identical -- should not exceed two seconds.
   // The difference is not going to be zero due to the difference in resolution.
   assert(Math.abs(dt.ts - (dtInMS/1000)) < 2);
@@ -24,234 +30,110 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'constructor', function() {
   // one was created as a clone of the other.
   assert.equal(dt.ts, dt2.ts);
   assert.equal(dt.offset, dt2.offset);
-});  
-
-test('unit', 'runtime', 'javascript', 'DateTime', 'environment-detection-internationalization', function() {
-  // Let's use monkeypatching to simulate an environment in which the
-  // rich internationalization support is NOT available.
-  var DateFromVictim = DateTimeInternals.Date;
-  var restorePrototype = DateFromVictim.prototype.toLocaleDateString;
-  DateFromVictim.prototype.toLocaleDateString = function(locale) {
-    return "constant-that-ignores-the-locale-param";  
-  };
-  assert.equal(canUseInternationalizationAPI(), false);
-  DateFromVictim.prototype.toLocaleDateString = function(locale) {
-    return "constant-that-varies-based-on-the-locale-param" + locale;
-  };
-  assert.equal(canUseInternationalizationAPI(), true);
-  DateFromVictim.prototype.toLocaleDateString = restorePrototype;
 });
 
-test('unit', 'runtime', 'javascript', 'DateTime', 'environment-detection-safari', function() {
+test('unit', 'runtime', 'javascript', 'DateTime', 'offsets', function() {
+  var base = new DateTime({ts: THE_BEST_TIME, offset: 0});
 
-  // Unfortunately, this test cannot be hyper-specific because "canUse...()" function
-  // will return different values in different NodeJS environments.  All we can really
-  // do here is test that the function:  1) exists, and 2) does not throw an exception.
-  // I have tested it in specific environments (including browser JS-consoles of course)
-  // using "manual" test techniques.
-  assert.ok(!!canUseSafariSpecialFallback);
-  assert.ok(canUseSafariSpecialFallback() || true); // << just to ensure no exception thrown
-  
-  // Test the backdoor override that allows this test module to test even portions
-  // of the runtime class that it should not have access to:
-  DateTimeInternals.doForceUseOfSafariFallback(true);
-  assert.equal(canUseSafariSpecialFallback(), true);
-  DateTimeInternals.doForceUseOfSafariFallback(false);
+  var dtGMT = base.toGMT();
+  assert.equal(dtGMT.offset, 0);
+  assert.equal(dtGMT.ts, THE_BEST_TIME);
+
+  var dtMalaysia = base.toOffset(8*60*60);
+  assert.equal(dtMalaysia.offset, 8*60*60);
+  assert.equal(dtMalaysia.ts, THE_BEST_TIME);
+
+  var dtLocal = base.toLocal();
+  assert.equal(dtLocal.offset, new Date().getTimezoneOffset() * -60);
+  assert.equal(dtLocal.ts, THE_BEST_TIME);
 });
-
-
-
-// Used throughout the tests in this document for testing
-// formatting output:
-var timestampFixed = 1181056120;
-
-
 
 test('unit', 'runtime', 'javascript', 'DateTime', 'toJSDate', function() {
-  var dtUTC = new DateTime({ts: timestampFixed, offset: 0});
-  var jsdateUTC = dtUTC.toJSDate();
-  assert.equal(jsdateUTC.toJSON(), "2007-06-05T15:08:40.000Z");
+  var dt = new DateTime({ts: THE_BEST_TIME, offset: 0});
+  var jsdt = dt.toJSDate();
+
+  assert.equal(+jsdt, THE_BEST_TIME * 1000);
+  assert.equal(jsdt.toISOString(), "2007-06-05T15:08:40.000Z");
+
+  dt = dt.toOffset(1);
+  jsdt = dt.toJSDate();
+  assert.equal(+jsdt, (THE_BEST_TIME + 1) * 1000);
+  assert.equal(jsdt.toISOString(), '2007-06-05T15:08:41.000Z');
+
+  dt = dt.toLocal();
+  jsdt = dt.toJSDate();
+  var reference = new Date((THE_BEST_TIME + (new Date().getTimezoneOffset() * -60)) * 1000);
+  assert.equal(+jsdt, +reference);
+  assert.equal(jsdt.toISOString(), reference.toISOString());
 });
 
+test('unit', 'runtime', 'javascript', 'DateTime', 'format', function(done) {
+  var dt = new DateTime({ ts: THE_BEST_TIME });
 
+  // Test behavior under ISO fallback
+  assert.throws(function() {
+    dt.format('bogus', null);
+  }, /format/i);
+  assert.throws(function() {
+    dt.format(null, 'bogus');
+  }, /format/i);
 
-test('unit', 'runtime', 'javascript', 'DateTime', 'offset-modification', function() {
+  assert.equal(dt.format(), '');
 
-  // The toXxxx() functions have only one immediate impact: the modificiation of the
-  // offset data member.  That modification is tested in *this* test.
-  // 
-  // The other (deferred) impact of toXxxx() is changing the result generated by
-  // the format() method, which is tested in other tests in this
-  // file, but not in *this* particular test.
+  assert.equal(dt.format('full'), 'Jun 5, 2007');
+  assert.equal(dt.format('fullnumeric'), '6/5/2007');
+  assert.equal(dt.format('year'), '2007');
+  assert.equal(dt.format('month'), 'Jun');
+  assert.equal(dt.format('fullmonth'), 'June');
+  assert.equal(dt.format('monthyear'), 'Jun 2007');
+  assert.equal(dt.format('fullmonthyear'), 'June 2007');
+  assert.equal(dt.format('daymonth'), 'Jun 05');
+  assert.equal(dt.format('weekday'), 'Tue');
+  assert.equal(dt.format('fullweekday'), 'Tuesday');
 
-  var dtUTC = new DateTime({ts: timestampFixed, offset: 0});
+  assert.equal(dt.format(null, 'full'), '3:08pm');
+  assert.equal(dt.format(null, 'abbrev'), '3pm');
 
-  var dtGMT = dtUTC.toGMT();
-  assert.equal(dtGMT.offset, 0);
-  assert.equal(dtGMT.ts, timestampFixed);
+  assert.equal(dt.format('full', 'full'), 'Jun 5, 2007 3:08pm');
+  assert.equal(dt.format('fullweekday', 'abbrev'), 'Tuesday 3pm');
+  assert.equal(dt.format('daymonth', 'full'), 'Jun 05 3:08pm');
+  assert.equal(dt.format('fullnumeric', 'abbrev'), '6/5/2007 3pm');
 
-  var dtMalaysia = dtUTC.toOffset(8*60*60);
-  assert.equal(dtMalaysia.offset, 8*60*60);
-  assert.equal(dtMalaysia.ts, timestampFixed);
+  // Check the AM too
+  var dt2 = new DateTime({ ts: THE_BEST_TIME - (12 * 60 * 60) + (3 * 60) });
+  assert.equal(dt2.format(null, 'abbrev'), '3am');
+  assert.equal(dt2.format(null, 'full'), '3:11am');
 
-  // The result of toLocal() is of course completely dependent upon
-  // the NodeJS environment.  All we can do here is test that 
-  // it functions without throwing an exception and that the
-  // offset data member is a numeric. (It is *not* correct to
-  // assert that it has changed from 0 to something else, because
-  // screwdriver tests are sometimes/(always?) executed in GMT context!)
-  var dtLocal = dtUTC.toLocal();
-  assert.equal(typeof(dtLocal.offset), 'number');
-  assert.equal(dtLocal.ts, timestampFixed);
-});
-
-
-
-
-
-test('unit', 'runtime', 'javascript', 'DateTime', 'format-GMT', function() {
-
-  var dtUTC = new DateTime({ts: timestampFixed, offset: 0});
-  var strdtUTC = dtUTC.format('fullnumeric', 'full');
-  assert.equal("6/5/2007 15:08:40", strdtUTC);
-
-  var dtGMT = dtUTC.toGMT();
-  assert.equal(strdtUTC, dtGMT.format('fullnumeric', 'full'));
-});
-
-
-
-
-
-test('unit', 'runtime', 'javascript', 'DateTime', 'format-localTimeZone', function() {
-  ////////////////////////////
-  // This test is tricky because the results will indeed vary,
-  // based on the timezone of the nodejs engine and even
-  // if DST is in effect.
-  // I will thus exact-check the result only if local==GMT 
-  // (which seems to be the case in screwdriverland).
-  // For others, I will just check the minutes/seconds and
-  // ignore the hour.
-  var dtUTC = new DateTime({ts: timestampFixed, offset: 0});
-  var dtLocal = dtUTC.toLocal();
-  var strdtLocal = dtLocal.format('full', 'full');
-
-  if (dtLocal.offset == 0) {  //GMT
-    if (canUseInternationalizationAPI()) {
-      assert.equal("Jun 5, 2007 3:08pm", strdtLocal);
-    }else{
-      assert.equal("6/5/2007 15:08:40", strdtLocal);
-    }
-  }else{
-    if (canUseInternationalizationAPI()) {
-      assert(strdtLocal.match(/Jun 5, 2007 \d+\:08[ap]m/i));
-    }else{
-      assert(strdtLocal.match(/6\/5\/2007 \d+\:08\:40/));
-    }
-  }
-});
-
-
-
-test('unit', 'runtime', 'javascript', 'DateTime', 'format-fixedTimeZone', function() {
-
-  var dtUTC = new DateTime({ts: timestampFixed, offset: 0});
-  var dtPacificSummer = dtUTC.toOffset(-7*60*60);
-  strdtLocal = dtPacificSummer.format('full', 'full');
-
-  if (canUseInternationalizationAPI()) {
-    assert.equal("Jun 5, 2007 8:08am", strdtLocal);
-  }else{
-    assert.equal("6/5/2007 08:08:40", strdtLocal);
-  }
-
-  var strdtLocalTimeOnly = dtPacificSummer.format(null, 'short');
-  assert(strdtLocalTimeOnly.length < strdtLocal.length);
-
-  var strdtLocalDateOnly = dtPacificSummer.format("short", null);
-  assert(strdtLocalDateOnly.length < strdtLocal.length);
-  assert(strdtLocalDateOnly != strdtLocalTimeOnly);
-
-});
-
-
-
-test('unit', 'runtime', 'javascript', 'DateTime', 'format-safari', function() {
-
-  var dtUTC = new DateTime({ts: timestampFixed, offset: 0});
-  var dtPacificSummer = dtUTC.toOffset(-7*60*60);
-
-  var safariSimulator = {
-    localeStr: "June 5, 2007 at 3:08:40 PM PDT",
-    str: "Tue Jun 05 2007 15:08:40 GMT-0700 (PDT)"
+  // Fake out the i18n API
+  var called = [];
+  var tmp = Date.prototype.toLocaleString;
+  Date.prototype.toLocaleString = function(lang, format) {
+    called.push({ lang: lang, format: format });
+    return '1 AM';
   };
+  global.language = 'de-AT';
+  done.cleanup(function() {
+    delete global.language;
+    Date.prototype.toLocaleString = tmp;
+  });
 
-  function test(specDate, specTime, target) {
-    var safariTest = dtPacificSummer.formatViaParseExtract(safariSimulator.localeStr, safariSimulator.str, specDate, specTime);
-    assert.equal(safariTest, target);
-  }
+  assert.equal(dt.format('full'), '1am');
+  assert.equal(called.length, 1);
+  assert.equal(called[0].lang, 'de-AT');
+  assert.ok(typeof called[0].format, 'object');
+  assert.ok(Object.keys(called[0].format).length > 0);
 
-  // Emit the date portion only
-  test("full",null,"Jun 5, 2007");
-  test("fullnumeric",null,"6/5/2007");
-  test("year",null,"2007");
-  test("month",null,"Jun");
-  test("fullmonth",null,"June");
-  test("monthyear",null,"Jun 2007");
-  test("fullmonthyear",null,"June 2007");
-  test("daymonth",null,"Jun 05");
-  test("weekday",null,"Tue");
-  test("fullweekday",null,"Tuesday");
+  assert.equal(dt.format('full', 'full'), '1am');
+  assert.equal(called.length, 2);
+  assert.equal(called[1].lang, 'de-AT');
+  assert.ok(typeof called[1].format, 'object');
+  assert.ok(Object.keys(called[1].format).length > 0);
 
-  // Emit the time portion only
-  test(null, "full", "3:08pm");
-  test(null, "abbrev", "3pm");
+  assert.equal(dt.format(null, 'full'), '1am');
+  assert.equal(called.length, 3);
+  assert.equal(called[2].lang, 'de-AT');
+  assert.ok(typeof called[2].format, 'object');
+  assert.ok(Object.keys(called[2].format).length > 0);
 
-  // Emit both portions
-  test("fullweekday", "full", "Tuesday 3:08pm");
-
-});
-
-
-
-test('unit', 'runtime', 'javascript', 'DateTime', 'force-100perc-coverage', function() {
-
-  // For the sake of coverage, this is done even though 
-  // on non-sophisticated NodeJS environments, it will simply call the base fallback alg.
-  // To simplify the string compare, we force use of Pacific Daylight time.
-
-  var dtUTC = new DateTime({ts: timestampFixed, offset: 0});
-  var dtPacificSummer = dtUTC.toOffset(-7*60*60);
-
-  assert.equal(dtPacificSummer.formatFallbackSafari("full", "full"), "6/5/2007 08:08:40");
-  assert.equal(dtPacificSummer.formatSophisticated("full", null), "Tuesday, June 05, 2007");
-  if ( ! (canUseInternationalizationAPI())) {
-    assert.match(dtPacificSummer.formatSophisticated("full", "full"), /Tuesday, June 05, 2007 \d\d:08:40/);
-    assert.match(dtPacificSummer.formatSophisticated(null, "full"), /\d\d:08:40/);
-  }
-  assert.match(dtPacificSummer.format(null, "full"), /8:08/);
-
-  // IF this environment does not support truly localized date formattin,
-  // for the sake of coverage, we monkeypatch JS's Date class toLocaleDateString() to fake
-  // such support.
-  if ( ! (canUseInternationalizationAPI())) {
-    Date.prototype.toLocaleDateStringOrig = Date.prototype.toLocaleDateString;
-    Date.prototype.toLocaleDateString = function(localeselector) {
-      return localeselector; // ensures 
-    }
-    DateTimeInternals.chooseFormatter();
-
-    var dt = new DateTime();
-    var resultIsUnimportant = dt.format("full","full");
-
-    // Undo the monkey patch
-    Date.prototype.toLocaleDateString = Date.prototype.toLocaleDateStringOrig;
-
-    // For the sake of coverage, we force safari-environment:
-    DateTimeInternals.doForceUseOfSafariFallback(true);
-    DateTimeInternals.chooseFormatter();
-    dt = new DateTime();
-    resultIsUnimportant = dt.format("full","full");
-    DateTimeInternals.doForceUseOfSafariFallback(false);
-  }
+  done();
 });
