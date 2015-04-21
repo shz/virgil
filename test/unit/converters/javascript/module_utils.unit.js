@@ -40,6 +40,24 @@ test('unit', 'converters', 'javascript', 'module_utils', 'getDeclarationForImpor
     name: 'mylib',
     importPath: ['mylib', 'bar']
   }));
+
+  // Lib include hack tests
+  var imp = {
+    name: '$Foo',
+    ast: {
+      lib: {
+        importPath: ['virgil', 'foo']
+      }
+    }
+  };
+  var result = moduleUtils.getDeclarationForImport.call({
+    _moduleNames: undefined,
+    baseDir: '/src',
+    currentModule: { filename: '/src/bar/main.vgl' },
+    getIdentifierForModule: moduleUtils.getIdentifierForModule
+  }, imp).declarations[0];
+  assert.equal(result.init.arguments[0].value, './../virgil/foo.js');
+  assert.equal(result.id.name, '$Foo');
 });
 
 // This test isn't the greatest, but it does get the job done

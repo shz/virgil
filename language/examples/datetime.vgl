@@ -1,0 +1,13 @@
+# Uses current time
+let dt = new datetime
+# Uses unix timestamp (seconds)
+let dt2 = new datetime { ts = 0 }
+
+# Timezone conversion
+let dtLocal = dt.toLocal()
+let dtSomewhere = dt.toOffset(60 * 60 * -8) # PST
+
+# Convert to a string
+dt.format("full", null)
+dt.format("full", "full")
+dt.format(null, "abbrev")
