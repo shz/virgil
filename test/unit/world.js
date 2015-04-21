@@ -450,7 +450,8 @@ test.isolate('unit', 'world', 'everything', 'relative', function(done) {
   mockfs({
     '/home/code/main.vgl': 'import foo',
     '/home/code/foo.vgl': 'import bar.baz',
-    '/home/code/bar/baz.vgl': 'import mylib.core',
+    '/home/code/bar/baz.vgl': 'import mylib.core; import zam',
+    '/home/code/bar/zam.vgl': 'export function zap {}',
     '/home/lib/mylib/core.vgl': 'import thefunk',
     '/home/lib/mylib/thefunk.vgl': 'import bar.baz',
     '/home/lib/mylib/bar/baz.vgl': 'export function jazzhands {}'
@@ -462,21 +463,21 @@ test.isolate('unit', 'world', 'everything', 'relative', function(done) {
 
   var w = new World({
     baseDir: 'code/',
-    mainModule: new ast.Module(null, 'main.vgl', 'import foo'), // Same as in our mockfs
+    mainModule: new ast.Module(null, 'code/main.vgl', 'import foo'), // Same as in our mockfs
     libs: { mylib: 'lib/mylib' }
   });
   w.load(function(err, m) {
     assert.ifError(err);
 
-    assert.equal(Object.keys(w.modules).length, 6);
-    assert.isDefined(w.modules['main.vgl']);
+    assert.equal(Object.keys(w.modules).length, 7);
+    assert.isDefined(w.modules['code/main.vgl']);
     assert.isDefined(w.modules['/home/code/foo.vgl']);
     assert.isDefined(w.modules['/home/code/bar/baz.vgl']);
     assert.isDefined(w.modules['/home/lib/mylib/core.vgl']);
     assert.isDefined(w.modules['/home/lib/mylib/thefunk.vgl']);
     assert.isDefined(w.modules['/home/lib/mylib/bar/baz.vgl']);
 
-    assert.ok(!w.modules['main.vgl'].lib);
+    assert.ok(!w.modules['code/main.vgl'].lib);
     assert.ok(!w.modules['/home/code/foo.vgl'].lib);
     assert.ok(!w.modules['/home/code/bar/baz.vgl'].lib);
     assert.ok(!!w.modules['/home/lib/mylib/core.vgl'].lib);
