@@ -80,8 +80,8 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'format', function(done) {
 
   assert.equal(dt.format(), '');
 
-  assert.equal(dt.format('full'), 'Jun 5, 2007');
-  assert.equal(dt.format('fullnumeric'), '6/5/2007');
+  assert.equal(dt.format('full', ''), 'Jun 5, 2007');
+  assert.equal(dt.format('fullnumeric', null), '6/5/2007');
   assert.equal(dt.format('year'), '2007');
   assert.equal(dt.format('month'), 'Jun');
   assert.equal(dt.format('fullmonth'), 'June');
@@ -91,7 +91,7 @@ test('unit', 'runtime', 'javascript', 'DateTime', 'format', function(done) {
   assert.equal(dt.format('weekday'), 'Tue');
   assert.equal(dt.format('fullweekday'), 'Tuesday');
 
-  assert.equal(dt.format(null, 'full'), '3:08pm');
+  assert.equal(dt.format('', 'full'), '3:08pm');
   assert.equal(dt.format(null, 'abbrev'), '3pm');
 
   assert.equal(dt.format('full', 'full'), 'Jun 5, 2007 3:08pm');

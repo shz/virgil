@@ -8,6 +8,6 @@ let dtLocal = dt.toLocal()
 let dtSomewhere = dt.toOffset(60 * 60 * -8) # PST
 
 # Convert to a string
-dt.format("full", null)
+dt.format("full", "")
 dt.format("full", "full")
-dt.format(null, "abbrev")
+dt.format("", "abbrev")
