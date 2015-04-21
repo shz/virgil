@@ -2,7 +2,7 @@ var ast = require('./../../../../lib/ast')
   , moduleUtils = require('./../../../../lib/converters/javascript/module_utils')
   ;
 
-var mod = function(baseDir, filename) {
+var mod = function(baseDir, filename, mlib) {
   return {
     imp: function(parts, lib) {
       var m = new ast.Module([], filename, '');
@@ -13,7 +13,7 @@ var mod = function(baseDir, filename) {
       return moduleUtils.getDeclarationForImport.call({
         _moduleNames: lib ? {} : undefined, // Nasty ugly crappy hack to get full test coverage
         baseDir: baseDir,
-        currentModule: { filename: filename },
+        currentModule: { filename: filename, lib: mlib },
         getIdentifierForModule: moduleUtils.getIdentifierForModule
       }, imp).declarations[0].init.arguments[0].value;
     }
@@ -39,6 +39,18 @@ test('unit', 'converters', 'javascript', 'module_utils', 'getDeclarationForImpor
   assert.equal('./mylib/bar.js', m.imp(['mylib', 'foo'], {
     name: 'mylib',
     importPath: ['mylib', 'bar']
+  }));
+
+  // Relative test with lib
+  m = mod('base', 'base/baz.vgl', {
+    name: 'mylib',
+    importPath: ['mylib', 'cool']
+  });
+  assert.equal('./foo/bar.js', m.imp(['foo', 'bar']));
+  assert.equal('./foo.js', m.imp(['foo']));
+  assert.equal('./foo.js', m.imp(['foo'], {
+    name: 'mylib',
+    importPath: ['mylib', 'foo']
   }));
 });
 
