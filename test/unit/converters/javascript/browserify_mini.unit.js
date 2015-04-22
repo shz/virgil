@@ -2,6 +2,7 @@ var browserifyMini = require('../../../../lib/converters/javascript/browserify_m
 
 var run = function(filemap, entrypoint) {
   var src = browserifyMini(filemap, entrypoint);
+  assert.ok(src.match(/modules\[\d+\]\s*=/g).length <= Object.keys(filemap).length);
   return eval(src);
 };
 
@@ -42,13 +43,15 @@ test('unit', 'converters', 'javascript', 'browserify mini', 'circular', function
 
 test('unit', 'converters', 'javascript', 'browserify mini', 'complex', function() {
   var filemap = {
-    'a.js': 'var b = require("./b.js"); exports.message = function() { return "hello world" };',
-    'b.js': ''
+    'a.js': 'var b = require("./b.js"); var c = require("./c.js");' +
+      'exports.message = "" + b.b + c.c;',
+    'b.js': 'var c = require("./c.js"); exports.b = "b";',
+    'c.js': 'var d = require("./d.js"); exports.c = "c"',
+    'd.js': 'exports.d = "d"'
   };
 
   var result = run(filemap, 'a.js');
   assert.isDefined(result);
   assert.isDefined(result.message);
-  assert.equal(typeof result.message, 'function');
-  assert.equal(result.message(), 'hello world');
+  assert.equal(result.message, 'bc');
 });
