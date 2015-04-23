@@ -4,6 +4,7 @@
 
 var path = require('path')
   , tmp = require('tmp')
+  , virgil = require('../../lib')
   , compile = require('../../lib/support/cmd/compile')
   ;
 
@@ -31,6 +32,30 @@ test('functional', 'compiler', 'module', 'javascript', function(done) {
           // assert.ok(f.dst[k].indexOf(crazyNamespace) >= 0);
         });
       });
+
+      done();
+    });
+  });
+});
+
+test('functional', 'compiler', 'javascript', 'browserify', function(done) {
+  tmp.dir({unsafeCleanup: true}, function(err, dir) {
+    assert.ifError(err);
+
+    compile.compile({
+      args: [path.resolve(path.join(__dirname, '..', '..', 'language', 'examples', 'module', 'main.vgl'))],
+      outputLanguage: 'javascript',
+      module: true,
+      outfile: dir,
+      namespace: crazyNamespace,
+      quiet: true,
+      browserify: true
+    }, function(err, files) {
+      assert.ifError(err);
+      assert.ok(files instanceof Array);
+      assert.ok(files.length > 0);
+
+      assert.equal(files.length, 1);
 
       done();
     });
