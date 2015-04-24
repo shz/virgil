@@ -82,6 +82,8 @@ None
 
 **`atan()`** - Returns atan of the float
 
+**`sqrt()`** - Returns the square root of the float
+
 <hr />
 ### `bool`
 

@@ -106,6 +106,7 @@ test('unit', 'builtins', 'float members', function() {
   c.method('acos', 'float');
   c.method('asin', 'float');
   c.method('atan', 'float');
+  c.method('sqrt', 'float');
   c.done();
 });
 
