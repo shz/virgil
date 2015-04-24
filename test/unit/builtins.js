@@ -102,6 +102,10 @@ test('unit', 'builtins', 'float members', function() {
   c.method('abs', 'float');
   c.method('cos', 'float');
   c.method('sin', 'float');
+  c.method('tan', 'float');
+  c.method('acos', 'float');
+  c.method('asin', 'float');
+  c.method('atan', 'float');
   c.done();
 });
 
