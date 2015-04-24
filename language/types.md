@@ -74,6 +74,14 @@ None
 
 **`sin()`** - Returns sin of the float
 
+**`tan()`** - Returns tan of the float
+
+**`acos()`** - Returns acos of the float
+
+**`asin()`** - Returns asin of the float
+
+**`atan()`** - Returns atan of the float
+
 <hr />
 ### `bool`
 
@@ -179,7 +187,7 @@ UNIX timestamp (the number of seconds since Jan 01 1970, UTC).
   The sole effect of this is to
   adjust the "point of view" used when producing a
   rendering of this point in time via the format() method.
-   
+
 
 #### Methods:
 
