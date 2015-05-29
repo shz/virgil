@@ -162,16 +162,7 @@ let c = [ 6, 7, 9, ]
 <hr />
 ### `datetime`
 
-Stores a one-second-precision point in time, independent of any
-particular time zone.
-
-To initialize to the current time, simply instantiate with overriding
-any properties.
-
-To initialize to a particular point in time, set the ts property to a UNIX-style
-timestamp (at resolution of one second).  You may also optionally
-provide a timezone offset (also in terms of number of seconds)
-that affects how the time is converted to a string by the format() method.
+Represents a UNIX timestamp (in seconds) at a particular timezone.
 
 ```c#
 let now = new datetime
@@ -180,64 +171,40 @@ let birthtime = new datetime { ts = 1107615820 }
 
 #### Properties:
 
-**`ts`** - representation of a point in time, in the form of a
-UNIX timestamp (the number of seconds since Jan 01 1970, UTC).
+**`ts`** - The number of seconds since Jan 1, 1970 (a Unix timestamp)
 
-**`offset`** - timezone offset, in number of
-  seconds.
-  E.g. Pacific Daylight Time would be represented by (-7) * 60 * 60.
-  The sole effect of this is to
-  adjust the "point of view" used when producing a
-  rendering of this point in time via the format() method.
-
+**`offset`** - Timezone offset in seconds, used to represent timezones.
+For example, PDT would be represented by `(-7) * 60 * 60`
 
 #### Methods:
 
-**`toLocal()`** - Returns a new datetime object that is identical
-except in that the offset has been automatically set to represent
-the timezone in which the virgil engine is running.
+**`toLocal()`** - Returns a new `datetime` with the `.offset` property
+set to the current locale's timezone offset.
 
-**`toGMT()`** - Returns a new datetime object that is identical
-except in that the offset has been set to 0.
+**`toGMT()`** - Returns a new `datetime` with the `.offset` property
+set to `0`.
 
-**`toOffset(offset)`** - Returns a new datetime object that is identical
-except in that the offset has been set to the number of seconds
-specified via the parameter.  E.g. to set the offset to Pacific
-Daylight (Summertime), use -7 * 60 * 60 as the offset.
+**`toOffset(offset)`** - Returns a new `datetime with the specified
+offset.
 
-**`format(fmtDate: str, fmtTime: str)`** - Produces a string
-  representation of either/both the date portion and/or time
-  portion. Send null to one of the "fmt" parameters to suppress a particular
-  portion.
+**`format(date: str, time: str)`** - Returns a `str` formatted with
+the specified date and time formatting options.  This method will
+produce localized results when possible.
 
-  The values supported for the fmtDate parameters are listed below,
-  along with typical samples of English-US results when executed
-  in modern JS environments:
+Possible values for `date`:
 
-- `full` produces "Jun 5, 2007"
+ * `full` produces "Jun 5, 2007"
+ * `fullnumeric` produces "6/5/2007"
+ * `year` produces "2007"
+ * `month` produces "Jun"
+ * `fullmonth` produces "June"
+ * `monthyear` produces "Jun 2007"
+ * `fullmonthyear` produces "June 2007"
+ * `daymonth` produces "Jun 05"
+ * `weekday` produces "Tue"
+ * `fullweekday` produces "Tuesday"
 
-- `fullnumeric` produces "6/5/2007"
+Possible values for `time`:
 
-- `year` produces "2007"
-
-- `month` produces "Jun"
-
-- `fullmonth` produces "June"
-
-- `monthyear` produces "Jun 2007"
-
-- `fullmonthyear` produces "June 2007"
-
-- `daymonth` produces "Jun 05"
-
-- `weekday` produces "Tue"
-
-- `fullweekday` produces "Tuesday"
-
-  The values supported for the fmtTime parameters are listed below,
-  along with typical samples of English-US results when executed
-  in modern JS environments:
-
-- `full` produces "3:08pm"
-
-- `abbrev` produces "3pm"
+ * `full` produces "3:08pm"
+ * `abbrev` produces "3pm"
