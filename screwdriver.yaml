@@ -5,4 +5,4 @@ shared:
 
   steps:
     publish:
-      bump_version: false
+      bump: false
