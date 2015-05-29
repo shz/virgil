@@ -38,6 +38,18 @@ test('functional', 'compiler', 'module', 'javascript', function(done) {
   });
 });
 
+test('functional', 'compiler', 'javascript', 'datetime', function(done) {
+  virgil.compile('function main { let dt = new datetime }', 'javascript', {}, function(err, filemap) {
+    assert.ifError(err);
+
+    assert.isDefined(filemap['main.js']);
+    assert.isDefined(filemap['virgil/datetime.js']);
+    assert.ok(0 <= filemap['main.js'].indexOf("require('./virgil/datetime.js')"));
+
+    done();
+  });
+});
+
 test('functional', 'compiler', 'javascript', 'browserify', function(done) {
   tmp.dir({unsafeCleanup: true}, function(err, dir) {
     assert.ifError(err);
