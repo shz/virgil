@@ -22,7 +22,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@git.corp.yahoo.com:vizify/virgil.git"
+    "url": "git@git.corp.yahoo.com:vizify/virgil.git",
+    "revision": "f8cc4470a6c1987f98e92a66467f352dca97fc0b"
   },
   "author": "Patrick Stein <lpstein@yahoo-inc.com>",
   "license": "None",
@@ -45,6 +46,11 @@
     "bugzilla": {
       "product": "Virgil",
       "component": "General"
+    },
+    "screwdriver": {
+      "build_url": "http://jenkins.screwdriver.corp.yahoo.com:9999/jenkins/job/33558-v3-component/BUILD_CONTAINER=node10,label=DOCKER-LOW/22/",
+      "project_id": 33558,
+      "project_url": "http://screwdriver.corp.yahoo.com/projects/33558"
     }
   },
   "yhint": {
