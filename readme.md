@@ -52,16 +52,16 @@ or need help!
 [Language guide](language/guide.md) - A short, gentle, and mostly complete
                                       introduction to Virgil.
 
-Details documentation/specs (some of these TODO):
+Details documentation/specs:
 
  * [Types](language/types.md)
  * [Operators](language/operators.md)
- * [Control](language/control.md)
- * [Functions](language/functions.md)
- * [Structs/Methods](language/structs.md)
- * [Modules](language/modules.md)
- * [Externs](language/externs.md)
- * [Generics](language/generics.md)
+ * [Control](language/control.md) (TODO)
+ * [Functions](language/functions.md) (TODO)
+ * [Structs/Methods](language/structs.md) (TODO)
+ * [Modules](language/modules.md) (TODO)
+ * [Externs](language/externs.md) (TODO)
+ * [Generics](language/generics.md) (TODO)
  * [Whitespace Rules](language/whitespace.md)
 
 ## Contributing

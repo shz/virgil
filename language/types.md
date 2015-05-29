@@ -74,6 +74,16 @@ None
 
 **`sin()`** - Returns sin of the float
 
+**`tan()`** - Returns tan of the float
+
+**`acos()`** - Returns acos of the float
+
+**`asin()`** - Returns asin of the float
+
+**`atan()`** - Returns atan of the float
+
+**`sqrt()`** - Returns the square root of the float
+
 <hr />
 ### `bool`
 
