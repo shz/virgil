@@ -1,0 +1,51 @@
+#
+# Every single language construct, in a single file.  Consider
+# it the Virgil Acid Test.
+#
+
+struct Regular {
+  foo: int = 100
+  bar = "yep, that's a bar"
+}
+
+struct Generic<'A, 'B> {
+  foo: 'A = default
+  bar: 'B = default
+}
+
+method doSomething(r: Regular, i: int) {
+  r.foo = r.foo + 1
+}
+
+method swap(g: Generic<'A, 'A>) : str {
+  let tmp = g.foo
+  g.foo = g.bar
+  g.bar = tmp
+
+  return "Swapped"
+}
+
+function main: int {
+  let l = new Regular
+  l.doSomething(1)
+
+  let g = new Generic<str, str> { foo = "a" bar = "b" }
+  if g.swap() == "swapped" {
+    mut accum = 0
+    for i = 0 upto 10 {
+      accum = accum +  i * 2
+    }
+  }
+
+  mut flip = false
+  while true {
+    if flip {
+      break
+    } else {
+      flip = !flip
+      continue
+    }
+  }
+
+  return 0
+}

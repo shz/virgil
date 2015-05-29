@@ -61,10 +61,19 @@ test('unit', 'tokenizer', 'errors', function() {
   assert.isDefined(err.loc);
   assert.isDefined(err.loc.start);
   assert.isDefined(err.loc.end);
+  assert.isUndefined(err.filename);
   assert.type(err.loc.start.line, 'number');
   assert.type(err.loc.start.col, 'number');
   assert.type(err.loc.end.line, 'number');
   assert.type(err.loc.end.col, 'number');
+
+  // Make sure that if a filename is specified, it's carried through
+  try {
+    var a = tokenizer('%$#^', 'file.vgl');
+  } catch (e) {
+    err = e;
+  }
+  assert.equal(err.filename, 'file.vgl');
 });
 
 test('unit', 'tokenizer', 'whitespace', function() {
