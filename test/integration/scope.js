@@ -116,3 +116,14 @@ test('integration', 'scope', 'loops', function() {
   }, /defined/i);
 });
 
+test('integration', 'scope', 'order', function() {
+  // This isn't allowed; the variable must be defined before it can
+  // be used.
+  assert.throws(function() {
+    calc('let a = b + 1; let b = 0');
+  }, /scope/i);
+
+  // However these ARE allowed
+  calc('function a { b() }; function b() { }');
+  calc('function a { let c = b + 1 }; let b = 1; a()');
+});
