@@ -18,3 +18,4 @@ loadDir(path.join(__dirname, 'converters'));
 loadDir(path.join(__dirname, 'converters', 'javascript'));
 loadDir(path.join(__dirname, 'converters', 'cpp'));
 loadDir(path.join(__dirname, 'runtime', 'javascript'));
+loadDir(path.join(__dirname, 'support'));
