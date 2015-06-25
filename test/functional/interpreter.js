@@ -55,6 +55,15 @@ test('functional', 'interpreter', 'variables', function() {
   assert.isDefined(result);
   assert.ok(result instanceof ast.IntegerLiteral);
   assert.equal(result.value, 1);
+
+  result = interpreter.run(buildFunc('function main : int { mut a = 1; a = 2; return a }'));
+  assert.isDefined(result);
+  assert.ok(result instanceof ast.IntegerLiteral);
+  assert.equal(result.value, 2);
+
+  assert.throws(function() {
+    interpreter.run(buildFunc('function main : int { let a = 1; a = 2; return a }'));
+  }, /immutable/);
 });
 
 test('functional', 'interpreter', 'control flow', function() {
@@ -84,6 +93,11 @@ test('functional', 'interpreter', 'control flow', function() {
   assert.ok(result instanceof ast.IntegerLiteral);
   assert.equal(result.value, 4);
 
-  // TODO - While loop, accum
+  // While loop, accum
+  result = interpreter.run(buildFunc('function main : int { mut a = 1; while a < 5 { a = a + a }; return a }'));
+  assert.isDefined(result);
+  assert.ok(result instanceof ast.IntegerLiteral);
+  assert.equal(result.value, 8);
+
   // TODO - For loop in all its forms
 });
