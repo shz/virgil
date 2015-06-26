@@ -91,7 +91,7 @@ some utility methods.
 `getErrorContext(err, padding)` - Creates a context from a compilation
   error, with `padding` lines above and below the error's location.
 
-### Built-in Highlighers
+### Built-in Highlighters
 
 Why reinvent the wheel?  The `highlighters` object provides a few built
 in highlighter functions for use in `Context.highlight()`.
