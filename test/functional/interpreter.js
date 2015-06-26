@@ -99,6 +99,12 @@ test('functional', 'interpreter', 'control flow', function() {
   assert.ok(result instanceof ast.IntegerLiteral);
   assert.equal(result.value, 8);
 
+  // While loop, break/continue
+  result = interpreter.run(buildFunc('function main : int { mut a = 1; while true { a = a + 1; if a > 4 { break } else { continue } }; return a }'));
+  assert.isDefined(result);
+  assert.ok(result instanceof ast.IntegerLiteral);
+  assert.equal(result.value, 5);
+
   // For loop, runs once
   result = interpreter.run(buildFunc('function main : int { mut a = 1; for i = 0 upto 1 { a = a + 1 }; return a }'));
   assert.isDefined(result);
@@ -117,6 +123,15 @@ test('functional', 'interpreter', 'control flow', function() {
   assert.ok(result instanceof ast.IntegerLiteral);
   assert.equal(result.value, 8);
 
-  // TODO - For loops return tests
-  // TODO - Break/Continue tests
+  // For loop, returns immediately
+  result = interpreter.run(buildFunc('function main : int { for i = 1 upto 2 { return i }}'));
+  assert.isDefined(result);
+  assert.ok(result instanceof ast.IntegerLiteral);
+  assert.equal(result.value, 1);
+
+  // For loop, break/continue
+  result = interpreter.run(buildFunc('function main : int { mut a = 0; for i = 0 upto 4 { a = a + 1; if a > 4 { break } else { continue } }; return a }'));
+  assert.isDefined(result);
+  assert.ok(result instanceof ast.IntegerLiteral);
+  assert.equal(result.value, 5);
 });
