@@ -99,5 +99,24 @@ test('functional', 'interpreter', 'control flow', function() {
   assert.ok(result instanceof ast.IntegerLiteral);
   assert.equal(result.value, 8);
 
-  // TODO - For loop in all its forms
+  // For loop, runs once
+  result = interpreter.run(buildFunc('function main : int { mut a = 1; for i = 0 upto 1 { a = a + 1 }; return a }'));
+  assert.isDefined(result);
+  assert.ok(result instanceof ast.IntegerLiteral);
+  assert.equal(result.value, 2);
+
+  // For loop, runs never
+  result = interpreter.run(buildFunc('function main : int { mut a = 1; for i = 0 upto 0 { a = a + 1 }; return a }'));
+  assert.isDefined(result);
+  assert.ok(result instanceof ast.IntegerLiteral);
+  assert.equal(result.value, 1);
+
+  // For loop, runs a few times
+  result = interpreter.run(buildFunc('function main : int { mut a = 1; for i = 0 upto 7 { a = a + 1 }; return a }'));
+  assert.isDefined(result);
+  assert.ok(result instanceof ast.IntegerLiteral);
+  assert.equal(result.value, 8);
+
+  // TODO - For loops return tests
+  // TODO - Break/Continue tests
 });
