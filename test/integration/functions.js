@@ -52,3 +52,14 @@ test('integration', 'functions', 'function types', function() {
   }, /type/);
 });
 
+// This is a regression test, interesting case...
+test('integration', 'functions', 'function properties', function() {
+  // Should throw an invalid property exception, nothing else
+  assert.throws(function() {
+    parse('function a(i : int) {}; a.foo');
+  }, /foo/);
+  assert.throws(function() {
+    parse('method a(i : int) {}; 1.a.foo');
+  }, /foo/);
+});
+
