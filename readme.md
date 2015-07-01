@@ -51,7 +51,8 @@ or need help!
 
 [Language guide](language/guide.md) - A short, gentle, and mostly complete
                                       introduction to Virgil.
-[Examples folder](language/exapmles) - A whole bunch of small examples
+
+[Examples folder](language/examples) - A whole bunch of small examples
 
 Details documentation/specs:
 

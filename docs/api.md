@@ -21,7 +21,7 @@ Alternatively, find out what's wrong with your shit code.
 
 ## AST Manipulation
 
-What's in an AST?  Everything, actually.  [Nitty gritty details](api.ast.md).
+What's in an AST?  Everything, actually.  [Nitty gritty details](api/ast.md).
 
 ## Analysis
 
