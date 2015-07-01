@@ -21,6 +21,8 @@ Ok.  With that out of the way, let's dive into the language.
  * [Functions](#functions)
  * [Creating structs](#struct-def)
  * [Instantiating structs](#struct-create)
+ * [Methods](#methods)
+ * [Externs](#externs)
 
 ## Basics
 
@@ -157,7 +159,29 @@ let b = new MyData {
 
 ## Methods
 
-TODO
+<a name="methods"></a>
+Methods are just special syntactic sugar for functions, and can be
+defined on any type.  Scope rules are exactly the same as for functions.
+
+Declaring a method is exactly the same as declaring a function, except
+the `method` keyword is used instead of `function` (shocking!).  The
+type of the first argument is used as the object the method
+is defined on (kind of like `self` in Python).  Best described through
+example:
+
+```perl
+# Using a function...
+function double(i: int) : int {
+  return i * 2
+}
+let a = double(2)
+
+# Using a method...
+method double(i: int) : int {
+  return i * 2
+}
+let b = 2.double()
+```
 
 ## Module System
 
@@ -165,7 +189,32 @@ TODO
 
 ## Externs
 
-TODO
+<a name="externs"></a>
+Virgil on its own provides basically no way to interact with the host
+system.  To rememdy this, the language provides the `extern` concept as
+a way to expose external functionality to Virgil code.  These `extern`d
+constructs can be `struct`s, `method`s, or `function`s, and are declared
+slighty differently than the regular variety: they have no bodies.
+
+When using an extern block, an optional namespace can be defined.
+
+```perl
+# Expose Javascript-style console functionality
+extern console {
+  function log(s : str)
+  function error(s : str)
+}
+
+# Expose browser-based JS globals
+extern {
+  function alert(s : str)
+
+  class Range {
+    endOffset : int
+    startOffset : int
+  }
+}
+```
 
 ## Generics
 

@@ -51,6 +51,7 @@ or need help!
 
 [Language guide](language/guide.md) - A short, gentle, and mostly complete
                                       introduction to Virgil.
+[Examples folder](language/exapmles) - A whole bunch of small examples
 
 Details documentation/specs:
 
@@ -66,7 +67,7 @@ Details documentation/specs:
 
 ## Contributing
 
-Check out [developing.md](language/developing.md) for information.  If
+Check out [developing.md](docs/developing.md) for information.  If
 you're interested in hacking on the language, adding compiler features,
 or whatever, don't hesitate to ask lpstein@yahoo-inc.com for help.  I'm
 more than happy to help ease people into the codebase!
