@@ -21,12 +21,9 @@ function main : int {
 ynpm install virgil
 ```
 
-#### Using from node
+#### Using as a library
 
-```javascript
-require('virgil');
-require('./path/to/virgil/file');
-```
+Check out the [API docs](docs/api.md).
 
 #### Compiling with Virgil
 
@@ -39,9 +36,12 @@ virgil-cpp [options] [files...]
 
  * `-d`/`--debug` - Use to debug the compiler
  * `-w`/`--watch` - Runs continuously, recompiling when input files change
- * `-n`/`--namespace` - Specifies namespace to use for generated output
+ * `-n`/`--namespace` - Namespace to use for generated output
  * `-o LOCATION`/`--output LOCATION` - Specifies output directory, or
                                        output file in snippet mode
+ * `--libs LIBS` - Comma separated list of `[libname]=[dir]` pairs.
+                   Dirs can be relative or absolute. Example:
+                   `foo=/lib/foo,bar=my-libs/bar`.
 
 ## The Language
 
