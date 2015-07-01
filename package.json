@@ -18,7 +18,8 @@
   },
   "scripts": {
     "test": "script/test.js",
-    "lint": "script/lint.sh"
+    "lint": "script/lint.sh",
+    "build": "script/build.sh"
   },
   "repository": {
     "type": "git",
@@ -28,15 +29,18 @@
   "author": "Patrick Stein <lpstein@yahoo-inc.com>",
   "license": "None",
   "devDependencies": {
+    "benchmark": "^1.0.0",
+    "brfs": "~1.4.0",
+    "browserify": "~10.2.4",
+    "esmangle": "~1.0.1",
     "istanbul": "^0.3.0",
     "jshint": "^2.5.2",
+    "jstoxml": "^0.2.3",
     "minimist": "^1.1.0",
     "mock-fs": "^2.3.1",
-    "whiskey": "^0.8.4",
-    "jstoxml": "^0.2.3",
+    "require-internal": "^1.0.1",
     "tmp": "0.0.24",
-    "benchmark": "^1.0.0",
-    "require-internal": "^1.0.1"
+    "whiskey": "^0.8.4"
   },
   "yahoo": {
     "custodian": {

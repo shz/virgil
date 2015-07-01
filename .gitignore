@@ -5,3 +5,5 @@ test/module/output
 .idea/
 test.vgl
 coverage/
+browser.js
+
