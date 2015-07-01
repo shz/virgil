@@ -21,12 +21,9 @@ function main : int {
 ynpm install virgil
 ```
 
-#### Using from node
+#### Using as a library
 
-```javascript
-require('virgil');
-require('./path/to/virgil/file');
-```
+Check out the [API docs](docs/api.md).
 
 #### Compiling with Virgil
 
@@ -39,9 +36,12 @@ virgil-cpp [options] [files...]
 
  * `-d`/`--debug` - Use to debug the compiler
  * `-w`/`--watch` - Runs continuously, recompiling when input files change
- * `-n`/`--namespace` - Specifies namespace to use for generated output
+ * `-n`/`--namespace` - Namespace to use for generated output
  * `-o LOCATION`/`--output LOCATION` - Specifies output directory, or
                                        output file in snippet mode
+ * `--libs LIBS` - Comma separated list of `[libname]=[dir]` pairs.
+                   Dirs can be relative or absolute. Example:
+                   `foo=/lib/foo,bar=my-libs/bar`.
 
 ## The Language
 
@@ -51,6 +51,8 @@ or need help!
 
 [Language guide](language/guide.md) - A short, gentle, and mostly complete
                                       introduction to Virgil.
+
+[Examples folder](language/examples) - A whole bunch of small examples
 
 Details documentation/specs:
 
@@ -66,7 +68,7 @@ Details documentation/specs:
 
 ## Contributing
 
-Check out [developing.md](language/developing.md) for information.  If
+Check out [developing.md](docs/developing.md) for information.  If
 you're interested in hacking on the language, adding compiler features,
 or whatever, don't hesitate to ask lpstein@yahoo-inc.com for help.  I'm
 more than happy to help ease people into the codebase!

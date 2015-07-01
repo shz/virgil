@@ -6,7 +6,7 @@ useful if you're working with it.
 
 All support components are accessible under `.support`, e.g.:
 
-```javavscript
+```javascript
 require('virgil').support
 ```
 
