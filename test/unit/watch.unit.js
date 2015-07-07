@@ -61,7 +61,7 @@ test.isolate('unit', 'watch.js', 'everything', function(done) {
       baz: { filename: '/bar/baz' }
     },
     compiling: {
-      zam: { filename: '/lib/zam' }
+      '/lib/zam': true
     }
   };
   var watcher = function(filename) {
