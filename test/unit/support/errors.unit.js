@@ -31,6 +31,41 @@ test('unit', 'support', 'errors', 'highlighters', 'console', function() {
   check(true, '=');
 });
 
+test('unit', 'support', 'errors', 'highlighters', 'html', function() {
+  var check = function(shouldDiffer, tokenName, tokenValue, hasError) {
+    if (!tokenValue) {
+      tokenValue = 'default';
+    }
+
+    var result = errors.highlighters.html({
+      name: tokenName,
+      value: tokenValue
+    }, hasError);
+
+    if (shouldDiffer) {
+      assert.notEqual(result, tokenValue);
+      assert.match(result, /<span class="token \w+">/);
+    } else {
+      assert.notEqual(result, tokenValue);
+      assert.ok(result.indexOf(tokenValue) >= 0);
+      assert.match(result, /<span class="token normal">/);
+    }
+  };
+
+  check(true, 'true');
+  check(true, 'false');
+  check(true, 'if');
+  check(true, 'import');
+  check(true, 'comment');
+  check(false, 'identifier', 'foo');
+  check(true, 'identifier', 'Foo');
+  check(true, 'string');
+  check(true, 'gref', '\'T');
+  check(true, 'identifier', 'foo', true);
+  check(true, '=');
+});
+
+
 test('unit', 'support', 'error', 'getContext', function() {
   var ctx;
   var source = [ 'a'
@@ -149,6 +184,19 @@ test('unit', 'support', 'errors', 'printErrorContext()', function(done) {
   errors.printErrorContext(err);
   assert.ok(output.length > 1);
   assert.ok(output[0].match(/it\.vgl/));
+  assert.ok(output[output.length - 1].match(/Bad news/));
+
+  output = [];
+  errors.printErrorContext(err, false);
+  assert.ok(output.length > 1);
+  assert.ok(!output[0].match(/it\.vgl/));
+  assert.ok(output[output.length - 1].match(/Bad news/));
+
+  output = [];
+  errors.printErrorContext(err, false, false);
+  assert.ok(output.length > 1);
+  assert.ok(!output[0].match(/it\.vgl/));
+  assert.ok(!output[output.length - 1].match(/Bad news/));
 
   output = [];
   delete err.filename;
