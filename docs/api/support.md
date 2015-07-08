@@ -19,6 +19,10 @@ fire a callback the first time one of those files changes.
 Because the callback will only be fired once, if you want to watch
 indefinitely you'll have to repeatedly call the `.watch()` function.
 
+The `.watch()` function returns another function tha can be used to
+stop watching the world.  It's safe to call this killer function
+multiple times.
+
 ### Example
 
 ```javascript
@@ -33,10 +37,17 @@ var compile = function() {
   };
   virgil.compile(src, 'javascript', options, function(err, output, world) {
     // Wait for a change
-    virgil.support.watch(world, function(filename) {
+    var killer = virgil.support.watch(world, function(filename) {
       console.log('The file', filename, 'changed, recompiling');
       compile();
     });
+
+    //
+    // If you want to stop watching at some point in the future, just
+    // call the killer:
+    //
+    //     killer();
+    //
   });
 };
 ```
@@ -50,9 +61,12 @@ displaying information about those errors, all within the context of
 
 ### High Level Utilities
 
-`printErrorContext(err)` - Prints syntax-highlighted code around an error
-to the stderr.  The error itself is highlighted, other tokens are
-colorized, and the standard gutter is displayed.
+`printErrorContext(err, [showFilename, [showMessage]])` - Prints
+syntax-highlighted code around an error to the stderr.  The error itself
+is highlighted, other tokens are colorized, and the standard gutter is
+displayed.  By default, `showFilename` and `showMessage` are enabled,
+but they can be disabled by setting them to `false`.  They do just
+about what you'd expect.
 
 ### Contexts
 
