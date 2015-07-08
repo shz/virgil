@@ -84,6 +84,21 @@ test.isolate('unit', 'watch.js', 'everything', function(done) {
   assert.isDefined(watchInfo.closed['/lib/zam']);
   assert.equal(called, 1);
 
+  // For this test, we'll set up a watch, and then immediately use
+  // the unwatch function that's returned before triggering a change.
+  // This should result in the watcher being closed and no callback.
+  setup();
+  killer = watch(world, watcher);
+  assert.equal(Object.keys(watchInfo.opened).length, 3);
+  assert.isDefined(watchInfo.opened['/bar/foo']);
+  assert.isDefined(watchInfo.opened['/bar/baz']);
+  assert.isDefined(watchInfo.opened['/lib/zam']);
+  assert.isDefined(killer);
+  assert.equal(typeof killer, 'function');
+  killer();
+  assert.isDefined(watchInfo.closed['/bar/foo']);
+  assert.isDefined(watchInfo.closed['/bar/baz']);
+  assert.isDefined(watchInfo.closed['/lib/zam']);
 
   // For this test, we'll change the mtime of the file BEFORE we begin
   // watching, which means the callback shouldn't actually fire.
