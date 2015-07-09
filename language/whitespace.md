@@ -1,9 +1,10 @@
 # Whitespace
 
-Virgil uses semicolons to separate expressions, but you'll almost
-never need to use them.  The end of each line has an implied semicolon,
-so the only time you'll need to insert them yourself is if you want to
-put multiple independent expressions on one line.
+Virgil uses semicolons to separate statements, but you'll almost
+never need to use them.  The end of each line, and the last statement
+in a block have implied semicolons, so the only time you'll need to
+insert them yourself is if you want to put multiple independent
+statements on one line.
 
 For example, here's some bog standard Virgil code:
 
@@ -11,6 +12,9 @@ For example, here's some bog standard Virgil code:
 let a = 1
 doSomething(a + 1)
 doSomethingElse(12)
+
+function blah { let a = 1
+                let b = 2 }
 ```
 
 You could collapse that like so:
@@ -18,6 +22,7 @@ You could collapse that like so:
 ```rust
 let a = 1
 doSomething(a + 1); doSomethingElse(12)
+function blah { let a = 1; let b = 2 }
 ```
 
 Note that this system prevents some behavior you may be used to, such

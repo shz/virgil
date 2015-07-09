@@ -49,13 +49,13 @@ test('unit', 'pruning', 'input checking', function() {
 
 test('unit', 'pruning', 'mark entry point functions', function() {
   var modules = buildModules({
-    "main": "function foo { let a = 1 } function bar { let b = 2 }"
+    "main": "function foo { let a = 1 }; function bar { let b = 2 }"
   }).modules;
   prune(modules, {rootModule: modules.main, entryPoints: ['foo']});
   assert.equal(modules.main.body[0].referenced, true);
 
   var modules2 = buildModules({
-    "main": "function foo { let a = 1 } function bar { let b = 2 }"
+    "main": "function foo { let a = 1 }; function bar { let b = 2 }"
   }).modules;
   prune(modules2, {rootModule: modules2.main, entryPoints: ['foo', 'bar']});
   assert.equal(modules2.main.body[0].referenced, true);
@@ -64,8 +64,8 @@ test('unit', 'pruning', 'mark entry point functions', function() {
 
 test('unit', 'pruning', 'prune unused functions', function() {
   var modules = buildModules({
-    "main": "function foo { let a = 1 } " +
-            "function bar { let b = 2 } " + "function baz { let c = 3 }"
+    "main": "function foo { let a = 1 }; " +
+            "function bar { let b = 2 }; " + "function baz { let c = 3 }"
   }).modules;
 
   prune(modules, {rootModule: modules.main, entryPoints: ['baz']});

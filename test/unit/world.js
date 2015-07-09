@@ -89,7 +89,7 @@ test('unit', 'world', '_processModule()', 'empty module', function(done) {
 });
 
 test('unit', 'world', '_processModule()', 'duplicate imports', function(done) {
-  var m = new ast.Module(null, 'main.vgl', 'import a; import a function blah {}');
+  var m = new ast.Module(null, 'main.vgl', 'import a; import a; function blah {}');
   var w = new World({
     baseDir: 'base/',
     mainModule: m

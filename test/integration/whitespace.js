@@ -20,7 +20,6 @@ test('integration', 'whitespace', 'block newlines', function() {
 test('integration', 'whitespace', 'method chaining', function() {
   // Just make sure these work without throwing
   parse('let a = foo().bar().baz()');
-  parse('let a = foo().bar().\nbaz()');
   parse('let a = foo().bar().\n   baz()');
 
   assert.throws(function() {
@@ -42,4 +41,20 @@ test('integration', 'whitespace', 'arithmetic', function() {
 
 test('integration', 'whitespace', 'line continuations', function() {
   parse('let a = 1 \\\n    + 2\\\n/3');
+});
+
+test('integration', 'whitespace', 'statement termination', function() {
+  parse('let a = 1; let b = 2');
+  parse('let a = 1\n let b = 2');
+  parse('if (true) { let b = 1 } else { let b = 2 }; let c = 1');
+
+  assert.throws(function() {
+    parse('let a = 1 let b = 2')
+  }, /terminate/);
+  assert.throws(function() {
+    parse('let a = 1;\n; let b = 2');
+  }, /superfluous/i);
+  assert.throws(function() {
+    parse('let a = 1\n;\n let b = 2');
+  }, /superfluous/i);
 });
