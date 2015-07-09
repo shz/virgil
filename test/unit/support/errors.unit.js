@@ -127,16 +127,16 @@ test('unit', 'support', 'error', 'getContext', function() {
 test('unit', 'support', 'errors', 'getErrorContext()', function() {
   var err = {
     message: 'Booga',
-    src: 'a\nb\nc\nd\nf\ng\n',
+    src: 'aa\nbb\ncc\ndd\nff\ngg\n',
     filename: 'booga.vgl',
     loc: {
       start: {
         line: 1,
-        col: 0
+        col: 1
       },
       end: {
-        line: 1,
-        col: 1
+        line: 2,
+        col: 2
       }
     }
   };
@@ -145,13 +145,15 @@ test('unit', 'support', 'errors', 'getErrorContext()', function() {
 
   assert.equal(ctx.err, err);
   assert.equal(ctx.filename, 'booga.vgl');
-  assert.equal(ctx.lines.length, 4);
+  assert.equal(ctx.lines.length, 5);
   assert.equal(ctx.lines[0].hasError, true);
-  assert.equal(ctx.lines[1].hasError, false);
+  assert.equal(ctx.lines[1].hasError, true);
   assert.equal(ctx.lines[2].hasError, false);
   assert.equal(ctx.lines[3].hasError, false);
-  assert.equal(ctx.toString(), 'a\nb\nc\nd');
-  assert.deepEqual(ctx.gutter(' '), ['1', '2', '3', '4']);
+  assert.deepEqual(ctx.lines[0].errorRange, [1, 2]);
+  assert.deepEqual(ctx.lines[1].errorRange, [0, 2]);
+  assert.equal(ctx.toString(), 'aa\nbb\ncc\ndd\nff');
+  assert.deepEqual(ctx.gutter(' '), ['1', '2', '3', '4', '5']);
 });
 
 test('unit', 'support', 'errors', 'printErrorContext()', function(done) {
