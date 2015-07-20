@@ -39,7 +39,7 @@ test('integration', 'variables', 'assignment allowance', function() {
   calc2('mut a = 1; a = 2.0f; a');
   calc2('struct Foo { a = 1 }; let f = new Foo; f.a = 2; f.a');
   calc2('let a : list<bool> = []; a');
-  calc2('function foo(x : \'T) { let a : list<\'T> = [] } foo');
+  calc2('function foo(x : \'T) { let a : list<\'T> = [] }; foo');
   calc2('struct Foo<\'T> { a : list<\'T> = [] }; new Foo<int>.a');
 
   // These should fail
