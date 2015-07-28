@@ -1,7 +1,9 @@
-var types = require('../../lib/types')
+var mockfs = require('mock-fs')
+  , types = require('../../lib/types')
   , scope = require('../../lib/scope')
   , parser = require('../../lib/parser')
   , passes = require('../../lib/passes')
+  , compile = require('../../lib/api/compile')
   ;
 
 var calc = function(str) {
@@ -22,7 +24,7 @@ test('integration', 'scope', 'basic', function() {
   assert.isDefined(scope.scopes[0].variables.b);
 });
 
-test('integration', 'scope', 'all bariable declarations', function() {
+test('integration', 'scope', 'all variable declarations', function() {
   var scope = calc('let a = 1; out b = 1; mut c = 1; let d = 1');
 
   assert.isDefined(scope.variables.a);
@@ -116,3 +118,25 @@ test('integration', 'scope', 'loops', function() {
   }, /defined/i);
 });
 
+//
+// It's possible for types to end up in scope without being explicitly
+// imported, if e.g. returned from a function in another module that
+// *does* have the import.  This needs to work.
+//
+test.isolate('integration', 'scope', 'implicit import scope', function(done) {
+  var main = 'import foo; function main { foo() }';
+  mockfs({
+    '/test/main.vgl': main,
+    '/test/foo.vgl': 'import thing; export function foo : Thing { return new Thing }',
+    '/test/thing.vgl': 'export struct Thing {}'
+  });
+  done.cleanup(function() {
+    mockfs.restore();
+  });
+
+  compile(main, 'javascript', {filename: '/test/main.vgl'}, function(err, filemap, world) {
+    assert.ifError(err);
+
+    done();
+  });
+});
