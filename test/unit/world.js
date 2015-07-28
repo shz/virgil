@@ -49,6 +49,8 @@ test('unit', 'world', 'load()', 'should process module', function(done) {
     assert.equal(processed, mod);
     assert.equal(mod, m);
 
+    assert.isUndefined(w.compiling['main.vgl']);
+
     done();
   });
 });
