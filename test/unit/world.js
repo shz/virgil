@@ -53,6 +53,26 @@ test('unit', 'world', 'load()', 'should process module', function(done) {
   });
 });
 
+test('unit', 'world', 'load()', 'should correctly mark entrypoint as compiling upon failure', function(done) {
+  var m = new ast.Module(null, 'main.vgl', 'function foo { let a: int = "OH NO" }');
+  var w = new World({
+    baseDir: 'base/',
+    mainModule: m
+  });
+
+  w._processModule = function(mod, callback) {
+    callback(new Error('Rats'));
+  };
+
+  w.load(function(err, mod) {
+    assert.isDefined(err);
+    assert.isUndefined(mod);
+    assert.equal(w.compiling['main.vgl'], true);
+
+    done();
+  });
+});
+
 //
 // _processModule()
 //
