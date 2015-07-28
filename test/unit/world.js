@@ -193,6 +193,9 @@ test.isolate('unit', 'world', '_loadImport()', 'circular import', function(done)
   w.compiling['/home/base/foo/bar.vgl'] = true;
   w._loadImport(m, i, function(err, mod) {
     assert.isDefined(err);
+    assert.isDefined(err.filename);
+    assert.isDefined(err.src);
+    assert.isDefined(err.world);
     assert.match(err.message, /circular/i);
 
     done();
@@ -331,6 +334,9 @@ test.isolate('unit', 'world', '_loadImport()', 'regular import', 'missing file',
   // Manually flag the import as circular
   w._loadImport(m, i, function(err, mod) {
     assert.isDefined(err);
+    assert.isDefined(err.filename);
+    assert.isDefined(err.src);
+    assert.isDefined(err.world);
     assert.match(err.message, /import/i);
 
     done();
