@@ -85,3 +85,10 @@ test('unit', 'tokenizer', 'whitespace', function() {
     'let', 'whitespace', 'identifier', '=', 'float'
   );
 });
+
+test('unit', 'tokenizer', 'comments', function() {
+  tokens(assert, 'let i = 10#00\n # foo bar\n',
+    'let', 'whitespace', 'identifier', 'whitespace', '=', 'whitespace', 'int',
+    'comment', 'newline', 'whitespace', 'comment'
+  );
+});

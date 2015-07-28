@@ -49,6 +49,28 @@ test('unit', 'world', 'load()', 'should process module', function(done) {
     assert.equal(processed, mod);
     assert.equal(mod, m);
 
+    assert.isUndefined(w.compiling['main.vgl']);
+
+    done();
+  });
+});
+
+test('unit', 'world', 'load()', 'should correctly mark entrypoint as compiling upon failure', function(done) {
+  var m = new ast.Module(null, 'main.vgl', 'function foo { let a: int = "OH NO" }');
+  var w = new World({
+    baseDir: 'base/',
+    mainModule: m
+  });
+
+  w._processModule = function(mod, callback) {
+    callback(new Error('Rats'));
+  };
+
+  w.load(function(err, mod) {
+    assert.isDefined(err);
+    assert.isUndefined(mod);
+    assert.equal(w.compiling['main.vgl'], true);
+
     done();
   });
 });
@@ -193,6 +215,9 @@ test.isolate('unit', 'world', '_loadImport()', 'circular import', function(done)
   w.compiling['/home/base/foo/bar.vgl'] = true;
   w._loadImport(m, i, function(err, mod) {
     assert.isDefined(err);
+    assert.isDefined(err.filename);
+    assert.isDefined(err.src);
+    assert.isDefined(err.world);
     assert.match(err.message, /circular/i);
 
     done();
@@ -331,6 +356,9 @@ test.isolate('unit', 'world', '_loadImport()', 'regular import', 'missing file',
   // Manually flag the import as circular
   w._loadImport(m, i, function(err, mod) {
     assert.isDefined(err);
+    assert.isDefined(err.filename);
+    assert.isDefined(err.src);
+    assert.isDefined(err.world);
     assert.match(err.message, /import/i);
 
     done();
