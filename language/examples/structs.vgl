@@ -3,6 +3,13 @@ struct Test {
   b : str = "default"
 }
 
+method foobar(t: Test) : str {
+  return t.b + "foobar"
+}
+method shazam(i: int) : int {
+  return i + 2
+}
+
 function main : int {
   let s = new Test
   let s2 = new Test {
