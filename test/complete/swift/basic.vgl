@@ -1,0 +1,9 @@
+method doThing(s: str) : str {
+  return s + s
+}
+
+function main {
+  let dummy = "Hello world".doThing()
+}
+
+main()

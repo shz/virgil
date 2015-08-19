@@ -25,15 +25,20 @@ method swap(g: Generic<'A, 'A>) : str {
   return "Swapped"
 }
 
+method double(i: int) : int {
+  return i * 2
+}
+
 function main: int {
   let l = new Regular
   l.doSomething(1)
 
   let g = new Generic<str, str> { foo = "a" bar = "b" }
+  let accum = 2.double()
   if g.swap() == "swapped" {
-    mut accum = 0
+    mut! accum = 0
     for i = 0 upto 10 {
-      accum = accum +  i * 2
+      accum = accum + i * 2
     }
   }
 
@@ -47,5 +52,5 @@ function main: int {
     }
   }
 
-  return 0
+  return accum
 }

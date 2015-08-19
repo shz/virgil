@@ -21,6 +21,7 @@ var levels = { read: require('./read')
              , passes: require('./passes')
              , js: require('./js')
              , cpp: require('./cpp')
+             , swift: require('./swift')
              };
 var base = path.join(__dirname, '..', '..', 'language', 'examples');
 
