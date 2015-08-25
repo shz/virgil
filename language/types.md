@@ -20,7 +20,7 @@ between `int` and `float` is not automatic.  If you want to turn your
 `int` into a `float`, use the `.asFloat()` method.
 
 ```c#
-let a : int = 1
+let a: int = 1
 let b = 10
 let c = b * a - 20
 let d = c.asFloat()
@@ -46,7 +46,7 @@ between `int` and `float` is not automatic.  If you want to turn your
 methods.
 
 ```c#
-let a : float = 1f
+let a: float = 1f
 let b = 1f
 let c = 10.2
 let d = 12.4f
@@ -59,7 +59,7 @@ None
 
 #### Methods:
 
-**`format(n : int)`** - Converts to an `str`, showing `n` digits after
+**`format(n: int)`** - Converts to an `str`, showing `n` digits after
                         the decimal
 
 **`floor()`** - Returns the floor
@@ -92,7 +92,7 @@ Either `true` or `false`.  May be used in logical expressions.
 ```c#
 let a = true
 let b = false
-let c : bool = false
+let c: bool = false
 let d = true || false
 let e = d && (a || false)
 ```
@@ -111,7 +111,7 @@ None
 Created using double-quotes.  May be concatenated using addition.
 
 ```c#
-let a : str = "Hello world"
+let a: str = "Hello world"
 let b = "Hello " + "world"
 let c = a + " " + b
 ```
@@ -126,11 +126,14 @@ let c = a + " " + b
 
 **`lower()`** - Converts to lowercase
 
-**`at(n : int)`** - Returns the character at position `n`
+**`at(n: int)`** - Returns the character at position `n`
 
 **`asInt()`** - Parses to an `int`
 
 **`asFloat()`** - Parses to a `float`
+
+**`format(n)`** - Nicely formats the number using the current locale.  A
+                  maximum of `n` decimal points will be used.
 
 <hr />
 ### `list<'T>`
@@ -138,8 +141,8 @@ let c = a + " " + b
 Standard array type.  Elements must all be of the same type.
 
 ```c#
-let a : list<int> = []
-let b : list<int> = [ 1, 2, 5 ]
+let a: list<int> = []
+let b: list<int> = [ 1, 2, 5 ]
 let c = [ 6, 7, 9, ]
 ```
 
@@ -151,11 +154,11 @@ let c = [ 6, 7, 9, ]
 
 **`empty()`** - Removes all elements from the list
 
-**`remove(i : int)`** - Removes the element at the specified index, returns removed element
+**`remove(i: int)`** - Removes the element at the specified index, returns removed element
 
-**`removeRange(start : int, end : int)`** - Removes elements in the specified range, returns elements removed
+**`removeRange(start: int, end: int)`** - Removes elements in the specified range, returns elements removed
 
-**`push(el : T)`** - Adds element to the end of the list
+**`push(el: T)`** - Adds element to the end of the list
 
 **`pop()`** - Removes element from the end of the list and returns it
 
