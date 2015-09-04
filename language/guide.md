@@ -188,7 +188,37 @@ let b = 2.double()
 
 ## Module System
 
-TODO
+<a name="module"></a>
+Virgil code can import other Virgil code by using the (*brace yourself!*) `import`
+statement.  It looks like this:
+
+```perl
+import some.lib
+```
+
+This will look for `some/lib.vgl`, relative to the file that's doing the
+importing.  You can also pass the `--lib foo=some/location/` flag to
+the compiler to specify the external location of some library, but the
+local version will always be looked for first.  (Sorry, this is poorly
+explained).
+
+When you import a file, all its exports will be brought into the current
+scope.  That's right; no namespacing.  This behavior is similar to C or
+Ruby.  Virgil files must export things explicitly, and may only export
+functions, methods, or structs.  Here's an example:
+
+```python
+export function add(a: int, b: int) : int {
+  return a + b
+}
+export method half(f: float) : float {
+  return f / 2
+}
+export struct Shazam {
+  magic = 42
+}
+```
+
 
 ## Externs
 
