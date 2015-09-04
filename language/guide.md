@@ -41,7 +41,7 @@ let b = "Hello world" # Inferred as str
 let c = 3.14 # Inferred as float
 let d = true # Inferred as bool
 let e = [1, 2, 3] # Inferred as list<int>
-let f : list<float> = [] # Cannot be inferred, since the initial list is empty
+let f: list<float> = [] # Cannot be inferred, since the initial list is empty
 ```
 
 All variables are immutable by default.  If you want to be able to
@@ -55,13 +55,16 @@ mut b = 1
 b = 4 # Works just fine
 ```
 
+Note that immutability doesn't reach into the value itself; you can
+still mutate the properties on an immutable variable.
+
 <a name="ifelse"></a>
 All your normal control flow features are present as well; if/else,
 while/for loops.
 
 ```python
 let a = 25
-let b : int = 0
+mut b: int = 0
 if a > 100 {
   b = 100
 } else if a > 10 {
@@ -99,7 +102,7 @@ see values `i = 0` and `i = 1`.
 <a name="logic"></a>
 Boolean operators are largely the same as in any other language.
 
-```perl
+```swift
 let a = false || true && (1 > 20) || (4 <= 4)
 ```
 
@@ -117,12 +120,12 @@ function f {
 }
 
 # Return type, no arguments
-function foo : int {
+function foo: int {
   return 1
 }
 
 # Return type, arguments
-function foobar(a : int) : bool {
+function foobar(a: int): bool {
   return a == 2
 }
 ```
@@ -142,8 +145,8 @@ all their properties.
 ```perl
 struct MyData {
   a = 1 # Type is inferred
-  b : int = 2 # Type is still inferred, but explicitly declared
-  recursive : MyData = null # Type must be specified, as null has no type
+  b: int = 2 # Type is still inferred, but explicitly declared
+  recursive: MyData = null # Type must be specified, as null has no type
 }
 ```
 
@@ -171,13 +174,13 @@ example:
 
 ```perl
 # Using a function...
-function double(i: int) : int {
+function double(i: int): int {
   return i * 2
 }
 let a = double(2)
 
 # Using a method...
-method double(i: int) : int {
+method double(i: int): int {
   return i * 2
 }
 let b = 2.double()
@@ -201,17 +204,17 @@ When using an extern block, an optional namespace can be defined.
 ```perl
 # Expose Javascript-style console functionality
 extern console {
-  function log(s : str)
-  function error(s : str)
+  function log(s: str)
+  function error(s: str)
 }
 
 # Expose browser-based JS globals
 extern {
-  function alert(s : str)
+  function alert(s: str)
 
   class Range {
-    endOffset : int
-    startOffset : int
+    endOffset: int
+    startOffset: int
   }
 }
 ```

@@ -122,6 +122,8 @@ let c = a + " " + b
 
 #### Methods:
 
+**`substr(i: int, length: int)` - Returns a string from `i` through `i + length - 1`
+
 **`upper()`** - Converts to uppercase
 
 **`lower()`** - Converts to lowercase
@@ -132,8 +134,14 @@ let c = a + " " + b
 
 **`asFloat()`** - Parses to a `float`
 
+**`trim()`** - Removes leading and trailing whitespace and returns the result
+
 **`format(n)`** - Nicely formats the number using the current locale.  A
                   maximum of `n` decimal points will be used.
+
+**`log()`** - Logs the string via the platform's log mechanism
+              (e.g. STDOUT).  The original string is return so that
+              it can still be used (e.g. `"foo".log().upper()`).
 
 <hr />
 ### `list<'T>`
@@ -211,3 +219,6 @@ Possible values for `time`:
 
  * `full` produces "3:08pm"
  * `abbrev` produces "3pm"
+
+Either the `date` or `time` portion can be excluded by passing `""` as
+the format value, e.g. `.format("", "abbrev")`.

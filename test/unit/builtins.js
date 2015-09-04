@@ -47,7 +47,7 @@ var checker = function(assert, t) {
 test('unit', 'builtins', 'list members', function() {
   var c = checker(assert, 'list');
   c.method('empty', 'void');
-  c.method('remove', 'int,void');
+  c.method('remove', 'int,\'T');
   c.method('removeRange', 'int,int,list<\'T>');
   c.method('push', '\'T,void');
   c.method('pop', '\'T');
@@ -77,8 +77,6 @@ test('unit', 'builtins', 'datetime members', function() {
 
 test('unit', 'builtins', 'str members', function() {
   var c = checker(assert, 'str');
-  c.method('trimStart', 'str');
-  c.method('trimEnd', 'str');
   c.method('trim', 'str');
   c.method('upper', 'str');
   c.method('lower', 'str');
@@ -86,6 +84,7 @@ test('unit', 'builtins', 'str members', function() {
   c.method('asInt', 'int');
   c.method('asFloat', 'float');
   c.method('substr', 'int,int,str');
+  c.method('log', 'str');
   c.attr('length', 'int');
   c.done();
 
