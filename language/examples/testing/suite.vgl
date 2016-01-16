@@ -1,0 +1,21 @@
+let test = new TestSuite
+
+test.suite("Foobar", lambda(suite) {
+  let f = new Foobar
+  suite.assert("correct initial value", f.a == 1)
+  f.double()
+  suite.assert("doubling works", f.a == 2)
+})
+
+test.suite("fib", lambda(suite) {
+  suite.assert("fib(0)", fib(0) == 0)
+  suite.assert("fib(1)", fib(1) == 1)
+  suite.assert("fib(2)", fib(2) == 1)
+  suite.assert("fib(3)", fib(3) == 2)
+  suite.assert("fib(4)", fib(4) == 3)
+  suite.assert("fib(5)", fib(5) == 5)
+  suite.assert("fib(6)", fib(6) == 8)
+  suite.assert("fib(7)", fib(7) == 13)
+})
+
+test.report()

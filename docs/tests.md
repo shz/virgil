@@ -36,5 +36,5 @@ your function, your test will be allowed to run async.
 #### Why?
 
 We have a whole bunch of different types of tests, and we want to collate
-coverage from all of them and run the *fast*.  This framework does
+coverage from all of them and run them *fast*.  This framework does
 that for us, and is also extremely flexible in how tests are specified.

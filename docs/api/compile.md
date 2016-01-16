@@ -1,6 +1,10 @@
 # Compiling Virgil Code
 
-What we're all here for.  Here's the basic signature:
+What we're all here for.  The compiler API is the highest-level way to
+interact with Virgil code, and zips together parsing, analysis, and
+code generation for you.
+
+Here's the basic signature:
 
 ```javascript
 require('virgil').compile(src, language, options, callback);
@@ -66,7 +70,8 @@ world, and it looks like...
 
 ## World Objects
 
-Docs TODO
+Hah!  Bait and switch, `World`s are so cool and important that they
+have their own set of docs.  [Check 'em](world.md).
 
 ## Conversion Options
 

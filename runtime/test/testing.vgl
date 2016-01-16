@@ -30,3 +30,8 @@ export method suite(ts: TestSuite, name: str, f: func<TestSuite, void>) {
 export method report(ts: TestSuite) {
 
 }
+
+
+let suite = new TestSuite
+suite.assert("it's true!", true)
+

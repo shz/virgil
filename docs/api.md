@@ -16,7 +16,7 @@ Compile Virgil source code!  Amaze your friends!  [Surf's up](api/compile.md).
 ## Lexing/parsing
 
 Take dead, boring Virgil text and turn it into an oh-so-handy AST.
-Alternatively, find out what's wrong with your shit code.
+Alternatively, find out what's wrong with your crap code.
 [Parse like a pro](api/parsing.md).
 
 ## AST Manipulation
@@ -26,8 +26,7 @@ What's in an AST?  Everything, actually.  [Nitty gritty details](api/ast.md).
 ## Analysis
 
 Scope, types, and all that cool stuff.  The heart and soul of the language,
-and the root of all neat things you can do with it.  Unfortunately, it's
-not exposed via the API yet...
+and the root of all neat things you can do with it.  [Feel the power](api/analysis.md).
 
 ## Support Components
 

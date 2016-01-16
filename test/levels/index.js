@@ -30,8 +30,8 @@ fs.readdir(base, function(err, files) {
   }
 
   files.forEach(function(f) {
-    // Skip the module folder, it'll break
-    if (f == 'module')
+    // Skip folders, they'll break
+    if (!fs.statSync(path.join(base, f)).isFile())
       return;
 
     var cur = path.join(base, f);
