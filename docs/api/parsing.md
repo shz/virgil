@@ -35,9 +35,9 @@ There are a few ways to use the parser:
 
 ```javascript
 var virgil = require('virgil');
-var module = virgil.parser(src, filename); // Option 1
-var nodes = virgil.parser.snippet(src); // Option 2
-var node = virgil.parser.statement(src); // Option 3
+var module = virgil.parse(src, filename); // Option 1
+var nodes = virgil.parse.snippet(src); // Option 2
+var node = virgil.parse.statement(src); // Option 3
 ```
 
  * Option 1 - Parses a whole file, and returns an [ast.Module](ast.md)
