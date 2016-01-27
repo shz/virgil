@@ -35,6 +35,27 @@ test('unit', 'ast', 'core', function() {
   assert.isDefined(err.loc.end);
 });
 
+test('unit', 'ast', 'core', 'deepEqual', function() {
+  var a = new ast.IntegerLiteral(10);
+  assert.equal(a.deepEqual(a), true);
+  assert.equal(a.deepEqual(new ast.IntegerLiteral(10)), true);
+  assert.equal(a.deepEqual(null), false);
+  assert.equal(a.deepEqual(new ast.IntegerLiteral(9)), false);
+  assert.equal(a.deepEqual(new ast.FloatLiteral(10)), false);
+
+  a = new ast.BlockStatement(null, [new ast.IntegerLiteral(10)]);
+  assert.equal(a.deepEqual(a), true);
+  assert.equal(a.deepEqual(new ast.BlockStatement(null, [new ast.IntegerLiteral(10)])), true);
+  assert.equal(a.deepEqual(new ast.BlockStatement(null, [new ast.IntegerLiteral(9)])), false);
+  assert.equal(a.deepEqual(new ast.BlockStatement(null, [new ast.IntegerLiteral(10), new ast.IntegerLiteral(9)])), false);
+
+  a = new ast.BlockStatement(null, [null, new ast.IntegerLiteral(1)]);
+  assert.equal(a.deepEqual(new ast.BlockStatement(null, [new ast.IntegerLiteral(1), null])), false);
+
+  a = new ast.BlockStatement(null, [new ast.IntegerLiteral(1), null]);
+  assert.equal(a.deepEqual(new ast.BlockStatement(null, [null, new ast.IntegerLiteral(1)])), false);
+});
+
 test('unit', 'ast', 'literals', function() {
   // Make sure the base stuff isn't directly instantiable
   assert.throws(function() {
