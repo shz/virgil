@@ -225,6 +225,11 @@ process.once('exit', function() {
   failures.forEach(function(f) {
     console.log('');
     console.log(clc.red('FAIL:'), clc.cyan(f[0].join(' / ')));
+    if (f[1].loc) {
+      try {
+        require('../lib').support.errors.printErrorContext(f[1]);
+       } catch (e) {}
+     }
     console.log(f[1].stack);
   });
   console.log('');
