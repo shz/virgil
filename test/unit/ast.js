@@ -37,6 +37,7 @@ test('unit', 'ast', 'core', function() {
 
 test('unit', 'ast', 'core', 'deepEqual', function() {
   var a = new ast.IntegerLiteral(10);
+  a.loc = {foo: 'bar'};
   assert.equal(a.deepEqual(a), true);
   assert.equal(a.deepEqual(new ast.IntegerLiteral(10)), true);
   assert.equal(a.deepEqual(null), false);

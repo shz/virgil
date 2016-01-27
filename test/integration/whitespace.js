@@ -58,3 +58,20 @@ test('integration', 'whitespace', 'statement termination', function() {
     parse('let a = 1\n;\n let b = 2');
   }, /superfluous/i);
 });
+
+test('integration', 'whitespace', 'return statement', function() {
+  parse('function a: int { return 1 > 5 ? true : false }');
+
+  return; // tmp
+
+  parse('function a {}');
+  parse('function a: bool { return true }');
+  parse('function a { return }');
+  parse('function a {\n return \n}');
+  parse('function a: bool {\n return true \n}');
+  parse('function a { return void }'); // Deprecated, but still works
+
+  assert.throws(function() {
+    parse('function a: bool { return \n true }');
+  }, /expected/);
+});
