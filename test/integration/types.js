@@ -125,7 +125,7 @@ test('integration', 'types', 'arithmetic', function() {
     calc('function a : int { return 1 + "string" }');
   }, /numeric/);
 
-  calc('function a : float { return 20f + (1f < 2f) ? 1f : 2f }');
+  calc('function a : float { return 20f + (1f < 2f ? 1f : 2f) }');
 });
 
 test('integration', 'types', 'logic', function() {

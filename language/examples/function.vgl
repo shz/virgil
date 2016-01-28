@@ -1,6 +1,6 @@
 # Type annotations are NOT optional for function signatures
-function sum (a : int, b : int) : int {
-  return a + b
+function dothing (a : int, b : int) : int {
+  return a > 1 ? a : b
 }
 
 # If a function lacks a return type, omit that part.  Arguments are the
@@ -11,11 +11,11 @@ function baz {
 
 # Calling works just like you'd expect
 baz()
-sum(1, 2)
+dothing(1, 2)
 
 # Functions are first class and can be referred to by name.
-let f = sum # f's type is func<int, int, int>
-let v = sum(1, 4)
+let f = dothing # f's type is func<int, int, int>
+let v = dothing(1, 4)
 
 # Functions may also be nested inside other functions
 function outer(n : int) : int {

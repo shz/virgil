@@ -44,6 +44,6 @@ test('integration', 'precedence', function() {
   check('1 + 1 <= 3', '(1 + 1) <= 3');
   check('1 + 1 <= 3 || 1 + 1 >= 3', '((1 + 1) <= 3) || ((1 + 1) >= 3)');
   check('true ? 1 + 1 : 2 + 2', '(true) ? (1 + 1) : (2 + 2)');
-  check('42 + true ? 1 : 3', '42 + (true ? 1 : 3)');
-  check('return 20f + (1f < 2f) ? 1f : 2f', 'return (20f + ((1f < 2f) ? 1f : 2f))');
+  check('42 + true ? 1 : 3', '(42 + true) ? 1 : 3'); // Types aside, that's how it parses
+  check('return 20f + (1f < 2f ? 1f : 2f)', 'return (20f + ((1f < 2f) ? 1f : 2f))');
 });
