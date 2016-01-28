@@ -184,4 +184,10 @@ test('functional', 'interpreter', 'structs', function() {
   assert.equal(result.get('a').value, 5);
   assert.ok(result.get('b') instanceof ast.StringLiteral);
   assert.equal(result.get('b').value, "yes");
+
+  // Modification
+  result = interpreter.run(build('struct Foo { a = 13 }; function main : int { let a = new Foo; a.a = 2; return a.a }'));
+  assert.isDefined(result);
+  assert.ok(result instanceof ast.IntegerLiteral);
+  assert.equal(result.value, 2);
 });
