@@ -42,7 +42,7 @@ test('integration', 'types', 'definitions', function() {
   calc('let a : datetime = default');
   calc('let a : datetime = null');
   calc('let a : datetime = new datetime');
-  calc('let a : datetime = new datetime { ts = 1 offset = -60*60*5 }');
+  calc('let a : datetime = new datetime { ts = 1; offset = -60*60*5 }');
 
   // Void cannot be used as a type
   assert.throws(function() {
@@ -191,10 +191,10 @@ test('integration', 'types', 'lambda types optional', function() {
        'test([1, 2, 3], lambda(x, i) { x + i * 2 })');
   calc('method test(l: list<\'T>, f: func<\'T, int, void>) { f(l[0], 1) };' +
        '[1, 2, 3].test(lambda(x, i) { x + i * 2 })');
-  calc("struct Foo<'A, 'B> { a: 'A = default b: 'B = default };" +
+  calc("struct Foo<'A, 'B> { a: 'A = default; b: 'B = default };" +
        "method test(foo: Foo<'A, 'B>, f: func<Foo<'A, 'B>, void>) {};" +
        "(new Foo<int, int>).test(lambda(x) { x.a + x.b })");
-  calc("struct Foo<'A, 'B> { a: 'A = default b: 'B = default };" +
+  calc("struct Foo<'A, 'B> { a: 'A = default; b: 'B = default };" +
        "function test(foo: Foo<'A, 'B>, f: func<Foo<'A, 'B>, void>) {};" +
        "test(new Foo<int, int>, lambda(x) { x.a + x.b })");
 

@@ -90,7 +90,7 @@ test('functional', 'interpreter', 'control flow', function() {
   assert.equal(result.value, 1);
 
   // While loop, does not run
-  result = interpreter.run(build('function main : int { while false { return 1 } return 4 }'));
+  result = interpreter.run(build('function main : int { while false { return 1 }; return 4 }'));
   assert.isDefined(result);
   assert.ok(result instanceof ast.IntegerLiteral);
   assert.equal(result.value, 4);
@@ -142,13 +142,13 @@ test('functional', 'interpreter', 'functions', function() {
   var result;
 
   // Simple function call
-  result = interpreter.run(build('function a : int { return 1 } function main : int { return a() }'));
+  result = interpreter.run(build('function a : int { return 1 }; function main : int { return a() }'));
   assert.isDefined(result);
   assert.ok(result instanceof ast.IntegerLiteral);
   assert.equal(result.value, 1);
 
   // Function call with arguments
-  result = interpreter.run(build('function double(i: int) : int { return i * 2 } function main : int { return double(2) }'));
+  result = interpreter.run(build('function double(i: int) : int { return i * 2 }; function main : int { return double(2) }'));
   assert.isDefined(result);
   assert.ok(result instanceof ast.IntegerLiteral);
   assert.equal(result.value, 4);
@@ -164,4 +164,24 @@ test('functional', 'interpreter', 'functions', function() {
   assert.isDefined(result);
   assert.ok(result instanceof ast.IntegerLiteral);
   assert.equal(result.value, 15);
+});
+
+test('functional', 'interpreter', 'structs', function() {
+  var result;
+
+  // Basic definition/instantiation
+  result = interpreter.run(build('struct Foo { a = 13 }; function main : Foo { return new Foo }'));
+  assert.isDefined(result);
+  assert.ok(result.constructor.name === 'SlotList'); // Bit of a hack but meh
+  assert.ok(result.get('a') instanceof ast.IntegerLiteral);
+  assert.equal(result.get('a').value, 13);
+
+  // Custom instantiation
+  result = interpreter.run(build('struct Foo { a = 13; b = "yes" }; function main : Foo { return new Foo { a = 5 } }'));
+  assert.isDefined(result);
+  assert.ok(result.constructor.name === 'SlotList'); // Bit of a hack but meh
+  assert.ok(result.get('a') instanceof ast.IntegerLiteral);
+  assert.equal(result.get('a').value, 5);
+  assert.ok(result.get('b') instanceof ast.StringLiteral);
+  assert.equal(result.get('b').value, "yes");
 });

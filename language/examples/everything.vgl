@@ -29,7 +29,7 @@ function main: int {
   let l = new Regular
   l.doSomething(1)
 
-  let g = new Generic<str, str> { foo = "a" bar = "b" }
+  let g = new Generic<str, str> { foo = "a"; bar = "b" }
   if g.swap() == "swapped" {
     mut accum = 0
     for i = 0 upto 10 {
