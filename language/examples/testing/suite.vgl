@@ -19,3 +19,5 @@ test.suite("fib", lambda(suite) {
 })
 
 test.report()
+
+return 1

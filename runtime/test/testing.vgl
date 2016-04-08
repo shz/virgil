@@ -32,6 +32,6 @@ export method report(ts: TestSuite) {
 }
 
 
-let suite = new TestSuite
-suite.assert("it's true!", true)
+# let suite = new TestSuite
+# suite.assert("it's true!", true)
 
